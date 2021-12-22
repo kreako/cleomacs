@@ -2,6 +2,12 @@
   "name": "cleomacs",
   "private": true,
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "lerna": "^4.0.0",
+    "prettier": "^2.5.1",
+    "prettier-plugin-prisma": "^3.7.0"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100
   }
 }
