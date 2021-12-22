@@ -8,7 +8,8 @@
     "eslint-plugin-react": "^7.27.1",
     "lerna": "^4.0.0",
     "prettier": "^2.5.1",
-    "prettier-plugin-prisma": "^3.7.0"
+    "prettier-plugin-prisma": "^3.7.0",
+    "typescript": "^4.5.4"
   },
   "prettier": {
     "semi": false,
