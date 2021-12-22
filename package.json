@@ -2,6 +2,10 @@
   "name": "cleomacs",
   "private": true,
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.8.0",
+    "@typescript-eslint/parser": "^5.8.0",
+    "eslint": "^8.5.0",
+    "eslint-plugin-react": "^7.27.1",
     "lerna": "^4.0.0",
     "prettier": "^2.5.1",
     "prettier-plugin-prisma": "^3.7.0"
