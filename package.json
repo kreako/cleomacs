@@ -1,0 +1,7 @@
+{
+  "name": "cleomacs",
+  "private": true,
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
