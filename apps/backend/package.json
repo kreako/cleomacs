@@ -2,7 +2,8 @@
   "name": "@cleomacs/backend",
   "version": "1.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "console": "NODE_OPTIONS='--experimental-repl-await' ts-node --project ./console/tsconfig-repl.json --interactive './console/console'"
   },
   "devDependencies": {
     "prisma": "^3.7.0"
