@@ -9,3 +9,57 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Organization {
+  id         Int          @id @default(autoincrement())
+  name       String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  membership Membership[]
+}
+
+model Membership {
+  id             Int              @id @default(autoincrement())
+  role           MembershipRole[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  organization   Organization     @relation(fields: [organizationId], references: [id])
+  organizationId Int
+  user           User?            @relation(fields: [userId], references: [id])
+  userId         Int?
+  Invitation     Invitation?
+
+  @@unique([organizationId, userId])
+}
+
+enum MembershipRole {
+  ADMIN
+  MANAGER
+  USER
+}
+
+model Invitation {
+  id           Int        @id @default(autoincrement())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  name         String?
+  email        String
+  membership   Membership @relation(fields: [membershipId], references: [id])
+  membershipId Int        @unique
+}
+
+model User {
+  id            Int          @id @default(autoincrement())
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  name          String?
+  email         String       @unique
+  emailVerified Boolean      @default(false)
+  role          GlobalRole
+  memberships   Membership[]
+}
+
+enum GlobalRole {
+  SUPERADMIN
+  CUSTOMER
+}
