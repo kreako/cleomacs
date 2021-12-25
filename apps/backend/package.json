@@ -2,7 +2,7 @@
   "name": "@cleomacs/backend",
   "version": "1.0.0",
   "scripts": {
-    "dev": "nodemon src/index.ts",
+    "dev": "NODE_ENV='development' nodemon src/index.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "console": "NODE_OPTIONS='--experimental-repl-await' ts-node --project ./console/tsconfig-repl.json --interactive './console/console'"
@@ -21,6 +21,7 @@
   "dependencies": {
     "@prisma/client": "^3.7.0",
     "express": "^4.17.2",
+    "express-async-errors": "^3.1.1",
     "morgan": "^1.10.0"
   }
 }
