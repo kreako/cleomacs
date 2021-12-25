@@ -2,11 +2,13 @@
   "name": "@cleomacs/backend",
   "version": "1.0.0",
   "scripts": {
+    "dev": "ts-node src/index.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "console": "NODE_OPTIONS='--experimental-repl-await' ts-node --project ./console/tsconfig-repl.json --interactive './console/console'"
   },
   "devDependencies": {
+    "@types/express": "^4.17.13",
     "@types/jest": "^27.0.3",
     "jest": "^27.4.5",
     "prisma": "^3.7.0",
@@ -14,6 +16,7 @@
     "ts-jest": "^27.1.2"
   },
   "dependencies": {
-    "@prisma/client": "^3.7.0"
+    "@prisma/client": "^3.7.0",
+    "express": "^4.17.2"
   }
 }
