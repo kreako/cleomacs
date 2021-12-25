@@ -10,3 +10,8 @@ test("meuh test", async () => {
   const res = await server.get("/meuh").expect(200)
   expect(res.body.meuh).toBeTruthy()
 })
+
+test("error test", async () => {
+  const server = supertest(app)
+  const res = await server.get("/error").expect(500)
+})
