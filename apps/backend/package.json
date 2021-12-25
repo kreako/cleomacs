@@ -2,11 +2,16 @@
   "name": "@cleomacs/backend",
   "version": "1.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "console": "NODE_OPTIONS='--experimental-repl-await' ts-node --project ./console/tsconfig-repl.json --interactive './console/console'"
   },
   "devDependencies": {
-    "prisma": "^3.7.0"
+    "@types/jest": "^27.0.3",
+    "jest": "^27.4.5",
+    "prisma": "^3.7.0",
+    "supertest": "^6.1.6",
+    "ts-jest": "^27.1.2"
   },
   "dependencies": {
     "@prisma/client": "^3.7.0"
