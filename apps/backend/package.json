@@ -23,6 +23,7 @@
     "express": "^4.17.2",
     "express-async-errors": "^3.1.1",
     "iron-session": "^6.0.4",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "zod": "^3.11.6"
   }
 }
