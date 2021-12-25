@@ -13,5 +13,5 @@ test("meuh test", async () => {
 
 test("error test", async () => {
   const server = supertest(app)
-  const res = await server.get("/error").expect(500)
+  await server.get("/error").expect(500)
 })
