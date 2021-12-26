@@ -21,20 +21,48 @@ router.post(
   async (req, res) => {
     const hashedPassword = await hash(req.body.password)
 
+    // Create objects in DB organization - membership - user
     const { id: organizationId } = await prisma.organization.create({
+      data: { name: req.body.organizationName },
+      select: { id: true },
+    })
+
+    const { id: userId } = await prisma.user.create({
       data: {
-        name: req.body.organizationName,
-        membership: {
-          create: {
-            role: MembershipRole.ADMIN,
-            user: {
-              create: {
                 name: req.body.userName,
                 email: req.body.email,
                 hashedPassword: hashedPassword,
                 role: GlobalRole.CUSTOMER,
               },
+      select: { id: true },
+    })
+
+    const { id: membershipId } = await prisma.membership.create({
+      data: {
+        role: MembershipRole.ADMIN,
+        userId: userId,
+        organizationId: organizationId,
             },
+      select: { id: true },
+    })
+
+    // now update the lastMembership
+    await prisma.user.update({
+      where: { id: userId },
+      data: { lastMembershipId: membershipId },
+    })
+
+    // set session
+    req.session.userId = userId
+    req.session.membershipId = membershipId
+    req.session.membershipRole = MembershipRole.ADMIN
+    req.session.organizationId = organizationId
+    req.session.globalRole = GlobalRole.CUSTOMER
+    await req.session.save()
+
+    res.json({ success: true })
+  }
+)
           },
         },
       },
