@@ -1,5 +1,5 @@
 import express from "express"
-import { hash, session } from "./auth-utils"
+import { hash, session, verify } from "./auth-utils"
 import { processRequestBody } from "zod-express-middleware"
 import { z } from "zod"
 import { prisma } from "./prisma"
@@ -29,11 +29,11 @@ router.post(
 
     const { id: userId } = await prisma.user.create({
       data: {
-                name: req.body.userName,
-                email: req.body.email,
-                hashedPassword: hashedPassword,
-                role: GlobalRole.CUSTOMER,
-              },
+        name: req.body.userName,
+        email: req.body.email,
+        hashedPassword: hashedPassword,
+        role: GlobalRole.CUSTOMER,
+      },
       select: { id: true },
     })
 
@@ -42,7 +42,7 @@ router.post(
         role: MembershipRole.ADMIN,
         userId: userId,
         organizationId: organizationId,
-            },
+      },
       select: { id: true },
     })
 
@@ -55,7 +55,7 @@ router.post(
     // set session
     req.session.userId = userId
     req.session.membershipId = membershipId
-    req.session.membershipRole = MembershipRole.ADMIN
+    req.session.membershipRole = [MembershipRole.ADMIN, MembershipRole.MANAGER, MembershipRole.USER]
     req.session.organizationId = organizationId
     req.session.globalRole = GlobalRole.CUSTOMER
     await req.session.save()
@@ -63,21 +63,30 @@ router.post(
     res.json({ success: true })
   }
 )
-          },
-        },
-      },
-    })
 
-    const ids = await prisma.organization.findUnique({
+router.post(
+  "/login",
+  processRequestBody(
+    z.object({
+      email: z.string(),
+      password: z.string(),
+    })
+  ),
+  session,
+  async (req, res) => {
+    const user = await prisma.user.findUnique({
       where: {
-        id: organizationId,
+        email: req.body.email,
       },
       select: {
         id: true,
-        membership: {
+        hashedPassword: true,
+        role: true,
+        lastMembership: {
           select: {
             id: true,
-            user: {
+            role: true,
+            organization: {
               select: {
                 id: true,
               },
@@ -86,32 +95,46 @@ router.post(
         },
       },
     })
-
-    if (ids === null) {
-      throw new Error("ids is undefined... inconsistent database")
-    }
-    const memberships = ids.membership
-    if (memberships.length !== 1) {
-      throw new Error("membership length is not 1... inconsistent database")
-    }
-    const membership = memberships[0]
-    if (membership === null) {
-      throw new Error("membership is null... inconsistent database")
-    }
-    const user = membership.user
     if (user === null) {
-      throw new Error("user is null... inconsistent database")
+      throw new Error("Invalid email")
     }
+    if (user.lastMembership === null) {
+      throw new Error(`Invalid DB state - lastMembership is null\nemail: ${req.body.email}`)
+    }
+    const membership = user.lastMembership
+    if (membership.organization === null) {
+      throw new Error(
+        `Invalid DB state - organization is null\nemail: ${req.body.email}\nlastMembershipId: ${membership.id}`
+      )
+    }
+    const organization = membership.organization
+
+    // Will throw if not OK
+    await verify(req.body.password, user.hashedPassword, async (newHashedPassword) => {
+      await prisma.user.update({
+        where: {
+          email: req.body.email,
+        },
+        data: {
+          hashedPassword: newHashedPassword,
+        },
+      })
+    })
 
     req.session.userId = user.id
     req.session.membershipId = membership.id
-    req.session.membershipRole = MembershipRole.ADMIN
-    req.session.organizationId = organizationId
-    req.session.globalRole = GlobalRole.CUSTOMER
+    req.session.membershipRole = membership.role
+    req.session.organizationId = organization.id
+    req.session.globalRole = user.role
     await req.session.save()
 
     res.json({ success: true })
   }
 )
+
+router.post("/logout", session, (req, res) => {
+  req.session.destroy()
+  res.json({ success: true })
+})
 
 export default router

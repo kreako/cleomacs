@@ -56,7 +56,7 @@ declare module "iron-session" {
   interface IronSessionData {
     userId?: number
     membershipId?: number
-    membershipRole?: MembershipRole
+    membershipRole?: MembershipRole[]
     organizationId?: number
     globalRole?: GlobalRole
   }

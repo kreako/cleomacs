@@ -36,16 +36,25 @@ const cleanupDb = async () => {
   await prisma.user.delete({ where: { id: ids.id } })
 }
 
-test("signup test", async () => {
+test("signup/login/logout test", async () => {
   // cleanup before if the last test failed
   await cleanupDb()
 
-  const server = supertest(app)
-  const res = await server
+  const agent = supertest.agent(app)
+  let res = await agent
     .post("/auth/signup")
     .send({ organizationName: ORG_NAME, userName: USER_NAME, email: EMAIL, password: PASSWORD })
     .set("Content-type", "application/json")
     .set("Accept", "application/json")
     .expect(200)
+  expect(res.body.success).toBeTruthy()
+
+  res = await agent.post("/auth/logout").expect(200)
+  expect(res.body.success).toBeTruthy()
+
+  res = await agent.post("/auth/login").send({ email: EMAIL, password: PASSWORD }).expect(200)
+  expect(res.body.success).toBeTruthy()
+
+  res = await agent.post("/auth/logout").expect(200)
   expect(res.body.success).toBeTruthy()
 })
