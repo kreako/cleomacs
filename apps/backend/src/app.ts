@@ -1,9 +1,7 @@
-import { PrismaClient, Prisma } from ".prisma/client"
 import express from "express"
 import morgan from "morgan"
 import "express-async-errors"
 
-const prisma = new PrismaClient()
 export const app = express()
 
 app.disable("x-powered-by")
