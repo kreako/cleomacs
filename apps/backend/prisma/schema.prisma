@@ -24,15 +24,16 @@ model Organization {
 }
 
 model Membership {
-  id             Int              @id @default(autoincrement())
-  role           MembershipRole[]
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  organization   Organization     @relation(fields: [organizationId], references: [id])
-  organizationId Int
-  user           User?            @relation(fields: [userId], references: [id])
-  userId         Int?
-  Invitation     Invitation?
+  id                 Int              @id @default(autoincrement())
+  role               MembershipRole[]
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  organization       Organization     @relation(fields: [organizationId], references: [id])
+  organizationId     Int
+  user               User?            @relation(name: "Memberships", fields: [userId], references: [id])
+  userId             Int?
+  Invitation         Invitation?
+  lastMembershipUser User[]           @relation("LastMembership")
 
   @@unique([organizationId, userId])
 }
@@ -54,15 +55,17 @@ model Invitation {
 }
 
 model User {
-  id             Int          @id @default(autoincrement())
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  name           String?
-  email          String       @unique
-  emailVerified  Boolean      @default(false)
-  hashedPassword String
-  role           GlobalRole
-  memberships    Membership[]
+  id               Int          @id @default(autoincrement())
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  name             String?
+  email            String       @unique
+  emailVerified    Boolean      @default(false)
+  hashedPassword   String
+  role             GlobalRole
+  memberships      Membership[] @relation(name: "Memberships")
+  lastMembershipId Int
+  lastMembership   Membership   @relation(name: "LastMembership", fields: [lastMembershipId], references: [id])
 }
 
 enum GlobalRole {

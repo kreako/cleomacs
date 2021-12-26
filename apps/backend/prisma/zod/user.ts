@@ -11,10 +11,12 @@ export const UserModel = z.object({
   emailVerified: z.boolean(),
   hashedPassword: z.string(),
   role: z.nativeEnum(GlobalRole),
+  lastMembershipId: z.number().int(),
 })
 
 export interface CompleteUser extends User {
   memberships: CompleteMembership[]
+  lastMembership: CompleteMembership
 }
 
 /**
@@ -25,5 +27,6 @@ export interface CompleteUser extends User {
 export const RelatedUserModel: z.ZodSchema<CompleteUser> = z.lazy(() =>
   UserModel.extend({
     memberships: RelatedMembershipModel.array(),
+    lastMembership: RelatedMembershipModel,
   })
 )
