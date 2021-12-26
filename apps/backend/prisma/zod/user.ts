@@ -9,6 +9,7 @@ export const UserModel = z.object({
   name: z.string().nullable(),
   email: z.string(),
   emailVerified: z.boolean(),
+  hashedPassword: z.string(),
   role: z.nativeEnum(GlobalRole),
 })
 
