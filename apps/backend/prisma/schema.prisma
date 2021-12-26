@@ -64,8 +64,8 @@ model User {
   hashedPassword   String
   role             GlobalRole
   memberships      Membership[] @relation(name: "Memberships")
-  lastMembershipId Int
-  lastMembership   Membership   @relation(name: "LastMembership", fields: [lastMembershipId], references: [id])
+  lastMembershipId Int?
+  lastMembership   Membership?  @relation(name: "LastMembership", fields: [lastMembershipId], references: [id])
 }
 
 enum GlobalRole {
