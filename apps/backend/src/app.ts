@@ -1,6 +1,7 @@
 import express from "express"
 import morgan from "morgan"
 import "express-async-errors"
+import auth from "./auth"
 
 export const app = express()
 
@@ -15,6 +16,9 @@ app.get("/meuh", async (req, res) => {
 app.get("/error", async () => {
   throw new Error("Oups !")
 })
+
+app.use("/auth", auth)
+
 app.use((error: Error, _req: express.Request, res: express.Response) => {
   console.error("Error : ", error)
   if (process.env.NODE_ENV === "development") {
