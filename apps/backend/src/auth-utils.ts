@@ -19,7 +19,7 @@ export const hash = async (password: string) => {
 export const verify = async (
   password: string,
   hashedPassword: string,
-  updateHash: (newHashedPassword: string) => void
+  updateHash: (newHashedPassword: string) => Promise<void>
 ) => {
   try {
     const result = await SP().verify(Buffer.from(password), Buffer.from(hashedPassword, "base64"))
@@ -28,7 +28,7 @@ export const verify = async (
         return true
       case SecurePasswordLib.VALID_NEEDS_REHASH: {
         const newHashedPassword = await hash(password)
-        updateHash(newHashedPassword)
+        await updateHash(newHashedPassword)
         return true
       }
       default:
