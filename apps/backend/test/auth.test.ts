@@ -57,4 +57,7 @@ test("signup/login/logout test", async () => {
 
   res = await agent.post("/auth/logout").expect(200)
   expect(res.body.success).toBeTruthy()
+
+  // cleanup after me
+  await cleanupDb()
 })
