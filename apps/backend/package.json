@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
+    "@types/http-errors": "^1.8.1",
     "@types/jest": "^27.0.3",
     "@types/morgan": "^1.9.3",
     "@types/secure-password": "^3.1.1",
