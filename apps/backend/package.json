@@ -8,6 +8,7 @@
     "console": "NODE_OPTIONS='--experimental-repl-await' ts-node --project ./console/tsconfig-repl.json --interactive './console/console'"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.13",
     "@types/http-errors": "^1.8.1",
     "@types/jest": "^27.0.3",
@@ -22,6 +23,7 @@
   },
   "dependencies": {
     "@prisma/client": "^3.7.0",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
     "express-async-errors": "^3.1.1",
