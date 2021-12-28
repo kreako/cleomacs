@@ -1,5 +1,13 @@
 import { profile, signup } from "../src/auth"
-import { cleanupOrganizationFromDb, cookieHeader, errorPost, faker, get, post } from "./utils"
+import {
+  cleanupOrganizationFromDb,
+  cookieHeader,
+  errorPost,
+  faker,
+  get,
+  post,
+  successBody,
+} from "./utils"
 
 test("signup", async () => {
   const fake = faker()
@@ -12,14 +20,13 @@ test("signup", async () => {
     email: fake.email,
     password: fake.password,
   })
-  let body = r._getJSONData()
-  expect(body.success).toBeTruthy()
+  successBody(r)
 
   const headers = cookieHeader(r)
 
   // Now let's check that cookie is now useful
   r = await get(profile, "/auth/profile", headers)
-  body = r._getJSONData()
+  const body = r._getJSONData()
   const user = body.user
   expect(user.name).toBe(fake.userName)
   expect(user.email).toBe(fake.email)

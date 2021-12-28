@@ -199,3 +199,8 @@ export const faker = () => {
     password: `PassWord-${id}`,
   }
 }
+
+export const successBody = (res: MockResponse<express.Response>) => {
+  const body = res._getJSONData()
+  expect(body.success).toBeTruthy()
+}
