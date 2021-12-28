@@ -8,6 +8,7 @@ import {
   MockRequest,
   createRequest,
   createResponse,
+  RequestMethod,
 } from "node-mocks-http"
 import { prisma } from "../src/prisma"
 import { nanoid } from "nanoid"
@@ -77,17 +78,8 @@ export const post = async (
   body: Body,
   headers?: Headers,
   params?: Params
-): Promise<Response> => {
-  const req = createRequest({
-    method: "POST",
-    url,
-    body,
-    params,
-    headers,
-  })
-  const res = createResponse()
-  const error = await handle(handlers, req, res)
-  return { res, error }
+): Promise<MockResponse<express.Response>> => {
+  return await request(handlers, url, "POST", headers, body, params)
 }
 
 export const get = async (
@@ -95,10 +87,74 @@ export const get = async (
   url: string,
   headers?: Headers,
   params?: Params
+): Promise<MockResponse<express.Response>> => {
+  return await request(handlers, url, "GET", headers, undefined, params)
+}
+
+export const errorPost = async (
+  handlers: Handler[],
+  url: string,
+  body: Body,
+  headers?: Headers,
+  params?: Params
+): Promise<HttpError> => {
+  return await errorRequest(handlers, url, "POST", headers, body, params)
+}
+
+export const errorGet = async (
+  handlers: Handler[],
+  url: string,
+  headers?: Headers,
+  params?: Params
+): Promise<HttpError> => {
+  return await errorRequest(handlers, url, "GET", headers, undefined, params)
+}
+
+export const request = async (
+  handlers: Handler[],
+  url: string,
+  method: RequestMethod,
+  headers?: Headers,
+  body?: Body,
+  params?: Params
+): Promise<MockResponse<express.Response>> => {
+  const { error, res } = await rawRequest(handlers, url, method, headers, body, params)
+  if (error !== undefined) {
+    throw new Error(`error is not undefined and it should not be, error: ${error}`)
+  }
+  if (res === undefined) {
+    throw new Error("Response is undefined and it should not be")
+  }
+  return res
+}
+
+export const errorRequest = async (
+  handlers: Handler[],
+  url: string,
+  method: RequestMethod,
+  headers?: Headers,
+  body?: Body,
+  params?: Params
+): Promise<HttpError> => {
+  const { error } = await rawRequest(handlers, url, method, headers, body, params)
+  if (error === undefined) {
+    throw new Error("error is undefined and it should not be")
+  }
+  return error
+}
+
+export const rawRequest = async (
+  handlers: Handler[],
+  url: string,
+  method: RequestMethod,
+  headers?: Headers,
+  body?: Body,
+  params?: Params
 ): Promise<Response> => {
   const req = createRequest({
-    method: "GET",
+    method,
     url,
+    body,
     params,
     headers,
   })

@@ -12,17 +12,13 @@ test("signup", async () => {
     email: fake.email,
     password: fake.password,
   })
-  expect(r.error).toBeUndefined()
-  expect(r.res).not.toBeUndefined()
-  let body = r.res?._getJSONData()
+  let body = r._getJSONData()
   expect(body.success).toBeTruthy()
 
-  const headers = cookieHeader(r.res)
+  const headers = cookieHeader(r)
 
   r = await get(profile, "/auth/profile", headers)
-  expect(r.error).toBeUndefined()
-  expect(r.res).not.toBeUndefined()
-  body = r.res?._getJSONData()
+  body = r._getJSONData()
   const user = body.user
   expect(user.name).toBe(fake.userName)
   expect(user.email).toBe(fake.email)
