@@ -1,5 +1,3 @@
-import supertest from "supertest"
-import { app } from "../src/app"
 import { login, logout, profile, signup } from "../src/auth"
 import {
   cleanupOrganizationFromDb,
