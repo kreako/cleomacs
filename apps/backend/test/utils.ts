@@ -53,12 +53,11 @@ const handle = async (
   handlers: Handler[],
   req: MockRequest<express.Request>,
   res: MockResponse<express.Response>
-): Promise<HttpError | undefined> => {
+): Promise<void> => {
   let stopHandling = true
-  let error = undefined
   const next = (err?: HttpError) => {
     if (err !== undefined) {
-      error = err
+      res.status(err.statusCode).send({ name: err.name, message: err.message })
     }
     stopHandling = false
   }
@@ -66,10 +65,10 @@ const handle = async (
     await handler(req, res, next as express.NextFunction)
     // console.log("handler", handler.name, res.status, res.cookies, res._getData())
     if (stopHandling) {
-      return error
+      return
     }
   }
-  return error
+  return
 }
 
 export const post = async (
@@ -118,13 +117,8 @@ export const request = async (
   body?: Body,
   params?: Params
 ): Promise<MockResponse<express.Response>> => {
-  const { error, res } = await rawRequest(handlers, url, method, headers, body, params)
-  if (error !== undefined) {
-    throw new Error(`error is not undefined and it should not be, error: ${error}`)
-  }
-  if (res === undefined) {
-    throw new Error("Response is undefined and it should not be")
-  }
+  const res = await rawRequest(handlers, url, method, headers, body, params)
+  expect(res.statusCode).toBe(200)
   return res
 }
 
@@ -136,18 +130,9 @@ export const errorRequest = async (
   body?: Body,
   params?: Params
 ): Promise<HttpError> => {
-  const { error, res } = await rawRequest(handlers, url, method, headers, body, params)
-  if (error === undefined) {
-    if (res === undefined) {
-      throw new Error(`error is undefined and res is undefined`)
-    }
-    const data = JSON.stringify(res?._getData())
-    if (res.statusCode !== 200) {
-      return createError(res.statusCode, data)
-    }
-    throw new Error(`error is undefined and res statusCode is 200 : ${data}`)
-  }
-  return error
+  const res = await rawRequest(handlers, url, method, headers, body, params)
+  expect(res.statusCode).not.toBe(200)
+  return createError(res.statusCode, JSON.stringify(res._getData()))
 }
 
 export const rawRequest = async (
@@ -157,7 +142,7 @@ export const rawRequest = async (
   headers?: Headers,
   body?: Body,
   params?: Params
-): Promise<Response> => {
+): Promise<MockResponse<express.Response>> => {
   const req = createRequest({
     method,
     url,
@@ -166,8 +151,8 @@ export const rawRequest = async (
     headers,
   })
   const res = createResponse()
-  const error = await handle(handlers, req, res)
-  return { res, error }
+  await handle(handlers, req, res)
+  return res
 }
 
 export const cookieHeader = (res?: MockResponse<express.Response>): Headers => {
