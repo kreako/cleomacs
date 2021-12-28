@@ -48,6 +48,14 @@ test("signup invalid payload", async () => {
   expect(r.status).toBe(400)
 })
 
+test("login invalid payload", async () => {
+  const r = await errorPost(login, "/auth/login", {
+    email: null,
+    password: null,
+  })
+  expect(r.status).toBe(400)
+})
+
 test("signup/login/logout test", async () => {
   const fake = faker()
 
