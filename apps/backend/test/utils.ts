@@ -1,5 +1,5 @@
 import express from "express"
-import { HttpError } from "http-errors"
+import createError, { HttpError } from "http-errors"
 import {
   Body,
   Headers,
@@ -136,9 +136,16 @@ export const errorRequest = async (
   body?: Body,
   params?: Params
 ): Promise<HttpError> => {
-  const { error } = await rawRequest(handlers, url, method, headers, body, params)
+  const { error, res } = await rawRequest(handlers, url, method, headers, body, params)
   if (error === undefined) {
-    throw new Error("error is undefined and it should not be")
+    if (res === undefined) {
+      throw new Error(`error is undefined and res is undefined`)
+    }
+    const data = JSON.stringify(res?._getData())
+    if (res.statusCode !== 200) {
+      return createError(res.statusCode, data)
+    }
+    throw new Error(`error is undefined and res statusCode is 200 : ${data}`)
   }
   return error
 }

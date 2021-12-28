@@ -1,5 +1,5 @@
 import { profile, signup } from "../src/auth"
-import { cleanupOrganizationFromDb, cookieHeader, faker, get, post } from "./utils"
+import { cleanupOrganizationFromDb, cookieHeader, errorPost, faker, get, post } from "./utils"
 
 test("signup", async () => {
   const fake = faker()
@@ -17,6 +17,7 @@ test("signup", async () => {
 
   const headers = cookieHeader(r)
 
+  // Now let's check that cookie is now useful
   r = await get(profile, "/auth/profile", headers)
   body = r._getJSONData()
   const user = body.user
@@ -25,6 +26,16 @@ test("signup", async () => {
   expect(user.lastMembership.organization.name).toBe(fake.organizationName)
 
   await cleanupOrganizationFromDb(fake.email)
+})
+
+test("signup invalid payload", async () => {
+  const r = await errorPost(signup, "/auth/signup", {
+    organizationName: null,
+    userName: null,
+    email: null,
+    password: null,
+  })
+  expect(r.status).toBe(400)
 })
 
 /*
