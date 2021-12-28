@@ -1,7 +1,10 @@
-import { profile, signup } from "../src/auth"
+import supertest from "supertest"
+import { app } from "../src/app"
+import { login, logout, profile, signup } from "../src/auth"
 import {
   cleanupOrganizationFromDb,
   cookieHeader,
+  errorGet,
   errorPost,
   faker,
   get,
@@ -45,44 +48,41 @@ test("signup invalid payload", async () => {
   expect(r.status).toBe(400)
 })
 
-/*
 test("signup/login/logout test", async () => {
-  const ORG_NAME = "test org"
-  const USER_NAME = "Test firstname and lastname"
-  const EMAIL = "test@test.org"
-  const PASSWORD = "PassWord"
+  const fake = faker()
 
-  // cleanup before if the last test failed
-  await cleanupDb(EMAIL)
+  await cleanupOrganizationFromDb(fake.email)
 
-  const agent = supertest.agent(app)
-  let res = await agent
-    .post("/auth/signup")
-    .send({ organizationName: ORG_NAME, userName: USER_NAME, email: EMAIL, password: PASSWORD })
-    .set("Content-type", "application/json")
-    .set("Accept", "application/json")
-    .expect(200)
-  expect(res.body.success).toBeTruthy()
-  console.log("res", res.headers)
-  await agent
-    .get("/auth/profile")
-    .set("Content-type", "application/json")
-    .set("Accept", "application/json")
-    .expect(200)
+  // signup
+  let r = await post(signup, "/auth/signup", {
+    organizationName: fake.organizationName,
+    userName: fake.userName,
+    email: fake.email,
+    password: fake.password,
+  })
+  successBody(r)
+  let headers = cookieHeader(r)
 
-  res = await agent.post("/auth/logout").expect(200)
-  expect(res.body.success).toBeTruthy()
-  await agent.get("/auth/profile").expect(401)
+  // Now let's check that cookie is now useful
+  r = await get(profile, "/auth/profile", headers)
+  expect(r.statusCode).toBe(200)
 
-  res = await agent.post("/auth/login").send({ email: EMAIL, password: PASSWORD }).expect(200)
-  expect(res.body.success).toBeTruthy()
-  await agent.get("/auth/profile").expect(200)
+  // logout
+  r = await post(logout, "/auth/logout", {}, headers)
+  successBody(r)
+  headers = cookieHeader(r)
 
-  res = await agent.post("/auth/logout").expect(200)
-  expect(res.body.success).toBeTruthy()
-  await agent.get("/auth/profile").expect(401)
+  // profile is in error
+  const err = await errorGet(profile, "/auth/profile", headers)
+  expect(err.statusCode).toBe(401)
+
+  // login
+  r = await post(login, "/auth/login", { email: fake.email, password: fake.password })
+  successBody(r)
+  headers = cookieHeader(r)
+  r = await get(profile, "/auth/profile", headers)
+  expect(r.statusCode).toBe(200)
 
   // cleanup after me
-  await cleanupDb(EMAIL)
-}, 10000)
-*/
+  await cleanupOrganizationFromDb(fake.email)
+})
