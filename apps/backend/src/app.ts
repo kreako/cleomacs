@@ -18,14 +18,3 @@ app.get("/error", async () => {
 })
 
 app.use("/auth", auth)
-
-app.use((error: Error, _req: express.Request, res: express.Response) => {
-  console.error("Error : ", error)
-  if (process.env.NODE_ENV === "development") {
-    res
-      .status(500)
-      .json({ error: true, message: error.message, name: error.name, stack: error.stack })
-  } else {
-    res.status(500).json({ error: true })
-  }
-})
