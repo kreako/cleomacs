@@ -4,11 +4,9 @@ import { processRequestBody } from "zod-express-middleware"
 import { z } from "zod"
 import { prisma } from "./prisma"
 import { MembershipRole, GlobalRole } from "@prisma/client"
+import createError from "http-errors"
 
-const router = express.Router()
-
-router.post(
-  "/signup",
+export const signup = [
   processRequestBody(
     z.object({
       organizationName: z.string(),
@@ -18,7 +16,7 @@ router.post(
     })
   ),
   session,
-  async (req, res) => {
+  async (req: express.Request, res: express.Response) => {
     const hashedPassword = await hash(req.body.password)
 
     // Create objects in DB organization - membership - user
@@ -39,7 +37,7 @@ router.post(
 
     const { id: membershipId } = await prisma.membership.create({
       data: {
-        role: MembershipRole.ADMIN,
+        role: [MembershipRole.ADMIN, MembershipRole.MANAGER, MembershipRole.USER],
         userId: userId,
         organizationId: organizationId,
       },
@@ -61,11 +59,10 @@ router.post(
     await req.session.save()
 
     res.json({ success: true })
-  }
-)
+  },
+]
 
-router.post(
-  "/login",
+export const login = [
   processRequestBody(
     z.object({
       email: z.string(),
@@ -73,7 +70,7 @@ router.post(
     })
   ),
   session,
-  async (req, res) => {
+  async (req: express.Request, res: express.Response) => {
     const user = await prisma.user.findUnique({
       where: {
         email: req.body.email,
@@ -129,12 +126,48 @@ router.post(
     await req.session.save()
 
     res.json({ success: true })
-  }
-)
+  },
+]
 
-router.post("/logout", session, (req, res) => {
-  req.session.destroy()
-  res.json({ success: true })
-})
+export const logout = [
+  session,
+  (req: express.Request, res: express.Response) => {
+    req.session.destroy()
+    res.json({ success: true })
+  },
+]
 
+export const profile = [
+  session,
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (req.session.userId === undefined) {
+      return next(createError(401, "login necessary"))
+    }
+    const userId = req.session.userId
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        lastMembership: {
+          include: {
+            organization: true,
+          },
+        },
+        memberships: {
+          include: {
+            organization: true,
+          },
+        },
+      },
+    })
+    res.json({ user })
+  },
+]
+
+const router = express.Router()
+router.post("/signup", ...signup)
+router.post("/login", ...login)
+router.post("/logout", ...logout)
+router.get("/profile", ...profile)
 export default router
