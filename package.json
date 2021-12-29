@@ -32,6 +32,6 @@
   "scripts": {
     "prepare": "husky install",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
-    "test": "cd ./apps/backend && npm run test"
+    "test": "npx lerna run test"
   }
 }
