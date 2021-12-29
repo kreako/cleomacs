@@ -32,6 +32,7 @@ test("signup", async () => {
   expect(user.name).toBe(fake.userName)
   expect(user.email).toBe(fake.email)
   expect(user.lastMembership.organization.name).toBe(fake.organizationName)
+  expect(body.constant).toBe("meuh")
 
   await cleanupOrganizationFromDb(fake.email)
 })

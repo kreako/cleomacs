@@ -21,6 +21,7 @@
     "ts-jest": "^27.1.2"
   },
   "dependencies": {
+    "@cleomacs/api": "^1.0.0",
     "@prisma/client": "^3.7.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^10.0.0",

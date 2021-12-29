@@ -5,6 +5,7 @@ import { z } from "zod"
 import { prisma } from "./prisma"
 import { MembershipRole, GlobalRole } from "@prisma/client"
 import createError from "http-errors"
+import { A_CONSTANT } from "@cleomacs/api"
 
 export const signup = [
   processRequestBody(
@@ -161,7 +162,7 @@ export const profile = [
         },
       },
     })
-    res.json({ user })
+    res.json({ user, constant: A_CONSTANT })
   },
 ]
 
