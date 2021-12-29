@@ -1,0 +1,14 @@
+{
+  "name": "@cleomacs/api",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.3",
+    "jest": "^27.4.5",
+    "ts-jest": "^27.1.2"
+  },
+  "dependencies": {}
+}
