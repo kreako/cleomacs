@@ -8,3 +8,5 @@ export const prisma = new PrismaClient({
 })
 
 export const Prisma = PrismaOriginal
+
+export * from "./prisma/zod"
