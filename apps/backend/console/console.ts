@@ -1,5 +1,5 @@
 import repl from "repl"
-import { PrismaClient } from ".prisma/client"
+import { PrismaClient } from "@cleomacs/db"
 
 export const prisma = new PrismaClient()
 
