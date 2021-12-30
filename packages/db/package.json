@@ -11,6 +11,9 @@
     "ts-jest": "^27.1.2"
   },
   "dependencies": {
-    "prisma": "^3.7.0"
+    "@prisma/client": "^3.7.0",
+    "prisma": "^3.7.0",
+    "zod": "^3.11.6",
+    "zod-prisma": "^0.3.2"
   }
 }
