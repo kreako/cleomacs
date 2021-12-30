@@ -1,6 +1,6 @@
 import SecurePasswordLib from "secure-password"
 import { ironSession } from "iron-session/express"
-import { GlobalRole, MembershipRole } from "@prisma/client"
+import { GlobalRole, MembershipRole } from "@cleomacs/db"
 
 export class AuthError extends Error {
   name = "AuthError"

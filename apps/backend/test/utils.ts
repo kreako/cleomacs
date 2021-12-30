@@ -10,7 +10,7 @@ import {
   createResponse,
   RequestMethod,
 } from "node-mocks-http"
-import { prisma } from "../src/prisma"
+import { prisma } from "@cleomacs/db"
 import { nanoid } from "nanoid"
 
 export const cleanupOrganizationFromDb = async (email: string) => {
