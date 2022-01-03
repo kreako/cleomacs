@@ -4,17 +4,10 @@ import { processRequestBody } from "zod-express-middleware"
 import { z } from "zod"
 import { prisma, MembershipRole, GlobalRole } from "@cleomacs/db"
 import createError from "http-errors"
-import { A_CONSTANT } from "@cleomacs/api"
+import { signupInput, signupOutput } from "@cleomacs/api/auth"
 
 export const signup = [
-  processRequestBody(
-    z.object({
-      organizationName: z.string(),
-      userName: z.string(),
-      email: z.string(),
-      password: z.string(),
-    })
-  ),
+  processRequestBody(signupInput),
   session,
   async (req: express.Request, res: express.Response) => {
     const hashedPassword = await hash(req.body.password)
@@ -58,7 +51,7 @@ export const signup = [
     req.session.globalRole = GlobalRole.CUSTOMER
     await req.session.save()
 
-    res.json({ success: true })
+    res.json(signupOutput())
   },
 ]
 
@@ -161,7 +154,7 @@ export const profile = [
         },
       },
     })
-    res.json({ user, constant: A_CONSTANT })
+    res.json({ user })
   },
 ]
 
