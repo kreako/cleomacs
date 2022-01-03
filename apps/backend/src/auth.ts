@@ -4,7 +4,13 @@ import { processRequestBody } from "zod-express-middleware"
 import { z } from "zod"
 import { prisma, MembershipRole, GlobalRole } from "@cleomacs/db"
 import createError from "http-errors"
-import { loginInput, loginOutput, signupInput, signupOutput } from "@cleomacs/api/auth"
+import {
+  loginInput,
+  loginOutput,
+  logoutOutput,
+  signupInput,
+  signupOutput,
+} from "@cleomacs/api/auth"
 
 export const signup = [
   processRequestBody(signupInput),
@@ -121,7 +127,7 @@ export const logout = [
   session,
   (req: express.Request, res: express.Response) => {
     req.session.destroy()
-    res.json({ success: true })
+    res.json(logoutOutput())
   },
 ]
 

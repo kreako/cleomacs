@@ -32,3 +32,9 @@ export type loginInputType = z.infer<typeof loginInput>
 export const loginOutput = () => success
 
 export type loginOutputType = ReturnType<typeof loginOutput>
+
+// logout
+
+export const logoutOutput = () => success
+
+export type logoutOutputType = ReturnType<typeof logoutOutput>
