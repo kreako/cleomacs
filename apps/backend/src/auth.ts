@@ -1,16 +1,17 @@
 import express from "express"
 import { hash, session, verify } from "./auth-utils"
 import { processRequestBody } from "zod-express-middleware"
-import { z } from "zod"
 import { prisma, MembershipRole, GlobalRole } from "@cleomacs/db"
 import createError from "http-errors"
 import {
   loginInput,
   loginOutput,
   logoutOutput,
+  profileOutput,
   signupInput,
   signupOutput,
 } from "@cleomacs/api/auth"
+import { findUser } from "@cleomacs/dbal/auth"
 
 export const signup = [
   processRequestBody(signupInput),
@@ -138,24 +139,8 @@ export const profile = [
       return next(createError(401, "login necessary"))
     }
     const userId = req.session.userId
-    const user = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-      include: {
-        lastMembership: {
-          include: {
-            organization: true,
-          },
-        },
-        memberships: {
-          include: {
-            organization: true,
-          },
-        },
-      },
-    })
-    res.json({ user })
+    const user = await findUser(userId)
+    res.json(profileOutput(user))
   },
 ]
 
