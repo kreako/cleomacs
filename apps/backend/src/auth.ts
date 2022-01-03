@@ -4,7 +4,7 @@ import { processRequestBody } from "zod-express-middleware"
 import { z } from "zod"
 import { prisma, MembershipRole, GlobalRole } from "@cleomacs/db"
 import createError from "http-errors"
-import { signupInput, signupOutput } from "@cleomacs/api/auth"
+import { loginInput, loginOutput, signupInput, signupOutput } from "@cleomacs/api/auth"
 
 export const signup = [
   processRequestBody(signupInput),
@@ -56,12 +56,7 @@ export const signup = [
 ]
 
 export const login = [
-  processRequestBody(
-    z.object({
-      email: z.string(),
-      password: z.string(),
-    })
-  ),
+  processRequestBody(loginInput),
   session,
   async (req: express.Request, res: express.Response) => {
     const user = await prisma.user.findUnique({
@@ -118,7 +113,7 @@ export const login = [
     req.session.globalRole = user.role
     await req.session.save()
 
-    res.json({ success: true })
+    res.json(loginOutput())
   },
 ]
 
