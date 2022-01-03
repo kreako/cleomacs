@@ -10,5 +10,7 @@
     "jest": "^27.4.5",
     "ts-jest": "^27.1.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "zod": "^3.11.6"
+  }
 }
