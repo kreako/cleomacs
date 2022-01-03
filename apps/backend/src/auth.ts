@@ -11,7 +11,7 @@ import {
   signupInput,
   signupOutput,
 } from "@cleomacs/api/auth"
-import { findUser } from "@cleomacs/dbal/auth"
+import { findReducedUserByEmail, findUser, updatePasswordHash } from "@cleomacs/dbal/auth"
 
 export const signup = [
   processRequestBody(signupInput),
@@ -66,27 +66,7 @@ export const login = [
   processRequestBody(loginInput),
   session,
   async (req: express.Request, res: express.Response) => {
-    const user = await prisma.user.findUnique({
-      where: {
-        email: req.body.email,
-      },
-      select: {
-        id: true,
-        hashedPassword: true,
-        role: true,
-        lastMembership: {
-          select: {
-            id: true,
-            role: true,
-            organization: {
-              select: {
-                id: true,
-              },
-            },
-          },
-        },
-      },
-    })
+    const user = await findReducedUserByEmail(req.body.email)
     if (user === null) {
       throw new Error("Invalid email")
     }
@@ -102,16 +82,7 @@ export const login = [
     const organization = membership.organization
 
     // Will throw if not OK
-    await verify(req.body.password, user.hashedPassword, async (newHashedPassword) => {
-      await prisma.user.update({
-        where: {
-          email: req.body.email,
-        },
-        data: {
-          hashedPassword: newHashedPassword,
-        },
-      })
-    })
+    await verify(req.body.password, user.hashedPassword, updatePasswordHash(req.body.email))
 
     req.session.userId = user.id
     req.session.membershipId = membership.id
