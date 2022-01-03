@@ -11,6 +11,7 @@
     "ts-jest": "^27.1.2"
   },
   "dependencies": {
+    "@cleomacs/dbal": "^1.0.0",
     "zod": "^3.11.6"
   }
 }
