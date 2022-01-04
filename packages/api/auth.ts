@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { User } from "@cleomacs/dbal/auth"
+import { User } from "@cleomacs/dbal/user"
 
 const email = z.string().email({ message: "l'email est invalide" })
 const password = z.string().min(8, { message: "Le password n'est pas assez long" })

@@ -11,7 +11,7 @@ import {
   signupInput,
   signupOutput,
 } from "@cleomacs/api/auth"
-import { findReducedUserByEmail, findUser, updatePasswordHash } from "@cleomacs/dbal/auth"
+import { findReducedUserByEmail, findUser, updatePasswordHash } from "@cleomacs/dbal/user"
 
 export const signup = [
   processRequestBody(signupInput),
