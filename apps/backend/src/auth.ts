@@ -1,7 +1,7 @@
 import express from "express"
 import { hash, session, verify } from "./auth-utils"
 import { processRequestBody } from "zod-express-middleware"
-import { prisma, MembershipRole, GlobalRole } from "@cleomacs/db"
+import { MembershipRole, GlobalRole } from "@cleomacs/db"
 import createError from "http-errors"
 import {
   loginInput,
@@ -11,7 +11,15 @@ import {
   signupInput,
   signupOutput,
 } from "@cleomacs/api/auth"
-import { findReducedUserByEmail, findUser, updatePasswordHash } from "@cleomacs/dbal/user"
+import {
+  createUser,
+  findReducedUserByEmail,
+  findUser,
+  updateLastMembership,
+  updatePasswordHash,
+} from "@cleomacs/dbal/user"
+import { createOrganization } from "@cleomacs/dbal/organization"
+import { createAdminMembership } from "@cleomacs/dbal/membership"
 
 export const signup = [
   processRequestBody(signupInput),
@@ -20,35 +28,12 @@ export const signup = [
     const hashedPassword = await hash(req.body.password)
 
     // Create objects in DB organization - membership - user
-    const { id: organizationId } = await prisma.organization.create({
-      data: { name: req.body.organizationName },
-      select: { id: true },
-    })
-
-    const { id: userId } = await prisma.user.create({
-      data: {
-        name: req.body.userName,
-        email: req.body.email,
-        hashedPassword: hashedPassword,
-        role: GlobalRole.CUSTOMER,
-      },
-      select: { id: true },
-    })
-
-    const { id: membershipId } = await prisma.membership.create({
-      data: {
-        role: [MembershipRole.ADMIN, MembershipRole.MANAGER, MembershipRole.USER],
-        userId: userId,
-        organizationId: organizationId,
-      },
-      select: { id: true },
-    })
+    const organizationId = await createOrganization(req.body.organizationName)
+    const userId = await createUser(req.body.userName, req.body.email, hashedPassword)
+    const membershipId = await createAdminMembership(userId, organizationId)
 
     // now update the lastMembership
-    await prisma.user.update({
-      where: { id: userId },
-      data: { lastMembershipId: membershipId },
-    })
+    await updateLastMembership(userId, membershipId)
 
     // set session
     req.session.userId = userId

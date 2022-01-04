@@ -1,4 +1,4 @@
-import { prisma, Prisma } from "@cleomacs/db"
+import { prisma, Prisma, GlobalRole } from "@cleomacs/db"
 
 export const findUser = async (userId: number) => {
   return await prisma.user.findUnique({
@@ -53,5 +53,25 @@ export const updatePasswordHash = (email: string) => async (newHashedPassword: s
     data: {
       hashedPassword: newHashedPassword,
     },
+  })
+}
+
+export const createUser = async (name: string, email: string, hashedPassword: string) => {
+  const { id: userId } = await prisma.user.create({
+    data: {
+      name: name,
+      email: email,
+      hashedPassword: hashedPassword,
+      role: GlobalRole.CUSTOMER,
+    },
+    select: { id: true },
+  })
+  return userId
+}
+
+export const updateLastMembership = async (userId: number, membershipId: number) => {
+  await prisma.user.update({
+    where: { id: userId },
+    data: { lastMembershipId: membershipId },
   })
 }
