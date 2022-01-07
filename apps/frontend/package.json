@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "vite",
-    "test": "vitest",
+    "test": "vitest run",
     "test-watch": "vitest watch",
     "build": "tsc && vite build",
     "serve": "vite preview",
@@ -30,7 +30,8 @@
     "autoprefixer": "^10.4.1",
     "postcss": "^8.4.5",
     "typescript": "^4.5.4",
-    "vite": "^2.7.10"
+    "vite": "^2.7.10",
+    "vitest": "0.0.139"
   },
   "prettier": {
     "semi": false
