@@ -7,6 +7,8 @@ module.exports = {
   extends: [
     "eslint:recommended",
     "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:react/jsx-runtime",
     "plugin:@typescript-eslint/recommended",
   ],
   ignorePatterns: ["apps/frontend/dist/**/*"],
@@ -31,5 +33,10 @@ module.exports = {
         functions: "never",
       },
     ],
+  },
+  settings: {
+    react: {
+      version: "17.0.2",
+    },
   },
 }
