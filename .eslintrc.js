@@ -22,7 +22,7 @@ module.exports = {
     ecmaVersion: 13,
     sourceType: "module",
   },
-  plugins: ["react", "@typescript-eslint", "import"],
+  plugins: ["react", "@typescript-eslint", "import", "unicorn"],
   rules: {
     semi: ["error", "never"],
     "comma-dangle": [
