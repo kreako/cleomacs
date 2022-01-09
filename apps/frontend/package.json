@@ -6,6 +6,7 @@
     "test": "vitest run",
     "test-watch": "vitest watch",
     "build": "tsc && vite build",
+    "postinstall": "patch-package",
     "serve": "vite preview",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -30,6 +31,7 @@
     "@types/tailwindcss": "^3.0.1",
     "@vitejs/plugin-react": "^1.1.3",
     "autoprefixer": "^10.4.1",
+    "patch-package": "^6.4.7",
     "postcss": "^8.4.5",
     "typescript": "^4.5.4",
     "unplugin-icons": "^0.13.0",

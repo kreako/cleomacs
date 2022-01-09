@@ -1,0 +1,12 @@
+diff --git a/node_modules/unplugin-icons/dist/vite.d.ts b/node_modules/unplugin-icons/dist/vite.d.ts
+index fa588fa..fc4e8be 100644
+--- a/node_modules/unplugin-icons/dist/vite.d.ts
++++ b/node_modules/unplugin-icons/dist/vite.d.ts
+@@ -1,6 +1,7 @@
+ import { Options } from './types';
+ import '@antfu/utils';
+ 
++// @ts-ignore
+ declare const _default: (options?: Options | undefined) => Plugin$1;
+ 
+ export { _default as default };
