@@ -31,24 +31,24 @@ tabs:
             run:
               command:
                 cmd: "./.launch.expect"
-                args: ["cd apps/backend && npm run dev"]
+                args: ["cd apps/backend && yarn run dev"]
           - direction: Vertical
             split_size:
               Percent: 33
             run:
               command:
                 cmd: "./.prefill-input.expect"
-                args: ["cd apps/backend && npx prisma studio --port 5555"]
+                args: ["cd packages/db && npx prisma studio --port 5555"]
           - direction: Vertical
             split_size:
               Percent: 33
             run:
               command:
                 cmd: "./.prefill-input.expect"
-                args: ["cd apps/backend && npm run console"]
+                args: ["cd apps/backend && yarn run console"]
       - direction: Horizontal
         run:
           command:
             cmd: "./.launch.expect"
-            args: ["cd apps/backend && npm run test:watch"]
+            args: ["cd apps/backend && yarn run test:watch"]
   - name: "Utils"
