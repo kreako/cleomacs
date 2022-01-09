@@ -10,8 +10,10 @@ module.exports = {
     "plugin:react-hooks/recommended",
     "plugin:react/jsx-runtime",
     "plugin:@typescript-eslint/recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
   ],
-  ignorePatterns: ["apps/frontend/dist/**/*"],
+  ignorePatterns: ["**/dist/**/*"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: {
@@ -20,7 +22,7 @@ module.exports = {
     ecmaVersion: 13,
     sourceType: "module",
   },
-  plugins: ["react", "@typescript-eslint"],
+  plugins: ["react", "@typescript-eslint", "import"],
   rules: {
     semi: ["error", "never"],
     "comma-dangle": [
@@ -33,6 +35,7 @@ module.exports = {
         functions: "never",
       },
     ],
+    "import/no-unresolved": "off",
   },
   settings: {
     react: {
