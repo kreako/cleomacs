@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "nodemon -r dotenv/config src/index.ts",
+    "clean": "rm -rf ./dist",
+    "compile": "tsc -p tsconfig.build.json",
+    "build": "yarn run clean && yarn run compile",
     "test": "jest",
     "test:watch": "jest --watch",
     "console": "NODE_OPTIONS='--experimental-repl-await' ts-node --project ./console/tsconfig-repl.json --interactive './console/console'"

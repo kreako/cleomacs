@@ -2,6 +2,9 @@
   "name": "@cleomacs/api",
   "version": "1.0.0",
   "scripts": {
+    "clean": "rm -rf ./dist",
+    "compile": "tsc -p tsconfig.build.json",
+    "build": "yarn run clean && yarn run compile",
     "test": "jest",
     "test:watch": "jest --watch"
   },

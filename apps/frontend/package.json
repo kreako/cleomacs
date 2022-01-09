@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "vite",
+    "clean": "rm -rf ./dist",
+    "compile": "tsc -p tsconfig.build.json  && vite build",
+    "build": "yarn run clean && yarn run compile",
     "test": "vitest run",
     "test-watch": "vitest watch",
-    "build": "tsc && vite build",
     "postinstall": "patch-package",
     "serve": "vite preview",
     "storybook": "start-storybook -p 6006",
