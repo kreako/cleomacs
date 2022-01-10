@@ -51,4 +51,24 @@ tabs:
           command:
             cmd: "./.launch.expect"
             args: ["cd apps/backend && yarn run test:watch"]
+  - name: "Frontend"
+    direction: Horizontal
+    parts:
+      - direction: Vertical
+        split_size:
+          Percent: 30
+        run:
+          command:
+            cmd: "./.launch.expect"
+            args: ["cd apps/frontend && yarn run dev"]
+      - direction: Vertical
+        split_size:
+          Percent: 30
+        run:
+          command:
+            cmd: "./.launch.expect"
+            args: ["cd apps/frontend && yarn run storybook"]
+      - direction: Vertical
+        split_size:
+          Percent: 40
   - name: "Utils"
