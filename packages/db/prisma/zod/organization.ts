@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { Organization } from "../../node_modules/@prisma/client"
+import { Organization } from "../../../../node_modules/@prisma/client"
 import { CompleteMembership, RelatedMembershipModel } from "./index"
 
 export const OrganizationModel = z.object({

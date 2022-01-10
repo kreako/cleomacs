@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { User, GlobalRole } from "../../node_modules/@prisma/client"
+import { User, GlobalRole } from "../../../../node_modules/@prisma/client"
 import { CompleteMembership, RelatedMembershipModel } from "./index"
 
 export const UserModel = z.object({

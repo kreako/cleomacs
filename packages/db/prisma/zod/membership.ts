@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { Membership, MembershipRole } from "../../node_modules/@prisma/client"
+import { Membership, MembershipRole } from "../../../../node_modules/@prisma/client"
 import {
   CompleteOrganization,
   RelatedOrganizationModel,
