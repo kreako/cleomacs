@@ -8,7 +8,7 @@
     "build": "yarn run clean && yarn run compile",
     "test": "jest",
     "test:watch": "jest --watch",
-    "console": "NODE_OPTIONS='--experimental-repl-await' ts-node --project ./console/tsconfig-repl.json --interactive './console/console'"
+    "console": "NODE_OPTIONS='--experimental-repl-await' ts-node -r dotenv/config --project ./console/tsconfig-repl.json --interactive './console/console'"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
