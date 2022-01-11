@@ -5,7 +5,9 @@ import LabelInput from "./LabelInput"
 export default {
   title: "LabelInput",
   component: LabelInput,
-  argTypes: {},
+  argTypes: {
+    onChange: { action: "change" },
+  },
   decorators: [
     (Story) => (
       <div className="max-w-md">
@@ -22,6 +24,8 @@ const Template: ComponentStory<typeof LabelInput> = (args) => (
 export const Text = Template.bind({})
 Text.args = {
   label: "Votre nom",
+  name: "name",
+  value: "",
   kind: "text",
 }
 
@@ -33,6 +37,7 @@ TextWithError.args = {
 
 export const Email = Template.bind({})
 Email.args = {
+  ...Text.args,
   label: "Votre email",
   kind: "email",
 }
@@ -45,6 +50,7 @@ EmailWithError.args = {
 
 export const Password = Template.bind({})
 Password.args = {
+  ...Text.args,
   label: "Votre password",
   kind: "password",
 }

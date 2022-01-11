@@ -1,9 +1,13 @@
+import { ChangeEventHandler } from "react"
 import { useBoolean } from "usehooks-ts"
 import Eye from "~icons/mdi/eye"
 import EyeOff from "~icons/mdi/eye-off"
 
 type InputProps = {
   id: string
+  name: string
+  value: string
+  onChange: ChangeEventHandler<HTMLInputElement>
   error: boolean
 }
 
@@ -19,7 +23,10 @@ function TextInput(props: InputProps) {
   const c = inputErrorClassName(props.error)
   return (
     <input
-      id={props.id}
+      id={props.name}
+      name={props.name}
+      value={props.value}
+      onChange={props.onChange}
       type="text"
       className={`bg-slate-100 px-4 py-2 rounded-md w-full caret-slate-900 ${c}`}
     />
@@ -31,6 +38,9 @@ function EmailInput(props: InputProps) {
   return (
     <input
       id={props.id}
+      name={props.name}
+      value={props.value}
+      onChange={props.onChange}
       type="email"
       className={`bg-slate-100 px-4 py-2 rounded-md w-full caret-slate-900 ${c}`}
     />
@@ -61,6 +71,9 @@ function PasswordInput(props: InputProps) {
     >
       <input
         id={props.id}
+        name={props.name}
+        value={props.value}
+        onChange={props.onChange}
         type={kind}
         className="flex-grow caret-slate-900 bg-transparent outline-none"
       />
@@ -73,20 +86,47 @@ function PasswordInput(props: InputProps) {
 
 type LabelInputProps = {
   label: string
+  name: string
+  value: string
+  onChange: ChangeEventHandler<HTMLInputElement>
   kind: "text" | "email" | "password"
   error?: string
 }
 
 export default function LabelInput(props: LabelInputProps) {
-  const id = props.label.replace(" ", "-")
+  const id = props.name.replace(" ", "-")
   const isError = props.error !== undefined
   let input = null
   if (props.kind === "text") {
-    input = <TextInput id={id} error={isError} />
+    input = (
+      <TextInput
+        id={id}
+        error={isError}
+        name={props.name}
+        value={props.value}
+        onChange={props.onChange}
+      />
+    )
   } else if (props.kind === "email") {
-    input = <EmailInput id={id} error={isError} />
+    input = (
+      <EmailInput
+        id={id}
+        error={isError}
+        name={props.name}
+        value={props.value}
+        onChange={props.onChange}
+      />
+    )
   } else if (props.kind === "password") {
-    input = <PasswordInput id={id} error={isError} />
+    input = (
+      <PasswordInput
+        id={id}
+        error={isError}
+        name={props.name}
+        value={props.value}
+        onChange={props.onChange}
+      />
+    )
   }
   return (
     <div>
