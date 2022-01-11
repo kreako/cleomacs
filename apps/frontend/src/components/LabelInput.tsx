@@ -11,7 +11,7 @@ function inputErrorClassName(error: boolean): string {
   if (error) {
     return "outline outline-2 outline-red-600"
   } else {
-    return "outline-none"
+    return "outline-none focus:outline focus:outline-2 focus:outline-indigo-300"
   }
 }
 
@@ -49,7 +49,11 @@ function useInputType() {
 
 function PasswordInput(props: InputProps) {
   const { hidden, toggle, kind } = useInputType()
-  const c = inputErrorClassName(props.error)
+  let c =
+    "outline-none focus-within:outline focus-within:outline-2 focus-within:outline-indigo-300"
+  if (props.error) {
+    c = "outline outline-2 outline-red-600"
+  }
 
   return (
     <div
