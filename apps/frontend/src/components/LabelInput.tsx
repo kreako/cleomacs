@@ -91,11 +91,12 @@ type LabelInputProps = {
   onChange: ChangeEventHandler<HTMLInputElement>
   kind: "text" | "email" | "password"
   error?: string
+  touched?: boolean
 }
 
 export default function LabelInput(props: LabelInputProps) {
   const id = props.name.replace(" ", "-")
-  const isError = props.error !== undefined
+  const isError = props.touched === true && props.error !== undefined
   let input = null
   if (props.kind === "text") {
     input = (

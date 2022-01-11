@@ -27,12 +27,19 @@ Text.args = {
   name: "name",
   value: "",
   kind: "text",
+  touched: true,
 }
 
 export const TextWithError = Template.bind({})
 TextWithError.args = {
   ...Text.args,
   error: "Quelque chose n'est pas très clair",
+}
+
+export const TextWithErrorNotTouched = Template.bind({})
+TextWithErrorNotTouched.args = {
+  ...TextWithError.args,
+  touched: false,
 }
 
 export const Email = Template.bind({})
