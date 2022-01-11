@@ -3,9 +3,22 @@ import { Form, Field } from "react-final-form"
 
 interface SignupValues {
   organizationName: string
-  username: string
+  identityName: string
   email: string
   password: string
+}
+
+const required = (label: string) => (value: string) =>
+  value ? undefined : `${label} est requis`
+
+const validateEmail = (value: string) => {
+  if (value == undefined) {
+    return "Votre adresse email est requise"
+  }
+  if (value.indexOf("@") === -1) {
+    return "Votre adresse email ne ressemble pas à une adresse email"
+  }
+  return undefined
 }
 
 export default function Signup() {
@@ -22,53 +35,82 @@ export default function Signup() {
                 Inscription
               </div>
               <div className="mt-4">
-                <Field<string> name="organizationName">
-                  {({ input: { name, value, onChange } }) => (
+                <Field<string>
+                  name="organizationName"
+                  validate={required("Le nom de votre organisation")}
+                >
+                  {({
+                    input: { name, value, onChange },
+                    meta: { error, touched },
+                  }) => (
                     <LabelInput
                       label="Le nom de votre organisation"
                       kind="text"
                       name={name}
                       value={value}
                       onChange={onChange}
+                      error={error}
+                      touched={touched}
                     />
                   )}
                 </Field>
               </div>
               <div className="mt-4">
-                <Field<string> name="username">
-                  {({ input: { name, value, onChange } }) => (
+                <Field<string>
+                  name="identityName"
+                  validate={required("Votre nom")}
+                >
+                  {({
+                    input: { name, value, onChange },
+                    meta: { error, touched },
+                  }) => (
                     <LabelInput
                       label="Votre nom"
                       kind="text"
                       name={name}
                       value={value}
                       onChange={onChange}
+                      error={error}
+                      touched={touched}
                     />
                   )}
                 </Field>
               </div>
               <div className="mt-4">
-                <Field<string> name="email">
-                  {({ input: { name, value, onChange } }) => (
+                <Field<string> name="email" validate={validateEmail}>
+                  {({
+                    input: { name, value, onChange },
+                    meta: { error, touched },
+                  }) => (
                     <LabelInput
                       label="Votre adresse email"
                       kind="email"
                       name={name}
                       value={value}
                       onChange={onChange}
+                      error={error}
+                      touched={touched}
                     />
                   )}
                 </Field>
               </div>
               <div className="mt-4">
-                <Field<string> name="password">
-                  {({ input: { name, value, onChange } }) => (
+                <Field<string>
+                  name="password"
+                  validate={required("Votre mot de passe")}
+                >
+                  {({
+                    input: { name, value, onChange },
+                    meta: { error, touched },
+                  }) => (
                     <LabelInput
                       label="Votre mot de passe"
                       kind="password"
                       name={name}
                       value={value}
                       onChange={onChange}
+                      error={error}
+                      touched={touched}
                     />
                   )}
                 </Field>
