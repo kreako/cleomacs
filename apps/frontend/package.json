@@ -13,6 +13,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@cleomacs/api": "^1.0.0",
     "@headlessui/react": "^1.4.1",
     "@tailwindcss/line-clamp": "^0.3.0",
     "axios": "^0.24.0",
