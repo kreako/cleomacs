@@ -1,6 +1,10 @@
 import LabelInput from "../components/LabelInput"
 import { Form, Field } from "react-final-form"
 import createDecorator from "final-form-focus"
+import { useMutation } from "react-query"
+import { signup as postSignup } from "../api/auth"
+import CloudSync from "~icons/ic/round-cloud-sync"
+import { useNavigate } from "react-router-dom"
 
 const focusOnError = createDecorator()
 
@@ -25,9 +29,35 @@ const validateEmail = (value: string) => {
 }
 
 export default function Signup() {
+  const navigate = useNavigate()
+  const signup = useMutation(
+    async ({
+      organizationName,
+      identityName,
+      email,
+      password,
+    }: SignupValues) => {
+      return await postSignup({
+        organizationName,
+        userName: identityName,
+        email,
+        password,
+      })
+    },
+    {
+      onError: (error) => {
+        // TODO
+        console.log("onError", JSON.stringify(error))
+      },
+      onSuccess: () => {
+        navigate("/")
+      },
+    }
+  )
+
   const onSubmit = async (v: object) => {
     const values = v as SignupValues
-    console.log("submit signup", values)
+    await signup.mutate(values)
   }
   return (
     <div className="pt-4 mx-2 flex flex-col items-center">
@@ -119,11 +149,32 @@ export default function Signup() {
                   )}
                 </Field>
               </div>
+              {signup.isError && (
+                <div className="mt-6 mb-4 text-red-600 flex flex-col items-center space-y-4">
+                  <div className="flex flex-col items-center">
+                    <div className="font-bold tracking-wide">Oh non !</div>
+                    <div> Il y a eu une erreur :</div>
+                  </div>
+                  <div className="font-mono">
+                    {(signup.error as Error).message as string}
+                  </div>
+                </div>
+              )}
               <button
                 type="submit"
+                disabled={signup.isLoading}
                 className="mt-6 w-full bg-indigo-600 text-indigo-100 py-2 rounded-md font-bold text-lg tracking-wide"
               >
-                Inscription
+                <div className="flex justify-center items-center space-x-2">
+                  <div>Inscription</div>
+                  {signup.isLoading && (
+                    <CloudSync
+                      className="text-indigo-50 animate-pulse"
+                      width="1em"
+                      height="1em"
+                    />
+                  )}
+                </div>
               </button>
             </div>
           </form>
