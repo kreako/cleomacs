@@ -1,5 +1,8 @@
 import LabelInput from "../components/LabelInput"
 import { Form, Field } from "react-final-form"
+import createDecorator from "final-form-focus"
+
+const focusOnError = createDecorator()
 
 interface SignupValues {
   organizationName: string
@@ -22,12 +25,13 @@ const validateEmail = (value: string) => {
 }
 
 export default function Signup() {
-  const onSubmit = async (values: SignupValues) => {
+  const onSubmit = async (v: object) => {
+    const values = v as SignupValues
     console.log("submit signup", values)
   }
   return (
     <div className="pt-4 mx-2 flex flex-col items-center">
-      <Form onSubmit={onSubmit}>
+      <Form onSubmit={onSubmit} decorators={[focusOnError]}>
         {({ handleSubmit }) => (
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col max-w-md">
