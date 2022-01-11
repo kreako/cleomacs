@@ -13,25 +13,25 @@ export const signupInput = z.object({
   email,
   password,
 })
-export type signupInputType = z.infer<typeof signupInput>
+export type SignupInputType = z.infer<typeof signupInput>
 export const signupOutput = () => success
-export type signupOutputType = ReturnType<typeof signupOutput>
+export type SignupOutputType = ReturnType<typeof signupOutput>
 
 // login
 export const loginInput = z.object({
   email,
   password,
 })
-export type loginInputType = z.infer<typeof loginInput>
+export type LoginInputType = z.infer<typeof loginInput>
 export const loginOutput = () => success
-export type loginOutputType = ReturnType<typeof loginOutput>
+export type LoginOutputType = ReturnType<typeof loginOutput>
 
 // logout
 export const logoutOutput = () => success
-export type logoutOutputType = ReturnType<typeof logoutOutput>
+export type LogoutOutputType = ReturnType<typeof logoutOutput>
 
 // profile
 export const profileOutput = (user: User) => ({
   user,
 })
-export type profileOutputType = ReturnType<typeof profileOutput>
+export type ProfileOutputType = ReturnType<typeof profileOutput>
