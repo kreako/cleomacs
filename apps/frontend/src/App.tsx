@@ -1,7 +1,7 @@
 import React from "react"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { HashRouter, Routes, Route } from "react-router-dom"
-import Loading from "./components/Loading"
+import LoadingPage from "./components/LoadingPage"
 import EmptyLayout from "./layout/EmptyLayout"
 
 const Signup = React.lazy(() => import("./pages/Signup"))
@@ -18,7 +18,7 @@ export default function App() {
             <Route
               path="signup"
               element={
-                <React.Suspense fallback={<Loading />}>
+                <React.Suspense fallback={<LoadingPage />}>
                   <Signup />
                 </React.Suspense>
               }
@@ -26,7 +26,7 @@ export default function App() {
             <Route
               path="*"
               element={
-                <React.Suspense fallback={<Loading />}>
+                <React.Suspense fallback={<LoadingPage />}>
                   <NotFound />
                 </React.Suspense>
               }
