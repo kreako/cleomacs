@@ -3,7 +3,7 @@ import type { ProfileOutputType, SignupInputType } from "@cleomacs/api/auth"
 import { useQuery } from "react-query"
 import { keys } from "./query-key"
 
-export const signup = async (values: SignupInputType) => {
+export const postSignup = async (values: SignupInputType) => {
   await axios.post("/api/auth/signup", values, {
     timeout: 3000,
     transitional: { clarifyTimeoutError: true },
