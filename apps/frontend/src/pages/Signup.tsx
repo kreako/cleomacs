@@ -3,8 +3,8 @@ import { Form, Field } from "react-final-form"
 import createDecorator from "final-form-focus"
 import { useMutation } from "react-query"
 import { signup as postSignup } from "../api/auth"
-import CloudSync from "~icons/ic/round-cloud-sync"
 import { useNavigate } from "react-router-dom"
+import Loading from "../components/Loading"
 
 const focusOnError = createDecorator()
 
@@ -167,13 +167,7 @@ export default function Signup() {
               >
                 <div className="flex justify-center items-center space-x-2">
                   <div>Inscription</div>
-                  {signup.isLoading && (
-                    <CloudSync
-                      className="text-indigo-50 animate-pulse"
-                      width="1em"
-                      height="1em"
-                    />
-                  )}
+                  {signup.isLoading && <Loading size={1} />}
                 </div>
               </button>
             </div>
