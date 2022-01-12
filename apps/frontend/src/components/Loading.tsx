@@ -1,15 +1,16 @@
 import CloudSync from "~icons/ic/round-cloud-sync"
 
-export default function Loading() {
+type LoadingProps = {
+  size: number
+}
+
+export default function Loading(props: LoadingProps) {
+  const size = `${props.size}em`
   return (
-    <div className="grid grid-cols-3 grid-rows-3 place-items-center h-screen">
-      <div className="col-start-2 row-start-2 ">
-        <CloudSync
-          className="text-indigo-600 animate-pulse"
-          width="2em"
-          height="2em"
-        />
-      </div>
-    </div>
+    <CloudSync
+      className="text-indigo-600 animate-pulse"
+      width={size}
+      height={size}
+    />
   )
 }

@@ -15,7 +15,14 @@ export default {
   ],
 } as ComponentMeta<typeof Loading>
 
-const Template: ComponentStory<typeof Loading> = () => <Loading />
+const Template: ComponentStory<typeof Loading> = (args) => <Loading {...args} />
 
 export const Simple = Template.bind({})
-Simple.args = {}
+Simple.args = {
+  size: 2,
+}
+
+export const Big = Template.bind({})
+Big.args = {
+  size: 10,
+}
