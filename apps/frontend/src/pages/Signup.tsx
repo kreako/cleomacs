@@ -1,8 +1,7 @@
 import LabelInput from "../components/LabelInput"
 import { Form, Field } from "react-final-form"
 import createDecorator from "final-form-focus"
-import { useMutation } from "react-query"
-import { postSignup } from "../api/auth"
+import { useSignup } from "../api/auth"
 import { useNavigate } from "react-router-dom"
 import Loading from "../components/Loading"
 import RawError from "../components/RawError"
@@ -11,6 +10,8 @@ const focusOnError = createDecorator()
 
 interface SignupValues {
   organizationName: string
+  // Why not call this thing userName like on SignupInputType ?
+  // Because browser (firefox) auto-complete on userName and put the email in the userName field
   identityName: string
   email: string
   password: string
@@ -31,34 +32,24 @@ const validateEmail = (value: string) => {
 
 export default function Signup() {
   const navigate = useNavigate()
-  const signup = useMutation(
-    async ({
+  const signup = useSignup({
+    onError: (error) => {
+      // TODO
+      console.log("onError", JSON.stringify(error))
+    },
+    onSuccess: () => {
+      navigate("/")
+    },
+  })
+  const onSubmit = async (v: object) => {
+    const { organizationName, identityName, email, password } =
+      v as SignupValues
+    await signup.mutate({
       organizationName,
-      identityName,
+      userName: identityName,
       email,
       password,
-    }: SignupValues) => {
-      return await postSignup({
-        organizationName,
-        userName: identityName,
-        email,
-        password,
-      })
-    },
-    {
-      onError: (error) => {
-        // TODO
-        console.log("onError", JSON.stringify(error))
-      },
-      onSuccess: () => {
-        navigate("/")
-      },
-    }
-  )
-
-  const onSubmit = async (v: object) => {
-    const values = v as SignupValues
-    await signup.mutate(values)
+    })
   }
   return (
     <div className="pt-4 mx-2 flex flex-col items-center">

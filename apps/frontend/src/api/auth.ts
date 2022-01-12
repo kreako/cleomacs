@@ -13,6 +13,23 @@ export const postSignup = async (values: SignupInputType) => {
   return await axios.post("/auth/signup", values)
 }
 
+type UseSignupType = {
+  onError: (error: Error) => void
+  onSuccess: () => void
+}
+
+export const useSignup = ({ onError, onSuccess }: UseSignupType) => {
+  return useMutation(
+    async (values: SignupInputType) => {
+      return await postSignup(values)
+    },
+    {
+      onError,
+      onSuccess,
+    }
+  )
+}
+
 export const postLogout = async () => {
   return await axios.post("/auth/logout", {})
 }
