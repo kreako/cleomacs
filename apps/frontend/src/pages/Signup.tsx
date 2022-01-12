@@ -5,6 +5,7 @@ import { useMutation } from "react-query"
 import { signup as postSignup } from "../api/auth"
 import { useNavigate } from "react-router-dom"
 import Loading from "../components/Loading"
+import RawError from "../components/RawError"
 
 const focusOnError = createDecorator()
 
@@ -149,17 +150,7 @@ export default function Signup() {
                   )}
                 </Field>
               </div>
-              {signup.isError && (
-                <div className="mt-6 mb-4 text-red-600 flex flex-col items-center space-y-4">
-                  <div className="flex flex-col items-center">
-                    <div className="font-bold tracking-wide">Oh non !</div>
-                    <div> Il y a eu une erreur :</div>
-                  </div>
-                  <div className="font-mono">
-                    {(signup.error as Error).message as string}
-                  </div>
-                </div>
-              )}
+              {signup.isError && <RawError error={signup.error as Error} />}
               <button
                 type="submit"
                 disabled={signup.isLoading}
