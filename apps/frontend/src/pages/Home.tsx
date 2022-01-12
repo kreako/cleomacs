@@ -1,5 +1,6 @@
 import { useProfile } from "../api/auth"
 import Loading from "../components/Loading"
+import Logout from "../components/Logout"
 import RawError from "../components/RawError"
 
 function Profile() {
@@ -18,9 +19,10 @@ function Profile() {
 
 export default function Home() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col space-y-4">
       <div>Accueil</div>
       <Profile />
+      <Logout />
     </div>
   )
 }
