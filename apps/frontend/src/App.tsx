@@ -6,6 +6,7 @@ import EmptyLayout from "./layout/EmptyLayout"
 
 const Home = React.lazy(() => import("./pages/Home"))
 const Signup = React.lazy(() => import("./pages/Signup"))
+const Login = React.lazy(() => import("./pages/Login"))
 const NotFound = React.lazy(() => import("./pages/NotFound"))
 
 const queryClient = new QueryClient()
@@ -29,6 +30,14 @@ export default function App() {
               element={
                 <React.Suspense fallback={<LoadingPage />}>
                   <Signup />
+                </React.Suspense>
+              }
+            />
+            <Route
+              path="login"
+              element={
+                <React.Suspense fallback={<LoadingPage />}>
+                  <Login />
                 </React.Suspense>
               }
             />
