@@ -1,5 +1,9 @@
 import rawAxios from "axios"
-import type { ProfileOutputType, SignupInputType } from "@cleomacs/api/auth"
+import type {
+  LoginInputType,
+  ProfileOutputType,
+  SignupInputType,
+} from "@cleomacs/api/auth"
 import { useMutation, useQuery } from "react-query"
 import { keys } from "./query-key"
 
@@ -22,6 +26,27 @@ export const useSignup = ({ onError, onSuccess }: UseSignupType) => {
   return useMutation(
     async (values: SignupInputType) => {
       return await postSignup(values)
+    },
+    {
+      onError,
+      onSuccess,
+    }
+  )
+}
+
+export const postLogin = async (values: LoginInputType) => {
+  return await axios.post("/auth/login", values)
+}
+
+type UseLoginType = {
+  onError: (error: Error) => void
+  onSuccess: () => void
+}
+
+export const useLogin = ({ onError, onSuccess }: UseLoginType) => {
+  return useMutation(
+    async (values: LoginInputType) => {
+      return await postLogin(values)
     },
     {
       onError,
