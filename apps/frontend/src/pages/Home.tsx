@@ -1,9 +1,12 @@
+import axios, { AxiosError } from "axios"
+import { useNavigate } from "react-router-dom"
 import { useProfile } from "../api/auth"
 import Loading from "../components/Loading"
 import Logout from "../components/Logout"
 import RawError from "../components/RawError"
 
 function Profile() {
+  const navigate = useNavigate()
   const profile = useProfile()
 
   if (profile.isLoading) {
@@ -11,6 +14,12 @@ function Profile() {
   }
 
   if (profile.isError) {
+    if (axios.isAxiosError(profile.error)) {
+      const axiosError = profile.error as AxiosError
+      if (axiosError.response?.status === 401) {
+        navigate("/login?next=/")
+      }
+    }
     return <RawError error={profile.error as Error} />
   }
 

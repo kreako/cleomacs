@@ -2,7 +2,7 @@ import LabelInput from "../components/LabelInput"
 import { Form, Field } from "react-final-form"
 import createDecorator from "final-form-focus"
 import { useLogin } from "../api/auth"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import Loading from "../components/Loading"
 import RawError from "../components/RawError"
 import type { LoginInputType } from "@cleomacs/api/auth"
@@ -24,13 +24,18 @@ const validateEmail = (value: string) => {
 
 export default function Login() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const login = useLogin({
     onError: (error) => {
       // TODO
       console.log("onError", JSON.stringify(error))
     },
     onSuccess: () => {
-      navigate("/")
+      let next = searchParams.get("next")
+      if (next == null) {
+        next = "/"
+      }
+      navigate(next)
     },
   })
   const onSubmit = async (v: object) => {
