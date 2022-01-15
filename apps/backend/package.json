@@ -11,6 +11,7 @@
     "console": "NODE_OPTIONS='--experimental-repl-await' ts-node -r dotenv/config --project ./console/tsconfig-repl.json --interactive './console/console'"
   },
   "devDependencies": {
+    "@cleomacs/test": "^1.0.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.13",
     "@types/http-errors": "^1.8.1",

@@ -1,14 +1,6 @@
 import { login, logout, profile, signup } from "../src/auth"
-import {
-  cleanupOrganizationFromDb,
-  cookieHeader,
-  errorGet,
-  errorPost,
-  faker,
-  get,
-  post,
-  successBody,
-} from "./utils"
+import { cookieHeader, errorGet, errorPost, get, post, successBody } from "./utils"
+import { cleanupOrganizationFromDb, faker } from "@cleomacs/test"
 
 test("signup", async () => {
   const fake = faker()

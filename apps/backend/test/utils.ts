@@ -10,31 +10,6 @@ import {
   createResponse,
   RequestMethod,
 } from "node-mocks-http"
-import { prisma } from "@cleomacs/db"
-import { nanoid } from "nanoid"
-
-export const cleanupOrganizationFromDb = async (email: string) => {
-  const ids = await prisma.user.findUnique({
-    where: { email },
-    select: {
-      id: true,
-      memberships: {
-        select: {
-          id: true,
-          organization: { select: { id: true } },
-        },
-      },
-    },
-  })
-  if (ids === null) {
-    return
-  }
-  for (const membership of ids.memberships) {
-    await prisma.membership.delete({ where: { id: membership.id } })
-    await prisma.organization.delete({ where: { id: membership.organization.id } })
-  }
-  await prisma.user.delete({ where: { id: ids.id } })
-}
 
 type SyncHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => void
 type AsyncHandler = (
@@ -173,16 +148,6 @@ export const cookieHeader = (res?: MockResponse<express.Response>): Headers => {
     c = c[0]
   }
   return { cookie: c }
-}
-
-export const faker = () => {
-  const id = nanoid()
-  return {
-    organizationName: `test org ${id}`,
-    userName: `Test firstname and lastname ${id}`,
-    email: `test-${id}@test.org`,
-    password: `PassWord-${id}`,
-  }
 }
 
 export const successBody = (res: MockResponse<express.Response>) => {
