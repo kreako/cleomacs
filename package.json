@@ -37,6 +37,6 @@
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "clean": "lerna run clean",
     "build": "lerna run build",
-    "test": "lerna run test"
+    "test": "yarn workspaces run test"
   }
 }
