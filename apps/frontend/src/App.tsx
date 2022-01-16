@@ -2,7 +2,7 @@ import React from "react"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { HashRouter, Routes, Route } from "react-router-dom"
 import LoadingPage from "./components/LoadingPage"
-import EmptyLayout from "./layout/EmptyLayout"
+import MainLayout from "./layout/MainLayout"
 
 const Home = React.lazy(() => import("./pages/Home"))
 const Signup = React.lazy(() => import("./pages/Signup"))
@@ -16,7 +16,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <HashRouter>
         <Routes>
-          <Route path="/" element={<EmptyLayout />}>
+          <Route path="/" element={<MainLayout />}>
             <Route
               index
               element={
