@@ -14,12 +14,6 @@ function Profile() {
   }
 
   if (profile.isError) {
-    if (axios.isAxiosError(profile.error)) {
-      const axiosError = profile.error as AxiosError
-      if (axiosError.response?.status === 401) {
-        navigate("/login?next=/")
-      }
-    }
     return <RawError error={profile.error as Error} />
   }
 
