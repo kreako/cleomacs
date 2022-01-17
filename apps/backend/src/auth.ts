@@ -1,8 +1,7 @@
 import express from "express"
-import { hash, session, verify } from "./auth-utils"
+import { hash, session, userIsLoggedIn, verify } from "./auth-utils"
 import { processRequestBody } from "zod-express-middleware"
 import { MembershipRole, GlobalRole } from "@cleomacs/db"
-import createError from "http-errors"
 import {
   loginInput,
   loginOutput,
@@ -90,11 +89,9 @@ export const logout = [
 
 export const profile = [
   session,
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (req.session.userId === undefined) {
-      return next(createError(401, "login necessary"))
-    }
-    const userId = req.session.userId
+  userIsLoggedIn,
+  async (req: express.Request, res: express.Response) => {
+    const userId = req.session.userId as number // legit cast because userIsLoggedIn is called before
     const user = await findUser(userId)
     res.json(profileOutput(user))
   },

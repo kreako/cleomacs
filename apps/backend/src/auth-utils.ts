@@ -1,3 +1,5 @@
+import express from "express"
+import createError from "http-errors"
 import SecurePasswordLib from "secure-password"
 import { ironSession } from "iron-session/express"
 import { GlobalRole, MembershipRole } from "@cleomacs/db"
@@ -51,6 +53,17 @@ export const session = ironSession({
     secure: process.env.NODE_ENV !== "development",
   },
 })
+
+export const userIsLoggedIn = async (
+  req: express.Request,
+  _res: express.Response,
+  next: express.NextFunction
+) => {
+  if (req.session.userId === undefined) {
+    return next(createError(401, "login necessary"))
+  }
+  return next()
+}
 
 declare module "iron-session" {
   interface IronSessionData {
