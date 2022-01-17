@@ -35,65 +35,63 @@ export default function LoginForm(props: LoginFormProp) {
     await props.onSubmit(values)
   }
   return (
-    <div className="pt-4 mx-2 flex flex-col items-center">
-      <Form onSubmit={onSubmit} decorators={[focusOnError]}>
-        {({ handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
-            <div className="flex flex-col max-w-md">
-              <div className="mt-4">
-                <Field<string> name="email" validate={validateEmail}>
-                  {({
-                    input: { name, value, onChange },
-                    meta: { error, touched },
-                  }) => (
-                    <LabelInput
-                      label="Votre adresse email"
-                      kind="email"
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      error={error}
-                      touched={touched}
-                    />
-                  )}
-                </Field>
-              </div>
-              <div className="mt-4">
-                <Field<string>
-                  name="password"
-                  validate={required("Votre mot de passe")}
-                >
-                  {({
-                    input: { name, value, onChange },
-                    meta: { error, touched },
-                  }) => (
-                    <LabelInput
-                      label="Votre mot de passe"
-                      kind="password"
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      error={error}
-                      touched={touched}
-                    />
-                  )}
-                </Field>
-              </div>
-              {props.mainError && <RawError error={props.mainError} />}
-              <button
-                type="submit"
-                disabled={props.loading}
-                className="mt-6 w-full bg-indigo-600 text-indigo-100 py-2 rounded-md font-bold text-lg tracking-wide"
-              >
-                <div className="flex justify-center items-center space-x-2">
-                  <div>Connexion</div>
-                  {props.loading && <Loading size={1} reverseColor={true} />}
-                </div>
-              </button>
+    <Form onSubmit={onSubmit} decorators={[focusOnError]}>
+      {({ handleSubmit }) => (
+        <form onSubmit={handleSubmit}>
+          <div className="flex flex-col max-w-md">
+            <div className="mt-4">
+              <Field<string> name="email" validate={validateEmail}>
+                {({
+                  input: { name, value, onChange },
+                  meta: { error, touched },
+                }) => (
+                  <LabelInput
+                    label="Votre adresse email"
+                    kind="email"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error}
+                    touched={touched}
+                  />
+                )}
+              </Field>
             </div>
-          </form>
-        )}
-      </Form>
-    </div>
+            <div className="mt-4">
+              <Field<string>
+                name="password"
+                validate={required("Votre mot de passe")}
+              >
+                {({
+                  input: { name, value, onChange },
+                  meta: { error, touched },
+                }) => (
+                  <LabelInput
+                    label="Votre mot de passe"
+                    kind="password"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error}
+                    touched={touched}
+                  />
+                )}
+              </Field>
+            </div>
+            {props.mainError && <RawError error={props.mainError} />}
+            <button
+              type="submit"
+              disabled={props.loading}
+              className="mt-6 w-full bg-indigo-600 text-indigo-100 py-2 rounded-md font-bold text-lg tracking-wide"
+            >
+              <div className="flex justify-center items-center space-x-2">
+                <div>Connexion</div>
+                {props.loading && <Loading size={1} reverseColor={true} />}
+              </div>
+            </button>
+          </div>
+        </form>
+      )}
+    </Form>
   )
 }
