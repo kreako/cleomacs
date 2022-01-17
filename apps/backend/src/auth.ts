@@ -1,7 +1,8 @@
 import express from "express"
-import { hash, session, userIsLoggedIn, verify } from "./auth-utils"
+import { AuthError, hash, session, userIsLoggedIn, verify } from "./auth-utils"
 import { processRequestBody } from "zod-express-middleware"
 import { MembershipRole, GlobalRole } from "@cleomacs/db"
+import createError from "http-errors"
 import {
   loginInput,
   loginOutput,
@@ -49,10 +50,10 @@ export const signup = [
 export const login = [
   processRequestBody(loginInput),
   session,
-  async (req: express.Request, res: express.Response) => {
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = await findReducedUserByEmail(req.body.email)
     if (user === null) {
-      throw new Error("Invalid email")
+      return next(createError(401, "login necessary"))
     }
     if (user.lastMembership === null) {
       throw new Error(`Invalid DB state - lastMembership is null\nemail: ${req.body.email}`)
@@ -65,8 +66,16 @@ export const login = [
     }
     const organization = membership.organization
 
-    // Will throw if not OK
-    await verify(req.body.password, user.hashedPassword, updatePasswordHash(req.body.email))
+    try {
+      await verify(req.body.password, user.hashedPassword, updatePasswordHash(req.body.email))
+    } catch (error) {
+      if (error instanceof AuthError) {
+        return next(createError(401, "login necessary"))
+      } else {
+        // rethrow
+        throw error
+      }
+    }
 
     req.session.userId = user.id
     req.session.membershipId = membership.id

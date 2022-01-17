@@ -84,3 +84,41 @@ test("signup/login/logout test", async () => {
   // cleanup after me
   await cleanupOrganizationFromDb(fake.email)
 })
+
+test("signup/invalid login test", async () => {
+  const fake = faker()
+
+  await cleanupOrganizationFromDb(fake.email)
+
+  // signup
+  let r = await post(signup, "/auth/signup", {
+    organizationName: fake.organizationName,
+    userName: fake.userName,
+    email: fake.email,
+    password: fake.password,
+  })
+  successBody(r)
+  let headers = cookieHeader(r)
+
+  // logout
+  r = await post(logout, "/auth/logout", {}, headers)
+  successBody(r)
+  headers = cookieHeader(r)
+
+  // login with invalid email
+  const err1 = await errorPost(login, "/auth/login", {
+    email: fake.email + "_meuh",
+    password: fake.password,
+  })
+  expect(err1.statusCode).toBe(401)
+
+  // login with invalid password
+  const err2 = await errorPost(login, "/auth/login", {
+    email: fake.email,
+    password: fake.password + "_meuh",
+  })
+  expect(err2.statusCode).toBe(401)
+
+  // cleanup after me
+  await cleanupOrganizationFromDb(fake.email)
+})
