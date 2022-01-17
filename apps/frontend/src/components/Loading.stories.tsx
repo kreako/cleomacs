@@ -26,3 +26,16 @@ export const Big = Template.bind({})
 Big.args = {
   size: 10,
 }
+
+export const Reverse = Template.bind({})
+Reverse.decorators = [
+  (Story) => (
+    <div className="relative w-screen h-screen bg-indigo-600">
+      <Story />
+    </div>
+  ),
+]
+Reverse.args = {
+  size: 10,
+  reverseColor: true,
+}
