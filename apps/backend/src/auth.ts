@@ -1,5 +1,5 @@
 import express from "express"
-import { AuthError, hash, session, userIsLoggedIn, verify } from "./auth-utils"
+import { AuthError, hashPassword, session, userIsLoggedIn, verifyPassword } from "./auth-utils"
 import { processRequestBody } from "zod-express-middleware"
 import { MembershipRole, GlobalRole } from "@cleomacs/db"
 import createError from "http-errors"
@@ -25,7 +25,7 @@ export const signup = [
   processRequestBody(signupInput),
   session,
   async (req: express.Request, res: express.Response) => {
-    const hashedPassword = await hash(req.body.password)
+    const hashedPassword = await hashPassword(req.body.password)
 
     // Create objects in DB organization - membership - user
     const organizationId = await createOrganization(req.body.organizationName)
@@ -67,7 +67,11 @@ export const login = [
     const organization = membership.organization
 
     try {
-      await verify(req.body.password, user.hashedPassword, updatePasswordHash(req.body.email))
+      await verifyPassword(
+        req.body.password,
+        user.hashedPassword,
+        updatePasswordHash(req.body.email)
+      )
     } catch (error) {
       if (error instanceof AuthError) {
         return next(createError(401, "login necessary"))
