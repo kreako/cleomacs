@@ -13,12 +13,12 @@ export class AuthError extends Error {
 
 const SP = () => new SecurePasswordLib()
 
-export const hash = async (password: string) => {
+export const hashPassword = async (password: string) => {
   const hashedBuffer = await SP().hash(Buffer.from(password))
   return hashedBuffer.toString("base64")
 }
 
-export const verify = async (
+export const verifyPassword = async (
   password: string,
   hashedPassword: string,
   updateHash: (newHashedPassword: string) => Promise<void>
@@ -29,7 +29,7 @@ export const verify = async (
       case SecurePasswordLib.VALID:
         return true
       case SecurePasswordLib.VALID_NEEDS_REHASH: {
-        const newHashedPassword = await hash(password)
+        const newHashedPassword = await hashPassword(password)
         await updateHash(newHashedPassword)
         return true
       }
