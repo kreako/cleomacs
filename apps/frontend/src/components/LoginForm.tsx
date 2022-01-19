@@ -4,6 +4,9 @@ import createDecorator from "final-form-focus"
 import Loading from "../components/Loading"
 import RawError from "../components/RawError"
 import type { LoginInputType } from "@cleomacs/api/auth"
+import axios from "axios"
+import React from "react"
+import { Link } from "react-router-dom"
 
 const focusOnError = createDecorator()
 
@@ -33,6 +36,30 @@ export default function LoginForm(props: LoginFormProp) {
   const onSubmit = async (v: object) => {
     const values = v as LoginInputType
     await props.onSubmit(values)
+  }
+  let mainError: React.ReactElement | null = null
+  if (props.mainError != undefined) {
+    if (axios.isAxiosError(props.mainError)) {
+      if (props.mainError.response?.status === 401) {
+        mainError = (
+          <div className="mt-6 mb-4 text-red-600 flex flex-col items-center space-y-4">
+            <div className="flex flex-col items-center">
+              <div className="font-bold tracking-wide">Oh non !</div>
+              <div> Je ne reconnais pas ce couple email/mot de passe.</div>
+            </div>
+            <div className="">
+              Est-ce que vous avez
+              <Link to="/lost-password" className="underline decoration-dotted">
+                {" "}
+                perdu votre mot de passe ?
+              </Link>
+            </div>
+          </div>
+        )
+      }
+    } else {
+      mainError = <RawError error={props.mainError} />
+    }
   }
   return (
     <Form onSubmit={onSubmit} decorators={[focusOnError]}>
@@ -66,19 +93,29 @@ export default function LoginForm(props: LoginFormProp) {
                   input: { name, value, onChange },
                   meta: { error, touched },
                 }) => (
-                  <LabelInput
-                    label="Votre mot de passe"
-                    kind="password"
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    error={error}
-                    touched={touched}
-                  />
+                  <>
+                    <LabelInput
+                      label="Votre mot de passe"
+                      kind="password"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error}
+                      touched={touched}
+                    />
+                    <div className="flex justify-end">
+                      <Link
+                        to="/lost-password"
+                        className="text-sm text-gray-700 underline decoration-dotted decoration-gray-400 hover:decoration-gray-700"
+                      >
+                        mot de passe perdu ?
+                      </Link>
+                    </div>
+                  </>
                 )}
               </Field>
             </div>
-            {props.mainError && <RawError error={props.mainError} />}
+            {mainError}
             <button
               type="submit"
               disabled={props.loading}
