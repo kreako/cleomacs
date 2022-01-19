@@ -2,6 +2,7 @@ import express from "express"
 import morgan from "morgan"
 import "express-async-errors"
 import auth from "./auth"
+import authPassword from "./auth-password"
 
 export const app = express()
 
@@ -18,3 +19,4 @@ app.get("/error", async () => {
 })
 
 app.use("/auth", auth)
+app.use("/auth-password", authPassword)
