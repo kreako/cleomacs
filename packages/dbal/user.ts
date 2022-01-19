@@ -24,7 +24,7 @@ export type User = Prisma.PromiseReturnType<typeof findUser>
 export const findReducedUserByEmail = async (email: string) => {
   return await prisma.user.findUnique({
     where: {
-      email: email,
+      email,
     },
     select: {
       id: true,
@@ -45,10 +45,57 @@ export const findReducedUserByEmail = async (email: string) => {
   })
 }
 
+export const findReducedUserById = async (id: number) => {
+  return await prisma.user.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      hashedPassword: true,
+      role: true,
+      lastMembership: {
+        select: {
+          id: true,
+          role: true,
+          organization: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      },
+    },
+  })
+}
+
+export const findUserNameByEmail = async (email: string) => {
+  return await prisma.user.findUnique({
+    where: {
+      email: email,
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+  })
+}
+
 export const updatePasswordHash = (email: string) => async (newHashedPassword: string) => {
   await prisma.user.update({
     where: {
       email,
+    },
+    data: {
+      hashedPassword: newHashedPassword,
+    },
+  })
+}
+
+export const updatePasswordHashById = async (id: number, newHashedPassword: string) => {
+  await prisma.user.update({
+    where: {
+      id,
     },
     data: {
       hashedPassword: newHashedPassword,
@@ -69,9 +116,9 @@ export const createUser = async (name: string, email: string, hashedPassword: st
   return userId
 }
 
-export const updateLastMembership = async (userId: number, membershipId: number) => {
+export const updateLastMembership = async (id: number, membershipId: number) => {
   await prisma.user.update({
-    where: { id: userId },
+    where: { id },
     data: { lastMembershipId: membershipId },
   })
 }
