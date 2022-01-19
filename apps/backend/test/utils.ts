@@ -33,7 +33,6 @@ const handle = async (
   const next = (err?: HttpError) => {
     if (err !== undefined) {
       res.status(err.statusCode).send({ name: err.name, message: err.message })
-      stopHandling = true
     } else {
       stopHandling = false
     }
@@ -44,6 +43,7 @@ const handle = async (
     if (stopHandling) {
       return
     }
+    stopHandling = true
   }
   return
 }
