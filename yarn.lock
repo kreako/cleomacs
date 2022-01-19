@@ -3927,7 +3927,7 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.19.tgz#1afa165146997b8286b6eabcb1c2d50729055169"
   integrity sha512-BPAcfDPoHlRQNKktbsbnpACGdypPFBuX4xQlsWDE7B8XXcfII+SpOLay3/qZmCLb39kV5S1RTYwXdkx2lwLYng==
 
-"@types/nodemailer@^6.4.4":
+"@types/nodemailer@*", "@types/nodemailer@^6.4.4":
   version "6.4.4"
   resolved "https://registry.yarnpkg.com/@types/nodemailer/-/nodemailer-6.4.4.tgz#c265f7e7a51df587597b3a49a023acaf0c741f4b"
   integrity sha512-Ksw4t7iliXeYGvIQcSIgWQ5BLuC/mljIEbjf615svhZL10PE9t+ei8O9gDaD3FPCasUJn9KTLwz2JFJyiiyuqw==
@@ -3968,6 +3968,13 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/pretty-hrtime/-/pretty-hrtime-1.0.1.tgz#72a26101dc567b0d68fd956cf42314556e42d601"
   integrity sha512-VjID5MJb1eGKthz2qUerWT8+R4b9N+CHvGCzg9fn4kWZgaF9AhdYikQio3R7wV8YY1NsQKPaCwKz1Yff+aHNUQ==
+
+"@types/preview-email@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@types/preview-email/-/preview-email-2.0.1.tgz#df5d1ce7a3034e3dfcd2b38a66c1f60401b27dc8"
+  integrity sha512-wHtm/Xxlxk2WKRok0ya7iUr+UvQFlq9nTIQXZi2d3n2tdrt+n4Fkybvi45BjQILl2wfGFq4y+jARCo2+ZoaTrA==
+  dependencies:
+    "@types/nodemailer" "*"
 
 "@types/prop-types@*":
   version "15.7.4"

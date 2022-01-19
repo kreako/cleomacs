@@ -18,6 +18,7 @@
     "@types/jest": "^27.0.3",
     "@types/morgan": "^1.9.3",
     "@types/nodemailer": "^6.4.4",
+    "@types/preview-email": "^2.0.1",
     "@types/secure-password": "^3.1.1",
     "jest": "^27.4.5",
     "node-mocks-http": "^1.11.0",
