@@ -4,14 +4,16 @@ import { HashRouter, Routes, Route } from "react-router-dom"
 import LoadingPage from "./components/LoadingPage"
 import MainLayout from "./layout/MainLayout"
 
-const Home = React.lazy(() => import("./pages/Home"))
-const Signup = React.lazy(() => import("./pages/Signup"))
-const Login = React.lazy(() => import("./pages/Login"))
-const LostPassword = React.lazy(() => import("./pages/LostPassword"))
-const LostPasswordSent = React.lazy(() => import("./pages/LostPasswordSent"))
-const NotFound = React.lazy(() => import("./pages/NotFound"))
-
 const queryClient = new QueryClient()
+
+function lazy(importUrl: string) {
+  const Component = React.lazy(() => import(`./pages/${importUrl}`))
+  return (
+    <React.Suspense fallback={<LoadingPage />}>
+      <Component />
+    </React.Suspense>
+  )
+}
 
 export default function App() {
   return (
@@ -19,54 +21,15 @@ export default function App() {
       <HashRouter>
         <Routes>
           <Route path="/" element={<MainLayout />}>
-            <Route
-              index
-              element={
-                <React.Suspense fallback={<LoadingPage />}>
-                  <Home />
-                </React.Suspense>
-              }
-            />
-            <Route
-              path="signup"
-              element={
-                <React.Suspense fallback={<LoadingPage />}>
-                  <Signup />
-                </React.Suspense>
-              }
-            />
-            <Route
-              path="login"
-              element={
-                <React.Suspense fallback={<LoadingPage />}>
-                  <Login />
-                </React.Suspense>
-              }
-            />
-            <Route
-              path="lost-password"
-              element={
-                <React.Suspense fallback={<LoadingPage />}>
-                  <LostPassword />
-                </React.Suspense>
-              }
-            />
+            <Route index element={lazy("Home")} />
+            <Route path="signup" element={lazy("Signup")} />
+            <Route path="login" element={lazy("Login")} />
+            <Route path="lost-password" element={lazy("LostPassword")} />
             <Route
               path="lost-password-sent"
-              element={
-                <React.Suspense fallback={<LoadingPage />}>
-                  <LostPasswordSent />
-                </React.Suspense>
-              }
+              element={lazy("LostPasswordSent")}
             />
-            <Route
-              path="*"
-              element={
-                <React.Suspense fallback={<LoadingPage />}>
-                  <NotFound />
-                </React.Suspense>
-              }
-            />
+            <Route path="*" element={lazy("NotFound")} />
           </Route>
         </Routes>
       </HashRouter>
