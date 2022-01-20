@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react"
 
-import { LostPasswordSent } from "./LostPasswordSent"
+import LostPasswordSent from "./LostPasswordSent"
 
 export default {
   title: "LostPasswordSent",
@@ -15,7 +15,7 @@ export default {
   ],
 } as ComponentMeta<typeof LostPasswordSent>
 
-const Template: ComponentStory<typeof LostPasswordSent> = (args) => (
+const Template: ComponentStory<typeof LostPasswordSent> = () => (
   <LostPasswordSent />
 )
 
