@@ -1,10 +1,6 @@
 import { z } from "zod"
 import { User } from "@cleomacs/dbal/user"
-
-const email = z.string().email({ message: "l'email est invalide" })
-const password = z.string().min(8, { message: "Le password n'est pas assez long" })
-
-const success = { success: true }
+import { email, password, success } from "./utils"
 
 // signup
 export const signupInput = z.object({
@@ -13,42 +9,25 @@ export const signupInput = z.object({
   email,
   password,
 })
-export type SignupInputType = z.infer<typeof signupInput>
+export type SignupInput = z.infer<typeof signupInput>
 export const signupOutput = () => success
-export type SignupOutputType = ReturnType<typeof signupOutput>
+export type SignupOutput = ReturnType<typeof signupOutput>
 
 // login
 export const loginInput = z.object({
   email,
   password,
 })
-export type LoginInputType = z.infer<typeof loginInput>
+export type LoginInput = z.infer<typeof loginInput>
 export const loginOutput = () => success
-export type LoginOutputType = ReturnType<typeof loginOutput>
+export type LoginOutput = ReturnType<typeof loginOutput>
 
 // logout
 export const logoutOutput = () => success
-export type LogoutOutputType = ReturnType<typeof logoutOutput>
+export type LogoutOutput = ReturnType<typeof logoutOutput>
 
 // profile
 export const profileOutput = (user: User) => ({
   user,
 })
-export type ProfileOutputType = ReturnType<typeof profileOutput>
-
-// lost password
-export const lostPasswordInput = z.object({
-  email,
-})
-export type LostPasswordInput = z.infer<typeof lostPasswordInput>
-export const lostPasswordOutput = () => success
-export type LostPasswordOutput = ReturnType<typeof lostPasswordOutput>
-
-// change lost password
-export const changeLostPasswordInput = z.object({
-  token: z.string(),
-  password,
-})
-export type ChangeLostPasswordInput = z.infer<typeof changeLostPasswordInput>
-export const changeLostPasswordOutput = (success: boolean) => ({ success })
-export type ChangeLostPasswordOutput = ReturnType<typeof changeLostPasswordOutput>
+export type ProfileOutput = ReturnType<typeof profileOutput>
