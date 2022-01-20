@@ -7,6 +7,8 @@ import MainLayout from "./layout/MainLayout"
 const Home = React.lazy(() => import("./pages/Home"))
 const Signup = React.lazy(() => import("./pages/Signup"))
 const Login = React.lazy(() => import("./pages/Login"))
+const LostPassword = React.lazy(() => import("./pages/LostPassword"))
+const LostPasswordSent = React.lazy(() => import("./pages/LostPasswordSent"))
 const NotFound = React.lazy(() => import("./pages/NotFound"))
 
 const queryClient = new QueryClient()
@@ -38,6 +40,22 @@ export default function App() {
               element={
                 <React.Suspense fallback={<LoadingPage />}>
                   <Login />
+                </React.Suspense>
+              }
+            />
+            <Route
+              path="lost-password"
+              element={
+                <React.Suspense fallback={<LoadingPage />}>
+                  <LostPassword />
+                </React.Suspense>
+              }
+            />
+            <Route
+              path="lost-password-sent"
+              element={
+                <React.Suspense fallback={<LoadingPage />}>
+                  <LostPasswordSent />
                 </React.Suspense>
               }
             />
