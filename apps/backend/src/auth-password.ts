@@ -14,7 +14,6 @@ import {
 import { sealData, unsealData } from "iron-session"
 import { lostPasswordMail } from "./mailer"
 import { hashPassword, session } from "./auth-utils"
-import cookieParser from "cookie-parser"
 
 const LOST_PASSWORD_TOKEN_EXPIRATION_IN_HOURS = 4
 const sealConfiguration = () => {
