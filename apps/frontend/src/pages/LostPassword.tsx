@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import LostPasswordForm from "../components/LostPasswordForm"
 import { useLostPassword } from "../api/auth-password"
-import type { LostPasswordInput } from "packages/api/auth-password"
+import type { LostPasswordInput } from "@cleomacs/api/auth-password"
 
 export default function LostPassword() {
   const navigate = useNavigate()
