@@ -3,6 +3,8 @@ import { AuthenticationError, useLogin } from "../api/auth"
 import RawError from "./RawError"
 import type { LoginInputType } from "@cleomacs/api/auth"
 import LoginForm from "../components/LoginForm"
+import { useLocation } from "react-router-dom"
+import { useUpdateEffect } from "usehooks-ts"
 
 type LoginProps = {
   onSuccess: () => void
@@ -30,6 +32,18 @@ function LoginOn401(props: LoginProps) {
   )
 }
 
+function ErrorResetOnURLChange({
+  resetErrorBoundary,
+}: Pick<FallbackProps, "resetErrorBoundary">) {
+  const location = useLocation()
+  useUpdateEffect(() => {
+    // reset error on url change
+    // useful for login form with link to lost-password or signup or ...
+    resetErrorBoundary()
+  }, [location.key])
+  return <></>
+}
+
 export default function MainErrorFallback({
   error,
   resetErrorBoundary,
@@ -41,6 +55,7 @@ export default function MainErrorFallback({
           Connectez-vous pour accéder à cette page !
         </div>
         <LoginOn401 onSuccess={resetErrorBoundary} />
+        <ErrorResetOnURLChange resetErrorBoundary={resetErrorBoundary} />
       </div>
     )
   } else {
