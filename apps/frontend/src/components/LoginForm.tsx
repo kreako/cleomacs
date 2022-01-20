@@ -7,21 +7,9 @@ import type { LoginInput } from "@cleomacs/api/auth"
 import axios from "axios"
 import React from "react"
 import { Link } from "react-router-dom"
+import { required, validateEmail } from "../utils/form"
 
 const focusOnError = createDecorator()
-
-const required = (label: string) => (value: string) =>
-  value ? undefined : `${label} est requis`
-
-const validateEmail = (value: string) => {
-  if (value == undefined) {
-    return "Votre adresse email est requise"
-  }
-  if (value.indexOf("@") === -1) {
-    return "Votre adresse email ne ressemble pas à une adresse email"
-  }
-  return undefined
-}
 
 type LoginFormProp = {
   // submit callback
