@@ -1,38 +1,20 @@
-import rawAxios, { AxiosError } from "axios"
-import type {
-  LoginInputType,
-  ProfileOutputType,
-  SignupInputType,
-} from "@cleomacs/api/auth"
+import type { LoginInput, ProfileOutput, SignupInput } from "@cleomacs/api/auth"
 import { useMutation, useQuery } from "react-query"
 import { keys } from "./query-key"
+import { get, rawPost, retryQuery } from "./utils"
 
-const axios = rawAxios.create({
-  baseURL: "/api",
-  timeout: 3000,
-  transitional: { clarifyTimeoutError: true },
-})
-
-export class AuthenticationError extends Error {
-  name = "AuthenticationError"
-  statusCode = 401
-  constructor(message = "Vous devez vous connecter pour accéder à cette page") {
-    super(message)
-  }
+export const postSignup = async (values: SignupInput) => {
+  return await rawPost("/auth/signup", values)
 }
 
-export const postSignup = async (values: SignupInputType) => {
-  return await axios.post("/auth/signup", values)
-}
-
-type UseSignupType = {
+type UseSignup = {
   onError: (error: Error) => void
   onSuccess: () => void
 }
 
-export const useSignup = ({ onError, onSuccess }: UseSignupType) => {
+export const useSignup = ({ onError, onSuccess }: UseSignup) => {
   return useMutation(
-    async (values: SignupInputType) => {
+    async (values: SignupInput) => {
       return await postSignup(values)
     },
     {
@@ -42,18 +24,18 @@ export const useSignup = ({ onError, onSuccess }: UseSignupType) => {
   )
 }
 
-export const postLogin = async (values: LoginInputType) => {
-  return await axios.post("/auth/login", values)
+export const postLogin = async (values: LoginInput) => {
+  return await rawPost("/auth/login", values)
 }
 
-type UseLoginType = {
+type UseLogin = {
   onError: (error: Error) => void
   onSuccess: () => void
 }
 
-export const useLogin = ({ onError, onSuccess }: UseLoginType) => {
+export const useLogin = ({ onError, onSuccess }: UseLogin) => {
   return useMutation(
-    async (values: LoginInputType) => {
+    async (values: LoginInput) => {
       return await postLogin(values)
     },
     {
@@ -64,15 +46,15 @@ export const useLogin = ({ onError, onSuccess }: UseLoginType) => {
 }
 
 export const postLogout = async () => {
-  return await axios.post("/auth/logout", {})
+  return await rawPost("/auth/logout", {})
 }
 
-type UseLogoutType = {
+type UseLogout = {
   onError: (error: Error) => void
   onSuccess: () => void
 }
 
-export const useLogout = ({ onError, onSuccess }: UseLogoutType) => {
+export const useLogout = ({ onError, onSuccess }: UseLogout) => {
   return useMutation(
     async () => {
       return await postLogout()
@@ -84,27 +66,7 @@ export const useLogout = ({ onError, onSuccess }: UseLogoutType) => {
   )
 }
 
-const fetchProfile = async (): Promise<ProfileOutputType> => {
-  try {
-    const response = await axios.get("/auth/profile")
-    return response.data
-  } catch (error) {
-    if (rawAxios.isAxiosError(error)) {
-      const axiosError = error as AxiosError
-      if (axiosError.response?.status === 401) {
-        throw new AuthenticationError()
-      }
-    }
-    throw error
-  }
-}
-
-export const retryQuery = (count: number, error: unknown): boolean => {
-  if (error instanceof AuthenticationError) {
-    return false
-  }
-  return count < 3
-}
+const fetchProfile = async (): Promise<ProfileOutput> => get("/auth/profile")
 
 export const useProfile = () => {
   return useQuery(keys.profile, fetchProfile, {

@@ -1,10 +1,11 @@
 import { FallbackProps } from "react-error-boundary"
-import { AuthenticationError, useLogin } from "../api/auth"
+import { useLogin } from "../api/auth"
 import RawError from "./RawError"
-import type { LoginInputType } from "@cleomacs/api/auth"
+import type { LoginInput } from "@cleomacs/api/auth"
 import LoginForm from "../components/LoginForm"
 import { useLocation } from "react-router-dom"
 import { useUpdateEffect } from "usehooks-ts"
+import { AuthenticationError } from "../api/utils"
 
 type LoginProps = {
   onSuccess: () => void
@@ -20,7 +21,7 @@ function LoginOn401(props: LoginProps) {
       props.onSuccess()
     },
   })
-  const onSubmit = async (values: LoginInputType) => {
+  const onSubmit = async (values: LoginInput) => {
     await login.mutate(values)
   }
   return (

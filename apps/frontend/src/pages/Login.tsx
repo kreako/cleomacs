@@ -1,6 +1,6 @@
 import { useLogin } from "../api/auth"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import type { LoginInputType } from "@cleomacs/api/auth"
+import type { LoginInput } from "@cleomacs/api/auth"
 import LoginForm from "../components/LoginForm"
 
 export default function Login() {
@@ -19,7 +19,7 @@ export default function Login() {
       navigate(next)
     },
   })
-  const onSubmit = async (values: LoginInputType) => {
+  const onSubmit = async (values: LoginInput) => {
     await login.mutate(values)
   }
   return (

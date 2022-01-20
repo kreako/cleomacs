@@ -1,4 +1,4 @@
-import { AuthenticationError } from "./api/auth"
+import { AuthenticationError } from "./api/utils"
 
 export default function registerErrorHandlers() {
   const onUnhandledError = (ev: ErrorEvent) => {

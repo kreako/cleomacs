@@ -3,7 +3,7 @@ import { Form, Field } from "react-final-form"
 import createDecorator from "final-form-focus"
 import Loading from "../components/Loading"
 import RawError from "../components/RawError"
-import type { LoginInputType } from "@cleomacs/api/auth"
+import type { LoginInput } from "@cleomacs/api/auth"
 import axios from "axios"
 import React from "react"
 import { Link } from "react-router-dom"
@@ -25,7 +25,7 @@ const validateEmail = (value: string) => {
 
 type LoginFormProp = {
   // submit callback
-  onSubmit: (values: LoginInputType) => Promise<void>
+  onSubmit: (values: LoginInput) => Promise<void>
   // main error to be displayed at the end of the form
   mainError?: Error
   // Is login request currently running ?
@@ -34,7 +34,7 @@ type LoginFormProp = {
 
 export default function LoginForm(props: LoginFormProp) {
   const onSubmit = async (v: object) => {
-    const values = v as LoginInputType
+    const values = v as LoginInput
     await props.onSubmit(values)
   }
   let mainError: React.ReactElement | null = null
