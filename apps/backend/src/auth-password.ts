@@ -10,7 +10,7 @@ import {
   changeLostPasswordOutput,
   lostPasswordInput,
   lostPasswordOutput,
-} from "@cleomacs/api/auth"
+} from "@cleomacs/api/auth-password"
 import { sealData, unsealData } from "iron-session"
 import { lostPasswordMail } from "./mailer"
 import { hashPassword, session } from "./auth-utils"

@@ -4,17 +4,19 @@ import { processRequestBody } from "zod-express-middleware"
 import { MembershipRole, GlobalRole } from "@cleomacs/db"
 import createError from "http-errors"
 import {
-  changeLostPasswordInput,
-  changeLostPasswordOutput,
   loginInput,
   loginOutput,
   logoutOutput,
-  lostPasswordInput,
-  lostPasswordOutput,
   profileOutput,
   signupInput,
   signupOutput,
 } from "@cleomacs/api/auth"
+import {
+  changeLostPasswordInput,
+  changeLostPasswordOutput,
+  lostPasswordInput,
+  lostPasswordOutput,
+} from "@cleomacs/api/auth-password"
 import {
   createUser,
   findReducedUserByEmail,
@@ -35,6 +37,7 @@ import {
 import { nanoid } from "nanoid"
 import { lostPasswordMail } from "./mailer"
 import * as crypto from "crypto"
+import { debugLogger } from "./debug"
 
 export const hash256 = (input: string) => {
   return crypto.createHash("sha256").update(input).digest("hex")
@@ -67,7 +70,9 @@ export const signup = [
 ]
 
 export const login = [
+  debugLogger("login 1"),
   processRequestBody(loginInput),
+  debugLogger("login 2"),
   session,
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = await findReducedUserByEmail(req.body.email)
