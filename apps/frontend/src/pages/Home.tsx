@@ -1,12 +1,9 @@
-import axios, { AxiosError } from "axios"
-import { useNavigate } from "react-router-dom"
 import { useProfile } from "../api/auth"
 import Loading from "../components/Loading"
 import Logout from "../components/Logout"
 import RawError from "../components/RawError"
 
 function Profile() {
-  const navigate = useNavigate()
   const profile = useProfile()
 
   if (profile.isLoading) {
