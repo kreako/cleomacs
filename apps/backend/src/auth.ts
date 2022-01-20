@@ -37,7 +37,6 @@ import {
 import { nanoid } from "nanoid"
 import { lostPasswordMail } from "./mailer"
 import * as crypto from "crypto"
-import { debugLogger } from "./debug"
 
 export const hash256 = (input: string) => {
   return crypto.createHash("sha256").update(input).digest("hex")
