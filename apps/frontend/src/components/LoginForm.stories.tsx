@@ -1,4 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react"
+import { HashRouter } from "react-router-dom"
 
 import LoginForm from "./LoginForm"
 
@@ -10,9 +11,11 @@ export default {
   },
   decorators: [
     (Story) => (
-      <div className="relative w-screen h-screen bg-indigo-50">
-        <Story />
-      </div>
+      <HashRouter>
+        <div className="relative w-screen h-screen bg-indigo-50 p-2">
+          <Story />
+        </div>
+      </HashRouter>
     ),
   ],
 } as ComponentMeta<typeof LoginForm>
