@@ -70,9 +70,7 @@ export const signup = [
 ]
 
 export const login = [
-  debugLogger("login 1"),
   processRequestBody(loginInput),
-  debugLogger("login 2"),
   session,
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = await findReducedUserByEmail(req.body.email)
