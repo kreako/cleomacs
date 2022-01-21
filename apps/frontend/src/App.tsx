@@ -6,32 +6,29 @@ import MainLayout from "./layout/MainLayout"
 
 const queryClient = new QueryClient()
 
-function lazy(importUrl: string) {
-  const Component = React.lazy(() => import(`./pages/${importUrl}`))
-  return (
-    <React.Suspense fallback={<LoadingPage />}>
-      <Component />
-    </React.Suspense>
-  )
-}
+const Home = React.lazy(() => import("./pages/Home"))
+const Signup = React.lazy(() => import("./pages/Signup"))
+const Login = React.lazy(() => import("./pages/Login"))
+const LostPassword = React.lazy(() => import("./pages/LostPassword"))
+const LostPasswordSent = React.lazy(() => import("./pages/LostPasswordSent"))
+const NotFound = React.lazy(() => import("./pages/NotFound"))
 
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <HashRouter>
-        <Routes>
-          <Route path="/" element={<MainLayout />}>
-            <Route index element={lazy("Home")} />
-            <Route path="signup" element={lazy("Signup")} />
-            <Route path="login" element={lazy("Login")} />
-            <Route path="lost-password" element={lazy("LostPassword")} />
-            <Route
-              path="lost-password-sent"
-              element={lazy("LostPasswordSent")}
-            />
-            <Route path="*" element={lazy("NotFound")} />
-          </Route>
-        </Routes>
+        <React.Suspense fallback={<LoadingPage />}>
+          <Routes>
+            <Route path="/" element={<MainLayout />}>
+              <Route index element={<Home />} />
+              <Route path="signup" element={<Signup />} />
+              <Route path="login" element={<Login />} />
+              <Route path="lost-password" element={<LostPassword />} />
+              <Route path="lost-password-sent" element={<LostPasswordSent />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </React.Suspense>
       </HashRouter>
     </QueryClientProvider>
   )
