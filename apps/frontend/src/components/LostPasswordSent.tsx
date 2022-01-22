@@ -6,8 +6,8 @@ export default function LostPasswordSent() {
       <div className="flex flex-col items-center">
         <div className="font-bold tracking-wide">Et voilà !</div>
         <div className="mt-6 ">
-          Si j&apos;ai reconnu votre adresse email, je viens de vous y envoyer
-          un message.
+          J&apos;ai bien reconnu votre adresse email et je viens de vous y
+          envoyer un message.
         </div>
         <div className="mt-1">
           <span>Dedans vous trouverez un lien sur lequel vous devez&nbsp;</span>
