@@ -108,7 +108,7 @@ export default function LoginForm(props: LoginFormProp) {
             >
               <div className="flex justify-center items-center space-x-2">
                 <div>Connexion</div>
-                {props.loading && <Loading size={1} reverseColor={true} />}
+                {props.loading && <Loading size={1} reverseColor />}
               </div>
             </button>
           </div>

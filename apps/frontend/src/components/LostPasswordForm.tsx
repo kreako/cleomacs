@@ -72,7 +72,7 @@ export default function LostPasswordForm(props: LostPasswordFormProp) {
             >
               <div className="flex justify-center items-center space-x-2">
                 <div>Réinitialisation de mon mot de passe</div>
-                {props.loading && <Loading size={1} reverseColor={true} />}
+                {props.loading && <Loading size={1} reverseColor />}
               </div>
             </button>
           </div>
