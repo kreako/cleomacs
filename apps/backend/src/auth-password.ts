@@ -35,8 +35,13 @@ export const lostPassword = [
 
       // Send email
       await lostPasswordMail(req.body.email, token)
+
+      // success !
+      res.json(lostPasswordOutput(true))
+    } else {
+      // user not found
+      res.json(lostPasswordOutput(false))
     }
-    res.json(lostPasswordOutput())
   },
 ]
 

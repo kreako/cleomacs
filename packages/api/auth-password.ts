@@ -1,12 +1,12 @@
 import { z } from "zod"
-import { email, password, success } from "./utils"
+import { email, password } from "./utils"
 
 // lost password
 export const lostPasswordInput = z.object({
   email,
 })
 export type LostPasswordInput = z.infer<typeof lostPasswordInput>
-export const lostPasswordOutput = () => success
+export const lostPasswordOutput = (success: boolean) => ({ success })
 export type LostPasswordOutput = ReturnType<typeof lostPasswordOutput>
 
 // change lost password
