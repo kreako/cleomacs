@@ -1,15 +1,6 @@
-import {
-  changeLostPassword,
-  hash256,
-  login,
-  logout,
-  lostPassword,
-  profile,
-  signup,
-} from "../src/auth"
+import { login, logout, profile, signup } from "../src/auth"
 import { cookieHeader, errorGet, errorPost, get, post, successBody } from "./utils"
 import { cleanupOrganizationFromDb, faker } from "@cleomacs/test"
-import { prisma } from "@cleomacs/db"
 
 test("signup", async () => {
   const fake = faker()
@@ -127,77 +118,6 @@ test("signup/invalid login test", async () => {
     password: fake.password + "_meuh",
   })
   expect(err2.statusCode).toBe(401)
-
-  // cleanup after me
-  await cleanupOrganizationFromDb(fake.email)
-})
-
-// Do not open browser on each mail test
-jest.mock("preview-email", () => jest.fn())
-
-test("lost password test", async () => {
-  process.on("unhandledRejection", console.warn)
-  const fake = faker()
-
-  await cleanupOrganizationFromDb(fake.email)
-
-  // signup
-  let r = await post(signup, "/auth/signup", {
-    organizationName: fake.organizationName,
-    userName: fake.userName,
-    email: fake.email,
-    password: fake.password,
-  })
-  successBody(r)
-
-  // lost password
-  r = await post(lostPassword, "/auth/lost-password", {
-    email: fake.email,
-  })
-  successBody(r)
-
-  // Search for the corresponding token
-  const user = await prisma.user.findUnique({
-    where: {
-      email: fake.email,
-    },
-  })
-  expect(user).not.toBeNull()
-  const token = await prisma.lostPasswordToken.findFirst({
-    where: {
-      userId: user?.id,
-    },
-  })
-  expect(token).not.toBeNull()
-
-  // Patch the token
-  const unhashedToken = "meuh"
-  const hashedToken = hash256(unhashedToken)
-  await prisma.lostPasswordToken.update({
-    where: { id: token?.id },
-    data: { hashedToken },
-  })
-
-  // change lost password
-  const newPassword = "meuhmeuh42"
-  r = await post(changeLostPassword, "/auth/change-lost-password", {
-    token: unhashedToken,
-    password: newPassword,
-  })
-  successBody(r)
-  // Make sure there is auth cookie after change-lost-password (auto login)
-  expect(r.getHeader("set-cookie")).toBeDefined()
-
-  // Now login is ok with new password
-  r = await post(login, "/auth/login", { email: fake.email, password: newPassword })
-  successBody(r)
-
-  // But not with the old one
-  const err = await errorPost(login, "/auth/login", {
-    email: fake.email,
-    password: fake.password,
-  })
-  expect(err.statusCode).toBe(401)
 
   // cleanup after me
   await cleanupOrganizationFromDb(fake.email)
