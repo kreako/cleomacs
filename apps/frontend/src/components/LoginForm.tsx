@@ -7,7 +7,7 @@ import type { LoginInput } from "@cleomacs/api/auth"
 import axios from "axios"
 import React from "react"
 import { Link } from "react-router-dom"
-import { required, validateEmail, validatePassword } from "../utils/form"
+import { validateEmail, validatePassword } from "../utils/form"
 
 const focusOnError = createDecorator()
 
