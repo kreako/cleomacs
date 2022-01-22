@@ -5,7 +5,7 @@ import type { LostPasswordInput } from "@cleomacs/api/auth-password"
 
 export default function LostPassword() {
   const navigate = useNavigate()
-  const login = useLostPassword({
+  const lostPassword = useLostPassword({
     onError: (error) => {
       // TODO
       console.log("onError", JSON.stringify(error))
@@ -15,14 +15,14 @@ export default function LostPassword() {
     },
   })
   const onSubmit = async (values: LostPasswordInput) => {
-    await login.mutate(values)
+    await lostPassword.mutate(values)
   }
   return (
     <div className="pt-4 mx-2 flex flex-col items-center">
       <LostPasswordForm
         onSubmit={onSubmit}
-        mainError={login.error as Error}
-        loading={login.isLoading}
+        mainError={lostPassword.error as Error}
+        loading={lostPassword.isLoading}
       />
     </div>
   )
