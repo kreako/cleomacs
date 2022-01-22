@@ -76,5 +76,6 @@ tabs:
       command:
         cmd: "./.launch.expect"
         # Needs a ~/.pgpass with a line : "127.0.0.1:5432:postgres:postgres:password"
+        # And a "pip3 install --user pgcli"
         args: ["./postgres.sh && sleep 5s && pgcli --host 127.0.0.1 --user postgres"]
   - name: "Utils"
