@@ -12,11 +12,6 @@ export const cleanupOrganizationFromDb = async (email: string) => {
           organization: { select: { id: true } },
         },
       },
-      lostPasswordTokens: {
-        select: {
-          id: true,
-        },
-      },
     },
   })
   if (ids === null) {
@@ -25,9 +20,6 @@ export const cleanupOrganizationFromDb = async (email: string) => {
   for (const membership of ids.memberships) {
     await prisma.membership.delete({ where: { id: membership.id } })
     await prisma.organization.delete({ where: { id: membership.organization.id } })
-  }
-  for (const lostPasswordToken of ids.lostPasswordTokens) {
-    await prisma.lostPasswordToken.delete({ where: { id: lostPasswordToken.id } })
   }
   await prisma.user.delete({ where: { id: ids.id } })
 }
