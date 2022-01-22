@@ -1,5 +1,6 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react"
 import { HashRouter } from "react-router-dom"
+import { AuthenticationError } from "../api/utils"
 
 import LoginForm from "./LoginForm"
 
@@ -40,4 +41,10 @@ export const WithError = Template.bind({})
 WithError.args = {
   loading: false,
   mainError: new Error("Un grave problème"),
+}
+
+export const WithAuthenticationError = Template.bind({})
+WithAuthenticationError.args = {
+  loading: false,
+  mainError: new AuthenticationError("Un grave problème"),
 }
