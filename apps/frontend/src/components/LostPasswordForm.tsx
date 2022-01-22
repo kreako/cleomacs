@@ -14,7 +14,7 @@ type LostPasswordFormProp = {
   onSubmit: (values: LostPasswordInput) => Promise<void>
   // main error to be displayed at the end of the form
   mainError?: Error
-  // Is login request currently running ?
+  // Is lost password request currently running ?
   loading: boolean
 }
 
