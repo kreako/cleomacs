@@ -5,15 +5,31 @@ import type {
 } from "@cleomacs/api/auth-password"
 import { rawPost } from "./utils"
 
+export class UnknownEmailError extends Error {
+  name = "UnknownEmailError"
+  email: string
+  constructor(email: string) {
+    super(`Je ne reconnais pas cet email : '${email}'`)
+    this.email = email
+  }
+}
+
 export const postLostPassword = async (
   values: LostPasswordInput
 ): Promise<LostPasswordOutput> => {
-  return await rawPost("/auth-password/lost", values)
+  const data = await rawPost<LostPasswordOutput, LostPasswordInput>(
+    "/auth-password/lost",
+    values
+  )
+  if (!data.data.success) {
+    throw new UnknownEmailError(values.email)
+  }
+  return data.data
 }
 
 type UseLostPassword = {
   onError: (error: Error) => void
-  onSuccess: (data: LostPasswordOutput) => void
+  onSuccess: () => void
 }
 
 export const useLostPassword = ({ onError, onSuccess }: UseLostPassword) => {
