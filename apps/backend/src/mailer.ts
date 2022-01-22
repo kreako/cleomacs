@@ -6,9 +6,9 @@ export const lostPasswordMail = async (to: string, token: string) => {
     from: "todo@todo",
     to,
     subject: "[TODO]Mot de passe perdu",
-    html: `<p><a href="http://127.0.0.1:3001/#/change-lost-password?token=${token}">Changer votre mot de passe ici : </a></p>`,
+    html: `<p><a href="http://127.0.0.1:3001/#/change-lost-password?token=${token}">Changer votre mot de passe en cliquant : ici !</a></p>`,
     text: `
-    Changer votre mot de passe ici :',
+    Changer votre mot de passe ici :
     http://127.0.0.1:3001/#/change-lost-password?token=${token}
     `,
   }
