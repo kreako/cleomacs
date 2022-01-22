@@ -5,6 +5,7 @@ import Loading from "../components/Loading"
 import RawError from "../components/RawError"
 import type { LostPasswordInput } from "@cleomacs/api/auth-password"
 import { validateEmail } from "../utils/form"
+import { UnknownEmailError } from "../api/auth-password"
 
 const focusOnError = createDecorator()
 
@@ -18,6 +19,24 @@ type LostPasswordFormProp = {
 }
 
 export default function LostPasswordForm(props: LostPasswordFormProp) {
+  let error: React.ReactElement | null = null
+  if (props.mainError != null) {
+    if (props.mainError instanceof UnknownEmailError) {
+      error = (
+        <div className="mt-6 text-red-600">
+          <div className="flex flex-col items-center">
+            <div className="font-bold tracking-wide">Oh non !</div>
+            <div>
+              Je ne reconnais pas cet email{" "}
+              <span className="font-mono">{props.mainError.email}</span>
+            </div>
+          </div>
+        </div>
+      )
+    } else {
+      error = <RawError error={props.mainError} />
+    }
+  }
   const onSubmit = async (v: object) => {
     const values = v as LostPasswordInput
     await props.onSubmit(values)
@@ -45,7 +64,7 @@ export default function LostPasswordForm(props: LostPasswordFormProp) {
                 )}
               </Field>
             </div>
-            {props.mainError && <RawError error={props.mainError} />}
+            {error}
             <button
               type="submit"
               disabled={props.loading}

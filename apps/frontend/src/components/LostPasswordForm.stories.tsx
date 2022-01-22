@@ -1,4 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react"
+import { UnknownEmailError } from "../api/auth-password"
 
 import LostPasswordForm from "./LostPasswordForm"
 
@@ -37,4 +38,10 @@ export const WithError = Template.bind({})
 WithError.args = {
   loading: false,
   mainError: new Error("Un grave problème"),
+}
+
+export const WithUnknownEmailError = Template.bind({})
+WithUnknownEmailError.args = {
+  loading: false,
+  mainError: new UnknownEmailError("olivier@kreako.fr"),
 }
