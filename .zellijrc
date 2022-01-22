@@ -71,4 +71,10 @@ tabs:
       - direction: Vertical
         split_size:
           Percent: 40
+  - name: "Postgres"
+    run:
+      command:
+        cmd: "./.launch.expect"
+        # Needs a ~/.pgpass with a line : "127.0.0.1:5432:postgres:postgres:password"
+        args: ["./postgres.sh && sleep 5s && pgcli --host 127.0.0.1 --user postgres"]
   - name: "Utils"
