@@ -1,4 +1,4 @@
-import rawAxios, { AxiosError } from "axios"
+import rawAxios, { AxiosError, AxiosResponse } from "axios"
 
 const axios = rawAxios.create({
   baseURL: "/api",
@@ -29,11 +29,14 @@ export const get = async <T>(url: string): Promise<T> => {
   }
 }
 
-export const rawGet = async <T>(url: string): Promise<T> => {
+export const rawGet = async <T>(url: string): Promise<AxiosResponse<T>> => {
   return await axios.get(url)
 }
 
-export const rawPost = async <T, D>(url: string, data: D): Promise<T> => {
+export const rawPost = async <T, D>(
+  url: string,
+  data: D
+): Promise<AxiosResponse<T>> => {
   return await axios.post(url, data)
 }
 
