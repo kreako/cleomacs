@@ -7,7 +7,7 @@ import type { LoginInput } from "@cleomacs/api/auth"
 import axios from "axios"
 import React from "react"
 import { Link } from "react-router-dom"
-import { required, validateEmail } from "../utils/form"
+import { required, validateEmail, validatePassword } from "../utils/form"
 
 const focusOnError = createDecorator()
 
@@ -73,10 +73,7 @@ export default function LoginForm(props: LoginFormProp) {
               </Field>
             </div>
             <div className="mt-4">
-              <Field<string>
-                name="password"
-                validate={required("Votre mot de passe")}
-              >
+              <Field<string> name="password" validate={validatePassword}>
                 {({
                   input: { name, value, onChange },
                   meta: { error, touched },

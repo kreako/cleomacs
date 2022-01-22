@@ -5,6 +5,7 @@ import { useSignup } from "../api/auth"
 import { useNavigate } from "react-router-dom"
 import Loading from "../components/Loading"
 import RawError from "../components/RawError"
+import { validatePassword } from "../utils/form"
 
 const focusOnError = createDecorator()
 
@@ -121,10 +122,7 @@ export default function Signup() {
                 </Field>
               </div>
               <div className="mt-4">
-                <Field<string>
-                  name="password"
-                  validate={required("Votre mot de passe")}
-                >
+                <Field<string> name="password" validate={validatePassword}>
                   {({
                     input: { name, value, onChange },
                     meta: { error, touched },

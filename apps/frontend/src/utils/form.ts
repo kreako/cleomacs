@@ -10,3 +10,13 @@ export const validateEmail = (value: string) => {
   }
   return undefined
 }
+
+export const validatePassword = (value: string) => {
+  if (value == undefined) {
+    return "Votre mot de passe est requis"
+  }
+  if (value.length <= 8) {
+    return "Votre mot de passe est trop court, il devrait compter plus de 8 caractères"
+  }
+  return undefined
+}
