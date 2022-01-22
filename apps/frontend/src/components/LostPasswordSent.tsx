@@ -23,7 +23,9 @@ export default function LostPasswordSent() {
           <span>&nbsp; pour changer votre mot de passe !</span>
         </div>
         <div className="mt-4 text-sm">
-          N&apos;hésitez pas à fouiller aussi dans votre dossier des spams.
+          Le lien sera valide pour les 4 prochaines heures et si vous ne trouvez
+          pas le mail, n&apos;hésitez pas à fouiller aussi dans votre dossier
+          des spams.
         </div>
       </div>
     </div>
