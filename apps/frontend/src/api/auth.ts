@@ -1,7 +1,12 @@
-import type { LoginInput, ProfileOutput, SignupInput } from "@cleomacs/api/auth"
+import type {
+  LoginInput,
+  LoginOutput,
+  ProfileOutput,
+  SignupInput,
+} from "@cleomacs/api/auth"
 import { useMutation, useQuery } from "react-query"
 import { keys } from "./query-key"
-import { get, rawPost, retryQuery } from "./utils"
+import { get, post, rawPost, retryQuery } from "./utils"
 
 export const postSignup = async (values: SignupInput) => {
   return await rawPost("/auth/signup", values)
@@ -24,8 +29,8 @@ export const useSignup = ({ onError, onSuccess }: UseSignup) => {
   )
 }
 
-export const postLogin = async (values: LoginInput) => {
-  return await rawPost("/auth/login", values)
+export const postLogin = async (values: LoginInput): Promise<LoginOutput> => {
+  return await post("/auth/login", values)
 }
 
 type UseLogin = {

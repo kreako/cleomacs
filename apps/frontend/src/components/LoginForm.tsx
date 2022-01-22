@@ -4,10 +4,10 @@ import createDecorator from "final-form-focus"
 import Loading from "../components/Loading"
 import RawError from "../components/RawError"
 import type { LoginInput } from "@cleomacs/api/auth"
-import axios from "axios"
 import React from "react"
 import { Link } from "react-router-dom"
 import { validateEmail, validatePassword } from "../utils/form"
+import { AuthenticationError } from "../api/utils"
 
 const focusOnError = createDecorator()
 
@@ -27,24 +27,20 @@ export default function LoginForm(props: LoginFormProp) {
   }
   let mainError: React.ReactElement | null = null
   if (props.mainError != undefined) {
-    if (axios.isAxiosError(props.mainError)) {
-      if (props.mainError.response?.status === 401) {
-        mainError = (
-          <div className="mt-6 mb-4 text-red-600 flex flex-col items-center space-y-4">
-            <div className="flex flex-col items-center">
-              <div className="font-bold tracking-wide">Oh non !</div>
-              <div> Je ne reconnais pas ce couple email/mot de passe.</div>
-            </div>
-            <div className="">
-              Est-ce que vous avez
-              <Link to="/lost-password" className="underline decoration-dotted">
-                {" "}
-                perdu votre mot de passe ?
-              </Link>
-            </div>
+    if (props.mainError instanceof AuthenticationError) {
+      mainError = (
+        <div className="mt-6 mb-4 text-red-600 flex flex-col items-center">
+          <div className="font-bold tracking-wide">Oh non !</div>
+          <div> Je ne reconnais pas ce couple email/mot de passe.</div>
+          <div>
+            Est-ce que vous avez
+            <Link to="/lost-password" className="underline decoration-dotted">
+              {" "}
+              perdu votre mot de passe ?
+            </Link>
           </div>
-        )
-      }
+        </div>
+      )
     } else {
       mainError = <RawError error={props.mainError} />
     }
