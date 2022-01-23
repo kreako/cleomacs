@@ -9,6 +9,7 @@ import {
   createRequest,
   createResponse,
   RequestMethod,
+  Query,
 } from "node-mocks-http"
 
 type SyncHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => void
@@ -62,9 +63,10 @@ export const get = async (
   handlers: Handler[],
   url: string,
   headers?: Headers,
-  params?: Params
+  params?: Params,
+  query?: Query
 ): Promise<MockResponse<express.Response>> => {
-  return await request(handlers, url, "GET", headers, undefined, params)
+  return await request(handlers, url, "GET", headers, undefined, params, query)
 }
 
 export const errorPost = async (
@@ -92,9 +94,10 @@ export const request = async (
   method: RequestMethod,
   headers?: Headers,
   body?: Body,
-  params?: Params
+  params?: Params,
+  query?: Query
 ): Promise<MockResponse<express.Response>> => {
-  const res = await rawRequest(handlers, url, method, headers, body, params)
+  const res = await rawRequest(handlers, url, method, headers, body, params, query)
   expect(res.statusCode).toBe(200)
   return res
 }
@@ -118,7 +121,8 @@ export const rawRequest = async (
   method: RequestMethod,
   headers?: Headers,
   body?: Body,
-  params?: Params
+  params?: Params,
+  query?: Query
 ): Promise<MockResponse<express.Response>> => {
   const req = createRequest({
     method,
@@ -126,6 +130,7 @@ export const rawRequest = async (
     body,
     params,
     headers,
+    query,
   })
   const res = createResponse()
   await handle(handlers, req, res)
