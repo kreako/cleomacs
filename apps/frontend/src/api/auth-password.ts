@@ -1,5 +1,7 @@
 import { useMutation } from "react-query"
 import type {
+  ChangeLostPasswordInput,
+  ChangeLostPasswordOutput,
   LostPasswordInput,
   LostPasswordOutput,
 } from "@cleomacs/api/auth-password"
@@ -36,6 +38,46 @@ export const useLostPassword = ({ onError, onSuccess }: UseLostPassword) => {
   return useMutation(
     async (values: LostPasswordInput) => {
       return await postLostPassword(values)
+    },
+    {
+      onError,
+      onSuccess,
+    }
+  )
+}
+
+export class ChangeLostPasswordError extends Error {
+  name = "ChangeLostPasswordError"
+  constructor() {
+    super("Ce lien n'est malheureusement plus valide")
+  }
+}
+
+export const postChangeLostPassword = async (
+  values: ChangeLostPasswordInput
+): Promise<LostPasswordOutput> => {
+  const data = await rawPost<ChangeLostPasswordOutput, ChangeLostPasswordInput>(
+    "/auth-password/change",
+    values
+  )
+  if (!data.data.success) {
+    throw new ChangeLostPasswordError()
+  }
+  return data.data
+}
+
+type UseChangeLostPassword = {
+  onError: (error: Error) => void
+  onSuccess: () => void
+}
+
+export const useChangeLostPassword = ({
+  onError,
+  onSuccess,
+}: UseChangeLostPassword) => {
+  return useMutation(
+    async (values: ChangeLostPasswordInput) => {
+      return await postChangeLostPassword(values)
     },
     {
       onError,
