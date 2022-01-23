@@ -11,6 +11,9 @@ const Signup = React.lazy(() => import("./pages/Signup"))
 const Login = React.lazy(() => import("./pages/Login"))
 const LostPassword = React.lazy(() => import("./pages/LostPassword"))
 const LostPasswordSent = React.lazy(() => import("./pages/LostPasswordSent"))
+const ChangeLostPassword = React.lazy(
+  () => import("./pages/ChangeLostPassword")
+)
 const NotFound = React.lazy(() => import("./pages/NotFound"))
 
 export default function App() {
@@ -25,6 +28,10 @@ export default function App() {
               <Route path="login" element={<Login />} />
               <Route path="lost-password" element={<LostPassword />} />
               <Route path="lost-password-sent" element={<LostPasswordSent />} />
+              <Route
+                path="change-lost-password"
+                element={<ChangeLostPassword />}
+              />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
