@@ -1,3 +1,4 @@
+import { User } from "@cleomacs/dbal/user"
 import { z } from "zod"
 import { email, password } from "./utils"
 
@@ -17,3 +18,13 @@ export const changeLostPasswordInput = z.object({
 export type ChangeLostPasswordInput = z.infer<typeof changeLostPasswordInput>
 export const changeLostPasswordOutput = (success: boolean) => ({ success })
 export type ChangeLostPasswordOutput = ReturnType<typeof changeLostPasswordOutput>
+
+// token info
+export const tokenInfoInput = z.object({
+  token: z.string(),
+})
+export type TokenInfoInput = z.infer<typeof tokenInfoInput>
+export const tokenInfoOutput = (user?: User) => ({
+  user,
+})
+export type TokenInfoOutput = ReturnType<typeof tokenInfoOutput>
