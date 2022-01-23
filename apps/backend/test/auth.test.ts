@@ -1,31 +1,89 @@
 import { login, logout, profile, signup } from "../src/auth"
 import { cookieHeader, errorGet, errorPost, get, post, successBody } from "./utils"
 import { cleanupOrganizationFromDb, faker } from "@cleomacs/test"
+import { LoginOutput, LogoutOutput, ProfileOutput, SignupOutput } from "@cleomacs/api/auth"
 
-test("signup", async () => {
-  const fake = faker()
+describe("Lost password", () => {
+  let fake: ReturnType<typeof faker>
+  let headers: ReturnType<typeof cookieHeader>
 
-  await cleanupOrganizationFromDb(fake.email)
-
-  let r = await post(signup, "/auth/signup", {
-    organizationName: fake.organizationName,
-    userName: fake.userName,
-    email: fake.email,
-    password: fake.password,
+  beforeEach(async () => {
+    fake = faker()
+    await cleanupOrganizationFromDb(fake.email)
+    // signup
+    const r = await post<SignupOutput>(signup, "/auth/signup", {
+      organizationName: fake.organizationName,
+      userName: fake.userName,
+      email: fake.email,
+      password: fake.password,
+    })
+    successBody(r)
+    headers = cookieHeader(r)
   })
-  successBody(r)
 
-  const headers = cookieHeader(r)
+  afterEach(async () => {
+    await cleanupOrganizationFromDb(fake.email)
+  })
 
-  // Now let's check that cookie is now useful
-  r = await get(profile, "/auth/profile", headers)
-  const body = r._getJSONData()
-  const user = body.user
-  expect(user.name).toBe(fake.userName)
-  expect(user.email).toBe(fake.email)
-  expect(user.lastMembership.organization.name).toBe(fake.organizationName)
+  test("signup", async () => {
+    // Now let's check that cookie is now useful
+    const r = await get<ProfileOutput>(profile, "/auth/profile", headers)
+    const user = r.body.user
+    if (user == null) {
+      throw new Error("user is null")
+    }
+    expect(user.name).toBe(fake.userName)
+    expect(user.email).toBe(fake.email)
+    if (user.lastMembership == null) {
+      throw new Error("lastMembership is null")
+    }
+    expect(user.lastMembership.organization.name).toBe(fake.organizationName)
+  })
 
-  await cleanupOrganizationFromDb(fake.email)
+  test("signup/login/logout test", async () => {
+    // Now let's check that cookie is now useful
+    const r1 = await get<ProfileOutput>(profile, "/auth/profile", headers)
+    expect(r1.statusCode).toBe(200)
+
+    // logout
+    const r2 = await post<LogoutOutput>(logout, "/auth/logout", {}, headers)
+    successBody(r2)
+    headers = cookieHeader(r2)
+
+    // profile is in error
+    const err = await errorGet(profile, "/auth/profile", headers)
+    expect(err.statusCode).toBe(401)
+
+    // login
+    const r3 = await post<LoginOutput>(login, "/auth/login", {
+      email: fake.email,
+      password: fake.password,
+    })
+    successBody(r3)
+    headers = cookieHeader(r3)
+    const r4 = await get<ProfileOutput>(profile, "/auth/profile", headers)
+    expect(r4.statusCode).toBe(200)
+  })
+
+  test("signup/invalid login test", async () => {
+    // logout
+    const r1 = await post<LogoutOutput>(logout, "/auth/logout", {}, headers)
+    successBody(r1)
+
+    // login with invalid email
+    const err1 = await errorPost(login, "/auth/login", {
+      email: fake.email + "_meuh",
+      password: fake.password,
+    })
+    expect(err1.statusCode).toBe(401)
+
+    // login with invalid password
+    const err2 = await errorPost(login, "/auth/login", {
+      email: fake.email,
+      password: fake.password + "_meuh",
+    })
+    expect(err2.statusCode).toBe(401)
+  })
 })
 
 test("signup invalid payload", async () => {
@@ -44,81 +102,4 @@ test("login invalid payload", async () => {
     password: null,
   })
   expect(r.status).toBe(400)
-})
-
-test("signup/login/logout test", async () => {
-  const fake = faker()
-
-  await cleanupOrganizationFromDb(fake.email)
-
-  // signup
-  let r = await post(signup, "/auth/signup", {
-    organizationName: fake.organizationName,
-    userName: fake.userName,
-    email: fake.email,
-    password: fake.password,
-  })
-  successBody(r)
-  let headers = cookieHeader(r)
-
-  // Now let's check that cookie is now useful
-  r = await get(profile, "/auth/profile", headers)
-  expect(r.statusCode).toBe(200)
-
-  // logout
-  r = await post(logout, "/auth/logout", {}, headers)
-  successBody(r)
-  headers = cookieHeader(r)
-
-  // profile is in error
-  const err = await errorGet(profile, "/auth/profile", headers)
-  expect(err.statusCode).toBe(401)
-
-  // login
-  r = await post(login, "/auth/login", { email: fake.email, password: fake.password })
-  successBody(r)
-  headers = cookieHeader(r)
-  r = await get(profile, "/auth/profile", headers)
-  expect(r.statusCode).toBe(200)
-
-  // cleanup after me
-  await cleanupOrganizationFromDb(fake.email)
-})
-
-test("signup/invalid login test", async () => {
-  const fake = faker()
-
-  await cleanupOrganizationFromDb(fake.email)
-
-  // signup
-  let r = await post(signup, "/auth/signup", {
-    organizationName: fake.organizationName,
-    userName: fake.userName,
-    email: fake.email,
-    password: fake.password,
-  })
-  successBody(r)
-  let headers = cookieHeader(r)
-
-  // logout
-  r = await post(logout, "/auth/logout", {}, headers)
-  successBody(r)
-  headers = cookieHeader(r)
-
-  // login with invalid email
-  const err1 = await errorPost(login, "/auth/login", {
-    email: fake.email + "_meuh",
-    password: fake.password,
-  })
-  expect(err1.statusCode).toBe(401)
-
-  // login with invalid password
-  const err2 = await errorPost(login, "/auth/login", {
-    email: fake.email,
-    password: fake.password + "_meuh",
-  })
-  expect(err2.statusCode).toBe(401)
-
-  // cleanup after me
-  await cleanupOrganizationFromDb(fake.email)
 })

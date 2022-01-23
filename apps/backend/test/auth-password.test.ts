@@ -2,6 +2,12 @@
 const previewEmail = jest.fn()
 jest.mock("preview-email", () => previewEmail)
 
+import { LoginOutput, SignupOutput } from "@cleomacs/api/auth"
+import {
+  ChangeLostPasswordOutput,
+  LostPasswordOutput,
+  TokenInfoOutput,
+} from "@cleomacs/api/auth-password"
 import { cleanupOrganizationFromDb, faker } from "@cleomacs/test"
 import { Handler } from "express"
 import { login, signup } from "../src/auth"
@@ -15,7 +21,7 @@ describe("Lost password", () => {
     fake = faker()
     await cleanupOrganizationFromDb(fake.email)
     // signup
-    const r = await post(signup, "/auth/signup", {
+    const r = await post<SignupOutput>(signup, "/auth/signup", {
       organizationName: fake.organizationName,
       userName: fake.userName,
       email: fake.email,
@@ -30,7 +36,9 @@ describe("Lost password", () => {
 
   test("lost password", async () => {
     // lost password
-    const r1 = await post(lostPassword, "/auth-password/lost", { email: fake.email })
+    const r1 = await post<LostPasswordOutput>(lostPassword, "/auth-password/lost", {
+      email: fake.email,
+    })
     successBody(r1)
     // check call
     expect(previewEmail.mock.calls.length).toBe(1)
@@ -45,14 +53,19 @@ describe("Lost password", () => {
     expect(token).toBeDefined()
 
     // token is valid
-    const rToken = await get(tokenInfo as Handler[], `auth-password/token-info?token=${token}`)
+    const rToken = await get<TokenInfoOutput>(
+      tokenInfo as Handler[],
+      `auth-password/token-info?token=${token}`
+    )
     expect(rToken.statusCode).toBe(200)
-    const body = rToken._getJSONData()
-    expect(body.user.email).toBe(fake.email)
+    if (rToken.body.user == null) {
+      throw new Error("user is null")
+    }
+    expect(rToken.body.user.email).toBe(fake.email)
 
     // change lost password
     const newPassword = "meuhmeuh42"
-    const r2 = await post(changeLostPassword, "/auth-password/change", {
+    const r2 = await post<ChangeLostPasswordOutput>(changeLostPassword, "/auth-password/change", {
       token,
       password: newPassword,
     })
@@ -61,7 +74,10 @@ describe("Lost password", () => {
     expect(r2.getHeader("set-cookie")).toBeDefined()
 
     // Now login is ok with new password
-    const r3 = await post(login, "/auth/login", { email: fake.email, password: newPassword })
+    const r3 = await post<LoginOutput>(login, "/auth/login", {
+      email: fake.email,
+      password: newPassword,
+    })
     successBody(r3)
 
     // But not with the old one
@@ -81,22 +97,20 @@ const INVALID_PASSWORD_TOKEN =
 test("invalid password change lost password", async () => {
   // change lost password
   const newPassword = "meuhmeuh42"
-  const r2 = await post(changeLostPassword, "/auth-password/change", {
+  const r2 = await post<ChangeLostPasswordOutput>(changeLostPassword, "/auth-password/change", {
     token: INVALID_PASSWORD_TOKEN,
     password: newPassword,
   })
-  const body = r2._getJSONData()
-  expect(body.success).toBeFalsy()
+  expect(r2.body.success).toBeFalsy()
 })
 
 test("invalid token info", async () => {
-  const rToken = await get(
+  const rToken = await get<TokenInfoOutput>(
     tokenInfo as Handler[],
     `auth-password/token-info?token=${INVALID_PASSWORD_TOKEN}`
   )
   expect(rToken.statusCode).toBe(200)
-  const body = rToken._getJSONData()
-  expect(body.user).toBeUndefined()
+  expect(rToken.body.user).toBeUndefined()
 })
 
 // const session = await import("iron-session")
@@ -107,20 +121,18 @@ const EXPIRED_TOKEN =
 test("expired token change lost password", async () => {
   // change lost password
   const newPassword = "meuhmeuh42"
-  const r2 = await post(changeLostPassword, "/auth-password/change", {
+  const r2 = await post<ChangeLostPasswordOutput>(changeLostPassword, "/auth-password/change", {
     token: EXPIRED_TOKEN,
     password: newPassword,
   })
-  const body = r2._getJSONData()
-  expect(body.success).toBeFalsy()
+  expect(r2.body.success).toBeFalsy()
 })
 
 test("expired token info", async () => {
-  const rToken = await get(
+  const rToken = await get<TokenInfoOutput>(
     tokenInfo as Handler[],
     `auth-password/token-info?token=${EXPIRED_TOKEN}`
   )
   expect(rToken.statusCode).toBe(200)
-  const body = rToken._getJSONData()
-  expect(body.user).toBeUndefined()
+  expect(rToken.body.user).toBeUndefined()
 })

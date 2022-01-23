@@ -9,7 +9,6 @@ import {
   createRequest,
   createResponse,
   RequestMethod,
-  Query,
 } from "node-mocks-http"
 
 type SyncHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => void
@@ -49,23 +48,38 @@ const handle = async (
   return
 }
 
-export const post = async (
+type BodyMockResponse<B> = {
+  body: B
+}
+
+type JsonMockResponse<B> = BodyMockResponse<B> & MockResponse<express.Response>
+
+const json = <B>(r: MockResponse<express.Response>): JsonMockResponse<B> => {
+  const body = r._getJSONData() as B
+  const r2 = r as JsonMockResponse<B>
+  r2.body = body
+  return r2
+}
+
+export const post = async <B>(
   handlers: Handler[],
   url: string,
   body: Body,
   headers?: Headers,
   params?: Params
-): Promise<MockResponse<express.Response>> => {
-  return await request(handlers, url, "POST", headers, body, params)
+): Promise<JsonMockResponse<B>> => {
+  const r = await request(handlers, url, "POST", headers, body, params)
+  return json(r)
 }
 
-export const get = async (
+export const get = async <B>(
   handlers: Handler[],
   url: string,
   headers?: Headers,
   params?: Params
-): Promise<MockResponse<express.Response>> => {
-  return await request(handlers, url, "GET", headers, undefined, params)
+): Promise<JsonMockResponse<B>> => {
+  const r = await request(handlers, url, "GET", headers, undefined, params)
+  return json(r)
 }
 
 export const errorPost = async (
@@ -153,7 +167,10 @@ export const cookieHeader = (res?: MockResponse<express.Response>): Headers => {
   return { cookie: c }
 }
 
-export const successBody = (res: MockResponse<express.Response>) => {
-  const body = res._getJSONData()
-  expect(body.success).toBeTruthy()
+type Success = {
+  success: boolean
+}
+
+export const successBody = <B extends Success>(res: JsonMockResponse<B>) => {
+  expect(res.body.success).toBeTruthy()
 }
