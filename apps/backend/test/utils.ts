@@ -63,10 +63,9 @@ export const get = async (
   handlers: Handler[],
   url: string,
   headers?: Headers,
-  params?: Params,
-  query?: Query
+  params?: Params
 ): Promise<MockResponse<express.Response>> => {
-  return await request(handlers, url, "GET", headers, undefined, params, query)
+  return await request(handlers, url, "GET", headers, undefined, params)
 }
 
 export const errorPost = async (
@@ -94,10 +93,9 @@ export const request = async (
   method: RequestMethod,
   headers?: Headers,
   body?: Body,
-  params?: Params,
-  query?: Query
+  params?: Params
 ): Promise<MockResponse<express.Response>> => {
-  const res = await rawRequest(handlers, url, method, headers, body, params, query)
+  const res = await rawRequest(handlers, url, method, headers, body, params)
   expect(res.statusCode).toBe(200)
   return res
 }
@@ -121,8 +119,7 @@ export const rawRequest = async (
   method: RequestMethod,
   headers?: Headers,
   body?: Body,
-  params?: Params,
-  query?: Query
+  params?: Params
 ): Promise<MockResponse<express.Response>> => {
   const req = createRequest({
     method,
@@ -130,7 +127,6 @@ export const rawRequest = async (
     body,
     params,
     headers,
-    query,
   })
   const res = createResponse()
   await handle(handlers, req, res)

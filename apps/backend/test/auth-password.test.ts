@@ -45,15 +45,7 @@ describe("Lost password", () => {
     expect(token).toBeDefined()
 
     // token is valid
-    const rToken = await get(
-      tokenInfo as Handler[],
-      `auth-password/token-info?token=${token}`,
-      undefined,
-      undefined,
-      {
-        token,
-      }
-    )
+    const rToken = await get(tokenInfo as Handler[], `auth-password/token-info?token=${token}`)
     expect(rToken.statusCode).toBe(200)
     const body = rToken._getJSONData()
     expect(body.user.email).toBe(fake.email)
@@ -100,12 +92,7 @@ test("invalid password change lost password", async () => {
 test("invalid token info", async () => {
   const rToken = await get(
     tokenInfo as Handler[],
-    `auth-password/token-info?token=${INVALID_PASSWORD_TOKEN}`,
-    undefined,
-    undefined,
-    {
-      token: INVALID_PASSWORD_TOKEN,
-    }
+    `auth-password/token-info?token=${INVALID_PASSWORD_TOKEN}`
   )
   expect(rToken.statusCode).toBe(200)
   const body = rToken._getJSONData()
@@ -131,12 +118,7 @@ test("expired token change lost password", async () => {
 test("expired token info", async () => {
   const rToken = await get(
     tokenInfo as Handler[],
-    `auth-password/token-info?token=${EXPIRED_TOKEN}`,
-    undefined,
-    undefined,
-    {
-      token: EXPIRED_TOKEN,
-    }
+    `auth-password/token-info?token=${EXPIRED_TOKEN}`
   )
   expect(rToken.statusCode).toBe(200)
   const body = rToken._getJSONData()
