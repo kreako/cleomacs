@@ -76,6 +76,6 @@ const fetchProfile = async (): Promise<ProfileOutput> => get("/auth/profile")
 export const useProfile = () => {
   return useQuery(keys.profile, fetchProfile, {
     useErrorBoundary: true,
-    retry: retryQuery,
+    retry: retryQuery(["AuthenticationError"]),
   })
 }

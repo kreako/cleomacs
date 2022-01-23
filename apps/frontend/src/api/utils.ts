@@ -55,9 +55,15 @@ export const rawPost = async <T, D>(
   return await axios.post(url, data)
 }
 
-export const retryQuery = (count: number, error: unknown): boolean => {
-  if (error instanceof AuthenticationError) {
-    return false
+export const retryQuery =
+  (ignoreErrors: string[]) =>
+  (count: number, error: unknown): boolean => {
+    if (error instanceof Error) {
+      for (const ignoreError of ignoreErrors) {
+        if (error.name === ignoreError) {
+          return false
+        }
+      }
+    }
+    return count < 3
   }
-  return count < 3
-}
