@@ -1,7 +1,8 @@
-import { processRequestBody } from "zod-express-middleware"
+import { processRequestBody, processRequestQuery } from "zod-express-middleware"
 import express from "express"
 import {
   findReducedUserById,
+  findUser,
   findUserNameByEmail,
   updatePasswordHashById,
 } from "@cleomacs/dbal/user"
@@ -10,6 +11,8 @@ import {
   changeLostPasswordOutput,
   lostPasswordInput,
   lostPasswordOutput,
+  tokenInfoInput,
+  tokenInfoOutput,
 } from "@cleomacs/api/auth-password"
 import { sealData, unsealData } from "iron-session"
 import { lostPasswordMail } from "./mailer"
@@ -88,7 +91,23 @@ export const changeLostPassword = [
   },
 ]
 
+export const tokenInfo = [
+  processRequestQuery(tokenInfoInput),
+  async (req: express.Request, res: express.Response) => {
+    const token = req.query.token as string // cast valid because processRequestQuery
+    const { userId }: { userId: number } = await unsealData(token, sealConfiguration())
+    if (userId == undefined) {
+      // Invalid or expired token
+      res.json(tokenInfoOutput())
+    } else {
+      const user = await findUser(userId)
+      res.json(tokenInfoOutput(user))
+    }
+  },
+]
+
 const router = express.Router()
 router.post("/lost", ...lostPassword)
 router.post("/change", ...changeLostPassword)
+router.get("/token-info", ...tokenInfo)
 export default router
