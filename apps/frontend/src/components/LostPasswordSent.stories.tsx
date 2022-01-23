@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react"
 import LostPasswordSent from "./LostPasswordSent"
 
 export default {
-  title: "LostPasswordSent",
+  title: "auth/LostPasswordSent",
   component: LostPasswordSent,
   argTypes: {},
   decorators: [

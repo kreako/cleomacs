@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react"
 import LoadingPage from "./LoadingPage"
 
 export default {
-  title: "LoadingPage",
+  title: "generic/LoadingPage",
   component: LoadingPage,
   argTypes: {},
   decorators: [

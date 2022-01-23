@@ -5,7 +5,7 @@ import { InvalidTokenError } from "../api/auth-password"
 import ChangeLostPasswordForm from "./ChangeLostPasswordForm"
 
 export default {
-  title: "ChangeLostPasswordForm",
+  title: "auth/ChangeLostPasswordForm",
   component: ChangeLostPasswordForm,
   argTypes: {
     onSubmit: { action: "submit" },

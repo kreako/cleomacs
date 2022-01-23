@@ -4,7 +4,7 @@ import { UnknownEmailError } from "../api/auth-password"
 import LostPasswordForm from "./LostPasswordForm"
 
 export default {
-  title: "LostPasswordForm",
+  title: "auth/LostPasswordForm",
   component: LostPasswordForm,
   argTypes: {
     onSubmit: { action: "submit" },

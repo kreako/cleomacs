@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react"
 import { LogoutButton } from "./Logout"
 
 export default {
-  title: "Logout",
+  title: "auth/Logout",
   component: LogoutButton,
   argTypes: { onClick: { action: "click" } },
   decorators: [(Story) => <Story />],

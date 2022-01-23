@@ -5,7 +5,7 @@ import { AuthenticationError } from "../api/utils"
 import LoginForm from "./LoginForm"
 
 export default {
-  title: "LoginForm",
+  title: "auth/LoginForm",
   component: LoginForm,
   argTypes: {
     onSubmit: { action: "submit" },

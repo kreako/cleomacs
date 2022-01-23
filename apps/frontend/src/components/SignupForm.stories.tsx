@@ -4,7 +4,7 @@ import { HashRouter } from "react-router-dom"
 import SignupForm from "./SignupForm"
 
 export default {
-  title: "SignupForm",
+  title: "auth/SignupForm",
   component: SignupForm,
   argTypes: {
     onSubmit: { action: "submit" },

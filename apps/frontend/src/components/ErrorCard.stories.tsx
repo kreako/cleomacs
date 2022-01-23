@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react"
 import ErrorCard from "./ErrorCard"
 
 export default {
-  title: "ErrorCard",
+  title: "error/ErrorCard",
   component: ErrorCard,
   argTypes: {},
   decorators: [

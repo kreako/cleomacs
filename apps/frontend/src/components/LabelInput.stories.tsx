@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react"
 import LabelInput from "./LabelInput"
 
 export default {
-  title: "LabelInput",
+  title: "generic/LabelInput",
   component: LabelInput,
   argTypes: {
     onChange: { action: "change" },

@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react"
 import RawError from "./RawError"
 
 export default {
-  title: "RawError",
+  title: "error/RawError",
   component: RawError,
   argTypes: {},
   decorators: [(Story) => <Story />],
