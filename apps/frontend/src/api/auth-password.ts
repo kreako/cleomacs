@@ -1,11 +1,13 @@
-import { useMutation } from "react-query"
+import { QueryFunctionContext, useMutation, useQuery } from "react-query"
 import type {
   ChangeLostPasswordInput,
   ChangeLostPasswordOutput,
   LostPasswordInput,
   LostPasswordOutput,
+  TokenInfoOutput,
 } from "@cleomacs/api/auth-password"
-import { rawPost } from "./utils"
+import { rawGet, rawPost, retryQuery } from "./utils"
+import { keys } from "./query-key"
 
 export class UnknownEmailError extends Error {
   name = "UnknownEmailError"
@@ -46,24 +48,24 @@ export const useLostPassword = ({ onError, onSuccess }: UseLostPassword) => {
   )
 }
 
-export class ChangeLostPasswordError extends Error {
-  name = "ChangeLostPasswordError"
+export class InvalidTokenError extends Error {
+  name = "InvalidTokenError"
   constructor() {
-    super("Ce lien n'est malheureusement plus valide")
+    super("Ce lien n'est malheureusement pas valide")
   }
 }
 
 export const postChangeLostPassword = async (
   values: ChangeLostPasswordInput
 ): Promise<LostPasswordOutput> => {
-  const data = await rawPost<ChangeLostPasswordOutput, ChangeLostPasswordInput>(
+  const res = await rawPost<ChangeLostPasswordOutput, ChangeLostPasswordInput>(
     "/auth-password/change",
     values
   )
-  if (!data.data.success) {
-    throw new ChangeLostPasswordError()
+  if (!res.data.success) {
+    throw new InvalidTokenError()
   }
-  return data.data
+  return res.data
 }
 
 type UseChangeLostPassword = {
@@ -77,6 +79,7 @@ export const useChangeLostPassword = ({
 }: UseChangeLostPassword) => {
   return useMutation(
     async (values: ChangeLostPasswordInput) => {
+      console.log("useChangeLostPassword", values)
       return await postChangeLostPassword(values)
     },
     {
@@ -84,4 +87,24 @@ export const useChangeLostPassword = ({
       onSuccess,
     }
   )
+}
+
+export const getTokenInfo = async ({
+  queryKey: [{ token }],
+}: QueryFunctionContext<
+  ReturnType<typeof keys["authPasswordTokenInfo"]>
+>): Promise<TokenInfoOutput> => {
+  const res = await rawGet<TokenInfoOutput>(
+    `/auth-password/token-info?token=${token}`
+  )
+  if (res.data.user == null) {
+    throw new InvalidTokenError()
+  }
+  return res.data
+}
+
+export const useTokenInfo = (token: string | null) => {
+  return useQuery(keys.authPasswordTokenInfo(token), getTokenInfo, {
+    retry: retryQuery(["AuthenticationError", "InvalidTokenError"]),
+  })
 }
