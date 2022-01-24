@@ -1,4 +1,6 @@
-import previewEmail from "preview-email"
+import { Queue } from "bullmq"
+
+const queue = new Queue("lost-password", { connection: { host: "localhost", port: 6379 } })
 
 export const lostPasswordMail = async (to: string, token: string) => {
   // TODO from, subject, html, text... TODO
@@ -12,9 +14,5 @@ export const lostPasswordMail = async (to: string, token: string) => {
     http://127.0.0.1:3001/#/change-lost-password?token=${token}
     `,
   }
-  if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
-    await previewEmail(message)
-  } else {
-    throw new Error(`TODO lostPasswordMail ${to} ${token}`)
-  }
+  await queue.add("send", { message })
 }
