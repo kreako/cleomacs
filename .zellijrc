@@ -37,20 +37,20 @@ tabs:
               Percent: 33
             run:
               command:
-                cmd: "./.prefill-input.expect"
-                args: ["cd packages/db && npx prisma studio --port 5555"]
+                cmd: "./.launch.expect"
+                args: ["cd apps/backend && yarn run worker:lost-password"]
           - direction: Vertical
             split_size:
               Percent: 33
             run:
               command:
                 cmd: "./.prefill-input.expect"
-                args: ["cd apps/backend && yarn run console"]
+                args: ["cd packages/db && npx prisma studio --port 5555"]
       - direction: Horizontal
         run:
           command:
             cmd: "./.launch.expect"
-            args: ["cd apps/backend && yarn run test:watch"]
+            args: ["cd apps/backend && yarn run console"]
   - name: "Frontend"
     direction: Horizontal
     parts:
