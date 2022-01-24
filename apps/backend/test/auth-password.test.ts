@@ -1,6 +1,8 @@
 // Do not open browser on each mail test but capture the call
-const previewEmail = jest.fn()
-jest.mock("preview-email", () => previewEmail)
+const lostPasswordMail = jest.fn()
+jest.mock("../src/mailer", () => ({
+  lostPasswordMail,
+}))
 
 import { LoginOutput, SignupOutput } from "@cleomacs/api/auth"
 import {
@@ -41,15 +43,12 @@ describe("Lost password", () => {
     })
     successBody(r1)
     // check call
-    expect(previewEmail.mock.calls.length).toBe(1)
-    const message = previewEmail.mock.calls[0][0]
-    expect(message.to).toBe(fake.email)
+    expect(lostPasswordMail.mock.calls.length).toBe(1)
+    const to = lostPasswordMail.mock.calls[0][0]
+    const token = lostPasswordMail.mock.calls[0][1]
+    expect(to).toBe(fake.email)
 
     // Find the link and the token in the message
-    const re = /href=".*?token=(.*?)"/g
-    const reToken = re.exec(message.html)
-    expect(reToken).not.toBeNull()
-    const token = (reToken as RegExpExecArray)[1]
     expect(token).toBeDefined()
 
     // token is valid
