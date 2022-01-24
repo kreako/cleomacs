@@ -4,10 +4,11 @@ import createDecorator from "final-form-focus"
 import Loading from "../components/Loading"
 import RawError from "../components/RawError"
 import type { SignupInput } from "@cleomacs/api/auth"
-import axios from "axios"
 import React from "react"
 import { Link } from "react-router-dom"
 import { required, validateEmail, validatePassword } from "../utils/form"
+import { DuplicatesError } from "../api/auth"
+import ErrorCard from "./ErrorCard"
 
 const focusOnError = createDecorator()
 
@@ -26,24 +27,48 @@ export default function SignupForm(props: SignupFormProp) {
     await props.onSubmit(values)
   }
   let mainError: React.ReactElement | null = null
+  let organizationNameError: string | null = null
+  let emailError: string | null = null
   if (props.mainError != undefined) {
-    if (axios.isAxiosError(props.mainError)) {
-      if (props.mainError.response?.status === 401) {
+    if (props.mainError instanceof DuplicatesError) {
+      if (props.mainError.email && props.mainError.organizationName) {
         mainError = (
-          <div className="mt-6 mb-4 text-red-600 flex flex-col items-center space-y-4">
-            <div className="flex flex-col items-center">
-              <div className="font-bold tracking-wide">Oh non !</div>
-              <div> Je ne reconnais pas ce couple email/mot de passe.</div>
-            </div>
-            <div className="">
-              Est-ce que vous avez
-              <Link to="/lost-password" className="underline decoration-dotted">
-                {" "}
-                perdu votre mot de passe ?
+          <ErrorCard>
+            <div>Je connais déjà votre email et votre organisation !</div>
+            <div>
+              <Link to="/login">
+                Est-ce que vous voulez plutôt vous connecter :&nbsp;
+                <span className="underline decoration-dotted">ici</span>&nbsp;?
               </Link>
             </div>
-          </div>
+          </ErrorCard>
         )
+        organizationNameError = "Je connais déjà une organisation avec ce nom"
+        emailError = "Je connais déjà cet email"
+      } else if (props.mainError.email) {
+        mainError = (
+          <ErrorCard>
+            <div>Je connais déjà votre email !</div>
+            <div>
+              <Link to="/login">
+                Est-ce que vous voulez plutôt vous connecter :&nbsp;
+                <span className="underline decoration-dotted">ici</span>&nbsp;?
+              </Link>
+            </div>
+          </ErrorCard>
+        )
+        emailError = "Je connais déjà cet email"
+      } else if (props.mainError.organizationName) {
+        mainError = (
+          <ErrorCard>
+            <div>Je connais déjà cette organisation !</div>
+            <div>
+              Si vous voulez y participer, il vous faudra demander un lien
+              d&apos;invitation à quelqu&apos;un qui en fait partie.
+            </div>
+          </ErrorCard>
+        )
+        organizationNameError = "Je connais déjà une organisation avec ce nom"
       }
     } else {
       mainError = <RawError error={props.mainError} />
@@ -72,8 +97,8 @@ export default function SignupForm(props: SignupFormProp) {
                     name={name}
                     value={value}
                     onChange={onChange}
-                    error={error}
-                    touched={touched}
+                    error={organizationNameError || error}
+                    touched={touched || organizationNameError != null}
                   />
                 )}
               </Field>
@@ -111,8 +136,8 @@ export default function SignupForm(props: SignupFormProp) {
                     name={name}
                     value={value}
                     onChange={onChange}
-                    error={error}
-                    touched={touched}
+                    error={emailError || error}
+                    touched={touched || emailError != null}
                   />
                 )}
               </Field>

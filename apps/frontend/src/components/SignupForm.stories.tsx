@@ -1,5 +1,6 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react"
 import { HashRouter } from "react-router-dom"
+import { DuplicatesError } from "../api/auth"
 
 import SignupForm from "./SignupForm"
 
@@ -40,4 +41,22 @@ export const WithError = Template.bind({})
 WithError.args = {
   loading: false,
   mainError: new Error("Un grave problème"),
+}
+
+export const WithDuplicatesOrganizationError = Template.bind({})
+WithDuplicatesOrganizationError.args = {
+  loading: false,
+  mainError: new DuplicatesError(true, false),
+}
+
+export const WithDuplicatesOrganizationEmailError = Template.bind({})
+WithDuplicatesOrganizationEmailError.args = {
+  loading: false,
+  mainError: new DuplicatesError(true, true),
+}
+
+export const WithDuplicatesEmailError = Template.bind({})
+WithDuplicatesEmailError.args = {
+  loading: false,
+  mainError: new DuplicatesError(false, true),
 }
