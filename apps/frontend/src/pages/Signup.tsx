@@ -1,14 +1,6 @@
-import LabelInput from "../components/LabelInput"
-import { Form, Field } from "react-final-form"
-import createDecorator from "final-form-focus"
 import { useSignup } from "../api/auth"
 import { useNavigate } from "react-router-dom"
-import Loading from "../components/Loading"
-import RawError from "../components/RawError"
-import { validatePassword } from "../utils/form"
 import SignupForm from "../components/SignupForm"
-
-const focusOnError = createDecorator()
 
 interface SignupValues {
   organizationName: string
@@ -17,19 +9,6 @@ interface SignupValues {
   identityName: string
   email: string
   password: string
-}
-
-const required = (label: string) => (value: string) =>
-  value ? undefined : `${label} est requis`
-
-const validateEmail = (value: string) => {
-  if (value == undefined) {
-    return "Votre adresse email est requise"
-  }
-  if (value.indexOf("@") === -1) {
-    return "Votre adresse email ne ressemble pas à une adresse email"
-  }
-  return undefined
 }
 
 export default function Signup() {
