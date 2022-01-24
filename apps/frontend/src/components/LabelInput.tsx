@@ -90,6 +90,8 @@ type LabelInputProps = {
   value: string
   onChange: ChangeEventHandler<HTMLInputElement>
   kind: "text" | "email" | "password"
+  // error and touched are modeled on react final form
+  // error is displayed when touched=true and error is defined
   error?: string
   touched?: boolean
 }
