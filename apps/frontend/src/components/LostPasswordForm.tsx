@@ -6,6 +6,7 @@ import RawError from "../components/RawError"
 import type { LostPasswordInput } from "@cleomacs/api/auth-password"
 import { validateEmail } from "../utils/form"
 import { UnknownEmailError } from "../api/auth-password"
+import ErrorCard from "./ErrorCard"
 
 const focusOnError = createDecorator()
 
@@ -23,15 +24,12 @@ export default function LostPasswordForm(props: LostPasswordFormProp) {
   if (props.mainError != null) {
     if (props.mainError instanceof UnknownEmailError) {
       error = (
-        <div className="mt-6 text-red-600">
-          <div className="flex flex-col items-center">
-            <div className="font-bold tracking-wide">Oh non !</div>
-            <div>
-              Je ne reconnais pas cet email{" "}
-              <span className="font-mono">{props.mainError.email}</span>
-            </div>
+        <ErrorCard>
+          <div>
+            Je ne reconnais pas cet email{" "}
+            <span className="font-mono">{props.mainError.email}</span>
           </div>
-        </div>
+        </ErrorCard>
       )
     } else {
       error = <RawError error={props.mainError} />

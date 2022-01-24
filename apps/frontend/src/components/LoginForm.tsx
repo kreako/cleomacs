@@ -8,6 +8,7 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { validateEmail, validatePassword } from "../utils/form"
 import { AuthenticationError } from "../api/utils"
+import ErrorCard from "./ErrorCard"
 
 const focusOnError = createDecorator()
 
@@ -29,8 +30,7 @@ export default function LoginForm(props: LoginFormProp) {
   if (props.mainError != undefined) {
     if (props.mainError instanceof AuthenticationError) {
       mainError = (
-        <div className="mt-6 mb-4 text-red-600 flex flex-col items-center">
-          <div className="font-bold tracking-wide">Oh non !</div>
+        <ErrorCard>
           <div> Je ne reconnais pas ce couple email/mot de passe.</div>
           <div>
             Est-ce que vous avez
@@ -39,7 +39,7 @@ export default function LoginForm(props: LoginFormProp) {
               perdu votre mot de passe ?
             </Link>
           </div>
-        </div>
+        </ErrorCard>
       )
     } else {
       mainError = <RawError error={props.mainError} />
