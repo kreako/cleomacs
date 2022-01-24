@@ -29,6 +29,7 @@
     "@cleomacs/api": "^1.0.0",
     "@cleomacs/db": "^1.0.0",
     "@cleomacs/dbal": "^1.0.0",
+    "bullmq": "^1.66.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
