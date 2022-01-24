@@ -10,8 +10,15 @@ export const signupInput = z.object({
   password,
 })
 export type SignupInput = z.infer<typeof signupInput>
-export const signupOutput = () => success
-export type SignupOutput = ReturnType<typeof signupOutput>
+export const signupOutput = (v: SignupOutput) => v
+type SignupOutputDuplicates = {
+  organizationName: boolean
+  email: boolean
+}
+export type SignupOutput = {
+  success: boolean
+  duplicates?: SignupOutputDuplicates
+}
 
 // login
 export const loginInput = z.object({

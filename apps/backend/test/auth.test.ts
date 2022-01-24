@@ -84,6 +84,45 @@ describe("Lost password", () => {
     })
     expect(err2.statusCode).toBe(401)
   })
+
+  test("signup duplicate organization name", async () => {
+    // Now let's check that cookie is now useful
+    const r = await post<SignupOutput>(signup, "/auth/signup", {
+      organizationName: fake.organizationName,
+      userName: fake.userName,
+      email: fake.email + "meuh",
+      password: fake.password,
+    })
+    expect(r.body.success).toBeFalsy()
+    expect(r.body.duplicates?.organizationName).toBeTruthy()
+    expect(r.body.duplicates?.email).toBeFalsy()
+  })
+
+  test("signup duplicate user email", async () => {
+    // Now let's check that cookie is now useful
+    const r = await post<SignupOutput>(signup, "/auth/signup", {
+      organizationName: fake.organizationName + "meuh",
+      userName: fake.userName,
+      email: fake.email,
+      password: fake.password,
+    })
+    expect(r.body.success).toBeFalsy()
+    expect(r.body.duplicates?.organizationName).toBeFalsy()
+    expect(r.body.duplicates?.email).toBeTruthy()
+  })
+
+  test("signup duplicate user email and organization name", async () => {
+    // Now let's check that cookie is now useful
+    const r = await post<SignupOutput>(signup, "/auth/signup", {
+      organizationName: fake.organizationName,
+      userName: fake.userName,
+      email: fake.email,
+      password: fake.password,
+    })
+    expect(r.body.success).toBeFalsy()
+    expect(r.body.duplicates?.organizationName).toBeTruthy()
+    expect(r.body.duplicates?.email).toBeTruthy()
+  })
 })
 
 test("signup invalid payload", async () => {

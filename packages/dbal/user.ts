@@ -81,6 +81,17 @@ export const findUserNameByEmail = async (email: string) => {
   })
 }
 
+export const findUserIdByEmail = async (email: string) => {
+  return await prisma.user.findUnique({
+    where: {
+      email: email,
+    },
+    select: {
+      id: true,
+    },
+  })
+}
+
 export const updatePasswordHash = (email: string) => async (newHashedPassword: string) => {
   await prisma.user.update({
     where: {

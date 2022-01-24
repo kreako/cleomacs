@@ -15,10 +15,11 @@ import {
   createUser,
   findReducedUserByEmail,
   findUser,
+  findUserIdByEmail,
   updateLastMembership,
   updatePasswordHash,
 } from "@cleomacs/dbal/user"
-import { createOrganization } from "@cleomacs/dbal/organization"
+import { createOrganization, findOrganizationIdByName } from "@cleomacs/dbal/organization"
 import { createAdminMembership } from "@cleomacs/dbal/membership"
 import * as crypto from "crypto"
 
@@ -30,25 +31,44 @@ export const signup = [
   processRequestBody(signupInput),
   session,
   async (req: express.Request, res: express.Response) => {
-    const hashedPassword = await hashPassword(req.body.password)
+    // First check for duplicates
+    const organization = await findOrganizationIdByName(req.body.organizationName)
+    const user = await findUserIdByEmail(req.body.email)
+    if (organization != null || user != null) {
+      res.json(
+        signupOutput({
+          success: false,
+          duplicates: {
+            organizationName: organization != null,
+            email: user != null,
+          },
+        })
+      )
+    } else {
+      const hashedPassword = await hashPassword(req.body.password)
 
-    // Create objects in DB organization - membership - user
-    const organizationId = await createOrganization(req.body.organizationName)
-    const userId = await createUser(req.body.userName, req.body.email, hashedPassword)
-    const membershipId = await createAdminMembership(userId, organizationId)
+      // Create objects in DB organization - membership - user
+      const organizationId = await createOrganization(req.body.organizationName)
+      const userId = await createUser(req.body.userName, req.body.email, hashedPassword)
+      const membershipId = await createAdminMembership(userId, organizationId)
 
-    // now update the lastMembership
-    await updateLastMembership(userId, membershipId)
+      // now update the lastMembership
+      await updateLastMembership(userId, membershipId)
 
-    // set session
-    req.session.userId = userId
-    req.session.membershipId = membershipId
-    req.session.membershipRole = [MembershipRole.ADMIN, MembershipRole.MANAGER, MembershipRole.USER]
-    req.session.organizationId = organizationId
-    req.session.globalRole = GlobalRole.CUSTOMER
-    await req.session.save()
+      // set session
+      req.session.userId = userId
+      req.session.membershipId = membershipId
+      req.session.membershipRole = [
+        MembershipRole.ADMIN,
+        MembershipRole.MANAGER,
+        MembershipRole.USER,
+      ]
+      req.session.organizationId = organizationId
+      req.session.globalRole = GlobalRole.CUSTOMER
+      await req.session.save()
 
-    res.json(signupOutput())
+      res.json(signupOutput({ success: true }))
+    }
   },
 ]
 
