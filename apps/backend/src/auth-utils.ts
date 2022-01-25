@@ -59,10 +59,42 @@ export const userIsLoggedIn = async (
   _res: express.Response,
   next: express.NextFunction
 ) => {
-  if (req.session.userId === undefined) {
+  if (
+    req.session.userId == null ||
+    req.session.membershipId == null ||
+    req.session.membershipRole == null ||
+    req.session.organizationId == null ||
+    req.session.globalRole == null
+  ) {
     return next(createError(401, "login necessary"))
   }
   return next()
+}
+
+export const roleIsAtLeastManager = async (
+  req: express.Request,
+  _res: express.Response,
+  next: express.NextFunction
+) => {
+  if (req.session.globalRole == null) {
+    return next(createError(401, "login necessary"))
+  }
+  if (req.session.globalRole === GlobalRole.SUPERADMIN) {
+    // shortcut for superadmin
+    return next()
+  }
+  if (req.session.membershipRole == null) {
+    return next(createError(401, "login necessary"))
+  }
+  if (
+    req.session.membershipRole.indexOf(MembershipRole.MANAGER) !== -1 ||
+    req.session.membershipRole.indexOf(MembershipRole.ADMIN) !== -1
+  ) {
+    // Ok on this membership
+    return next()
+  }
+  // Else I don't have the permission !
+  return next(createError(403, "permission needed"))
 }
 
 declare module "iron-session" {
