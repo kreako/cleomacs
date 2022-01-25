@@ -1,6 +1,6 @@
 import { Queue } from "bullmq"
 
-const queue = new Queue("lost-password", { connection: { host: "localhost", port: 6379 } })
+const queue = new Queue("transactional-email", { connection: { host: "localhost", port: 6379 } })
 
 export const lostPasswordMail = async (to: string, token: string) => {
   // TODO from, subject, html, text... TODO
@@ -14,5 +14,5 @@ export const lostPasswordMail = async (to: string, token: string) => {
     http://127.0.0.1:3001/#/change-lost-password?token=${token}
     `,
   }
-  await queue.add("send", { message })
+  await queue.add("lost-password", { message })
 }
