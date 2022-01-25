@@ -10,7 +10,7 @@ export const OrganizationModel = z.object({
 })
 
 export interface CompleteOrganization extends Organization {
-  membership: CompleteMembership[]
+  memberships: CompleteMembership[]
 }
 
 /**
@@ -20,6 +20,6 @@ export interface CompleteOrganization extends Organization {
  */
 export const RelatedOrganizationModel: z.ZodSchema<CompleteOrganization> = z.lazy(() =>
   OrganizationModel.extend({
-    membership: RelatedMembershipModel.array(),
+    memberships: RelatedMembershipModel.array(),
   })
 )

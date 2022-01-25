@@ -22,7 +22,7 @@ export const UserModel = z.object({
 export interface CompleteUser extends User {
   memberships: CompleteMembership[]
   lastMembership: CompleteMembership | null
-  Invitation: CompleteInvitation[]
+  invitations: CompleteInvitation[]
 }
 
 /**
@@ -34,6 +34,6 @@ export const RelatedUserModel: z.ZodSchema<CompleteUser> = z.lazy(() =>
   UserModel.extend({
     memberships: RelatedMembershipModel.array(),
     lastMembership: RelatedMembershipModel.nullable(),
-    Invitation: RelatedInvitationModel.array(),
+    invitations: RelatedInvitationModel.array(),
   })
 )
