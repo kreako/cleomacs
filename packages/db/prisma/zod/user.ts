@@ -1,6 +1,11 @@
 import * as z from "zod"
 import { User, GlobalRole } from "../../../../node_modules/@prisma/client"
-import { CompleteMembership, RelatedMembershipModel } from "./index"
+import {
+  CompleteMembership,
+  RelatedMembershipModel,
+  CompleteInvitation,
+  RelatedInvitationModel,
+} from "./index"
 
 export const UserModel = z.object({
   id: z.number().int(),
@@ -17,6 +22,7 @@ export const UserModel = z.object({
 export interface CompleteUser extends User {
   memberships: CompleteMembership[]
   lastMembership: CompleteMembership | null
+  Invitation: CompleteInvitation[]
 }
 
 /**
@@ -28,5 +34,6 @@ export const RelatedUserModel: z.ZodSchema<CompleteUser> = z.lazy(() =>
   UserModel.extend({
     memberships: RelatedMembershipModel.array(),
     lastMembership: RelatedMembershipModel.nullable(),
+    Invitation: RelatedInvitationModel.array(),
   })
 )
