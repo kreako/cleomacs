@@ -3,6 +3,7 @@ import morgan from "morgan"
 import "express-async-errors"
 import auth from "./auth"
 import authPassword from "./auth-password"
+import authInvitation from "./auth-invitation"
 
 export const app = express()
 
@@ -20,3 +21,4 @@ app.get("/error", async () => {
 
 app.use("/auth", auth)
 app.use("/auth-password", authPassword)
+app.use("/auth-invitation", authInvitation)
