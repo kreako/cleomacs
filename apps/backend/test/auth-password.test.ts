@@ -21,7 +21,7 @@ describe("Lost password", () => {
 
   beforeEach(async () => {
     fake = faker()
-    await cleanupOrganizationFromDb(fake.email)
+    await cleanupOrganizationFromDb(fake.organizationName)
     // signup
     const r = await post<SignupOutput>(signup, "/auth/signup", {
       organizationName: fake.organizationName,
@@ -33,7 +33,7 @@ describe("Lost password", () => {
   })
 
   afterEach(async () => {
-    await cleanupOrganizationFromDb(fake.email)
+    await cleanupOrganizationFromDb(fake.organizationName)
   })
 
   test("lost password", async () => {

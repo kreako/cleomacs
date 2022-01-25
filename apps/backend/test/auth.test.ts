@@ -9,7 +9,7 @@ describe("Auth test", () => {
 
   beforeEach(async () => {
     fake = faker()
-    await cleanupOrganizationFromDb(fake.email)
+    await cleanupOrganizationFromDb(fake.organizationName)
     // signup
     const r = await post<SignupOutput>(signup, "/auth/signup", {
       organizationName: fake.organizationName,
@@ -22,7 +22,7 @@ describe("Auth test", () => {
   })
 
   afterEach(async () => {
-    await cleanupOrganizationFromDb(fake.email)
+    await cleanupOrganizationFromDb(fake.organizationName)
   })
 
   test("signup", async () => {

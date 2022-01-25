@@ -1,27 +1,37 @@
 import { prisma } from "@cleomacs/db"
 import { nanoid } from "nanoid"
 
-export const cleanupOrganizationFromDb = async (email: string) => {
-  const ids = await prisma.user.findUnique({
-    where: { email },
-    select: {
-      id: true,
+export const cleanupOrganizationFromDb = async (organizationName: string) => {
+  const organizationIds = await prisma.organization.findUnique({
+    where: {
+      name: organizationName,
+    },
+    include: {
       memberships: {
-        select: {
-          id: true,
-          organization: { select: { id: true } },
+        include: {
+          user: true,
+          invitation: true,
         },
       },
     },
   })
-  if (ids === null) {
+  if (organizationIds === null) {
     return
   }
-  for (const membership of ids.memberships) {
+
+  for (const membership of organizationIds.memberships) {
+    if (membership.invitation != null) {
+      await prisma.invitation.delete({ where: { id: membership.invitation.id } })
+    }
     await prisma.membership.delete({ where: { id: membership.id } })
-    await prisma.organization.delete({ where: { id: membership.organization.id } })
   }
-  await prisma.user.delete({ where: { id: ids.id } })
+  for (const membership of organizationIds.memberships) {
+    if (membership.user != null) {
+      await prisma.user.delete({ where: { id: membership.user.id } })
+    }
+  }
+
+  await prisma.organization.delete({ where: { id: organizationIds.id } })
 }
 
 export const faker = () => {
