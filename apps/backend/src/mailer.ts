@@ -16,3 +16,18 @@ export const lostPasswordMail = async (to: string, token: string) => {
   }
   await queue.add("lost-password", { message })
 }
+
+export const invitationMail = async (to: string, token: string) => {
+  // TODO from, subject, html, text... TODO
+  const message = {
+    from: "todo@todo",
+    to,
+    subject: "[TODO]Une invitation",
+    html: `<p><a href="http://127.0.0.1:3001/#/invitation?token=${token}">Venez vous faire inviter : ici !</a></p>`,
+    text: `
+    Venez vous faire inviter ici :
+    http://127.0.0.1:3001/#/invitation?token=${token}
+    `,
+  }
+  await queue.add("invitation", { message })
+}
