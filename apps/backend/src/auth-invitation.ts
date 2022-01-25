@@ -1,9 +1,15 @@
 import express from "express"
-import { processRequestBody } from "zod-express-middleware"
+import createError from "http-errors"
+import { processRequestBody, processRequestQuery } from "zod-express-middleware"
 import { roleIsAtLeastManager, session, userIsLoggedIn } from "./auth-utils"
-import { newInvitationInput, newInvitationOutput } from "@cleomacs/api/auth-invitation"
-import { createInvitation } from "@cleomacs/dbal/invitation"
-import { sealData } from "iron-session"
+import {
+  newInvitationInput,
+  newInvitationOutput,
+  tokenInfoInput,
+  tokenInfoOutput,
+} from "@cleomacs/api/auth-invitation"
+import { createInvitation, findInvitation } from "@cleomacs/dbal/invitation"
+import { sealData, unsealData } from "iron-session"
 import { invitationMail } from "./mailer"
 
 const INVITATION_TOKEN_EXPIRATION_IN_HOURS = 72
@@ -14,6 +20,10 @@ const sealConfiguration = () => {
   }
   const ttl = INVITATION_TOKEN_EXPIRATION_IN_HOURS * 3600 // in seconds
   return { password, ttl }
+}
+
+type SealData = {
+  invitationId: number
 }
 
 export const newInvitation = [
@@ -33,7 +43,8 @@ export const newInvitation = [
       organizationId,
     })
 
-    const token = await sealData({ invitationId }, sealConfiguration())
+    const data: SealData = { invitationId }
+    const token = await sealData(data, sealConfiguration())
 
     // Send email
     await invitationMail(req.body.email, token)
@@ -42,6 +53,40 @@ export const newInvitation = [
   },
 ]
 
+export const tokenInfo = [
+  session,
+  processRequestQuery(tokenInfoInput),
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const token = req.query.token as string // cast valid because processRequestQuery
+    const { invitationId }: SealData = await unsealData(token, sealConfiguration())
+    if (invitationId == undefined) {
+      // Invalid or expired token
+      res.json(tokenInfoOutput({ success: false }))
+    } else {
+      const invitation = await findInvitation(invitationId)
+      if (invitation == null) {
+        // Invalid invitation ?
+        return next(createError(500, "Internal server error"))
+      }
+      res.json(
+        tokenInfoOutput({
+          success: true,
+          token: {
+            inviterName: invitation.inviter.name,
+            inviterEmail: invitation.inviter.email,
+            invitedUserId: req.session.userId,
+            invitedName: invitation.name,
+            invitedEmail: invitation.email,
+            createdAt: invitation.createdAt,
+            organizationName: invitation.membership.organization.name,
+          },
+        })
+      )
+    }
+  },
+]
+
 const router = express.Router()
 router.post("/new", ...newInvitation)
+router.get("/token-info", ...tokenInfo)
 export default router
