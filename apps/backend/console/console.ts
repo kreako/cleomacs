@@ -4,6 +4,7 @@ import { PrismaClient } from "@cleomacs/db"
 export const prisma = new PrismaClient()
 
 export const deleteDbContent = async () => {
+  await prisma.invitation.deleteMany()
   await prisma.membership.deleteMany()
   await prisma.organization.deleteMany()
   await prisma.user.deleteMany()
