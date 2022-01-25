@@ -3,7 +3,7 @@ import { cookieHeader, errorGet, errorPost, get, post, successBody } from "./uti
 import { cleanupOrganizationFromDb, faker } from "@cleomacs/test"
 import { LoginOutput, LogoutOutput, ProfileOutput, SignupOutput } from "@cleomacs/api/auth"
 
-describe("Lost password", () => {
+describe("Auth test", () => {
   let fake: ReturnType<typeof faker>
   let headers: ReturnType<typeof cookieHeader>
 
