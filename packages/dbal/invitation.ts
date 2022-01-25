@@ -34,3 +34,17 @@ export const createInvitation = async ({
   })
   return invitationId
 }
+
+export const findInvitation = async (invitationId: number) => {
+  return await prisma.invitation.findUnique({
+    where: { id: invitationId },
+    include: {
+      inviter: true,
+      membership: {
+        include: {
+          organization: true,
+        },
+      },
+    },
+  })
+}
