@@ -8,7 +8,7 @@
     "build": "yarn run clean && yarn run compile",
     "test": "jest",
     "test:watch": "jest --watch",
-    "worker:lost-password": "nodemon -r dotenv/config src/worker/lost-password.ts",
+    "worker:lost-password": "nodemon -r dotenv/config src/worker/transactional-email.ts",
     "console": "NODE_OPTIONS='--experimental-repl-await' ts-node -r dotenv/config --project ./console/tsconfig-repl.json --interactive './console/console'"
   },
   "devDependencies": {
