@@ -27,6 +27,9 @@ const sealConfiguration = () => {
   const ttl = LOST_PASSWORD_TOKEN_EXPIRATION_IN_HOURS * 3600 // in seconds
   return { password, ttl }
 }
+type SealData = {
+  userId: number
+}
 
 export const lostPassword = [
   processRequestBody(lostPasswordInput),
@@ -34,7 +37,8 @@ export const lostPassword = [
     const user = await findUserNameByEmail(req.body.email)
     if (user != null) {
       // user have been found
-      const token = await sealData({ userId: user.id }, sealConfiguration())
+      const data: SealData = { userId: user.id }
+      const token = await sealData(data, sealConfiguration())
 
       // Send email
       await lostPasswordMail(req.body.email, token)
@@ -52,7 +56,7 @@ export const changeLostPassword = [
   processRequestBody(changeLostPasswordInput),
   session,
   async (req: express.Request, res: express.Response) => {
-    const { userId }: { userId: number } = await unsealData(req.body.token, sealConfiguration())
+    const { userId }: SealData = await unsealData(req.body.token, sealConfiguration())
     if (userId == undefined) {
       res.json(changeLostPasswordOutput(false))
     } else {
@@ -95,7 +99,7 @@ export const tokenInfo = [
   processRequestQuery(tokenInfoInput),
   async (req: express.Request, res: express.Response) => {
     const token = req.query.token as string // cast valid because processRequestQuery
-    const { userId }: { userId: number } = await unsealData(token, sealConfiguration())
+    const { userId }: SealData = await unsealData(token, sealConfiguration())
     if (userId == undefined) {
       // Invalid or expired token
       res.json(tokenInfoOutput())
