@@ -23,3 +23,12 @@ export const createUserMembership = async (userId: number, organizationId: numbe
   })
   return membershipId
 }
+
+export const addMembershipToUser = async (membershipId: number, userId: number) => {
+  await prisma.membership.update({
+    where: { id: membershipId },
+    data: {
+      userId,
+    },
+  })
+}
