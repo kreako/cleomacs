@@ -23,9 +23,6 @@ export class DuplicatesError extends Error {
 export const postSignup = async (values: SignupInput) => {
   const res = await rawPost<SignupOutput, SignupInput>("/auth/signup", values)
   if (!res.data.success) {
-    if (res.data.duplicates == null) {
-      throw new DuplicatesError(false, false)
-    }
     throw new DuplicatesError(
       res.data.duplicates.organizationName,
       res.data.duplicates.email

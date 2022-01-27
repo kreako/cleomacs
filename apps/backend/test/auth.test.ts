@@ -93,9 +93,11 @@ describe("Auth test", () => {
       email: fake.email + "meuh",
       password: fake.password,
     })
-    expect(r.body.success).toBeFalsy()
-    expect(r.body.duplicates?.organizationName).toBeTruthy()
-    expect(r.body.duplicates?.email).toBeFalsy()
+    if (r.body.success) {
+      throw new Error("success should be false")
+    }
+    expect(r.body.duplicates.organizationName).toBeTruthy()
+    expect(r.body.duplicates.email).toBeFalsy()
   })
 
   test("signup duplicate user email", async () => {
@@ -106,9 +108,11 @@ describe("Auth test", () => {
       email: fake.email,
       password: fake.password,
     })
-    expect(r.body.success).toBeFalsy()
-    expect(r.body.duplicates?.organizationName).toBeFalsy()
-    expect(r.body.duplicates?.email).toBeTruthy()
+    if (r.body.success) {
+      throw new Error("success should be false")
+    }
+    expect(r.body.duplicates.organizationName).toBeFalsy()
+    expect(r.body.duplicates.email).toBeTruthy()
   })
 
   test("signup duplicate user email and organization name", async () => {
@@ -119,9 +123,11 @@ describe("Auth test", () => {
       email: fake.email,
       password: fake.password,
     })
-    expect(r.body.success).toBeFalsy()
-    expect(r.body.duplicates?.organizationName).toBeTruthy()
-    expect(r.body.duplicates?.email).toBeTruthy()
+    if (r.body.success) {
+      throw new Error("success should be false")
+    }
+    expect(r.body.duplicates.organizationName).toBeTruthy()
+    expect(r.body.duplicates.email).toBeTruthy()
   })
 })
 

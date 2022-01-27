@@ -15,10 +15,14 @@ type SignupOutputDuplicates = {
   organizationName: boolean
   email: boolean
 }
-export type SignupOutput = {
-  success: boolean
-  duplicates?: SignupOutputDuplicates
-}
+export type SignupOutput =
+  | {
+      success: false
+      duplicates: SignupOutputDuplicates
+    }
+  | {
+      success: true
+    }
 
 // login
 export const loginInput = z.object({
