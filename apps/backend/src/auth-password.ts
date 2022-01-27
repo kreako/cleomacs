@@ -16,7 +16,7 @@ import {
 } from "@cleomacs/api/auth-password"
 import { sealData, unsealData } from "iron-session"
 import { lostPasswordMail } from "./mailer"
-import { hashPassword, session } from "./auth-utils"
+import { hashPassword, saveSession, session } from "./auth-utils"
 
 const LOST_PASSWORD_TOKEN_EXPIRATION_IN_HOURS = 4
 const sealConfiguration = () => {
@@ -83,12 +83,13 @@ export const changeLostPassword = [
       await updatePasswordHashById(userId, hashedPassword)
 
       // And log the user
-      req.session.userId = user.id
-      req.session.membershipId = membership.id
-      req.session.membershipRole = membership.role
-      req.session.organizationId = organization.id
-      req.session.globalRole = user.role
-      await req.session.save()
+      await saveSession(req, {
+        userId: user.id,
+        membershipId: membership.id,
+        membershipRole: membership.role,
+        organizationId: organization.id,
+        globalRole: user.role,
+      })
 
       res.json(changeLostPasswordOutput(true))
     }

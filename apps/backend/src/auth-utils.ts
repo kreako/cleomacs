@@ -3,6 +3,7 @@ import createError from "http-errors"
 import SecurePasswordLib from "secure-password"
 import { ironSession } from "iron-session/express"
 import { GlobalRole, MembershipRole } from "@cleomacs/db"
+import { IronSessionData } from "iron-session"
 
 export class AuthError extends Error {
   name = "AuthError"
@@ -105,4 +106,13 @@ declare module "iron-session" {
     organizationId?: number
     globalRole?: GlobalRole
   }
+}
+
+export const saveSession = async (req: express.Request, data: IronSessionData) => {
+  req.session.userId = data.userId
+  req.session.membershipId = data.membershipId
+  req.session.membershipRole = data.membershipRole
+  req.session.organizationId = data.organizationId
+  req.session.globalRole = data.globalRole
+  await req.session.save()
 }

@@ -1,6 +1,6 @@
 import { GlobalRole, MembershipRole } from "@cleomacs/db"
 import express, { Handler } from "express"
-import { roleIsAtLeastManager, session, userIsLoggedIn } from "./auth-utils"
+import { roleIsAtLeastManager, saveSession, session, userIsLoggedIn } from "./auth-utils"
 import { z } from "zod"
 import { processRequestBody } from "zod-express-middleware"
 import { cookieHeader, post, get, errorGet, successBody } from "../test/utils"
@@ -29,12 +29,18 @@ const saveSessionHandlers = [
     req.session.membershipRole = req.body.membershipRole
     req.session.organizationId = req.body.organizationId
     req.session.globalRole = req.body.globalRole
-    await req.session.save()
+    await saveSession(req, {
+      userId: req.body.userId,
+      membershipId: req.body.membershipId,
+      membershipRole: req.body.membershipRole,
+      organizationId: req.body.organizationId,
+      globalRole: req.body.globalRole,
+    })
     res.json({ success: true })
   },
 ]
 
-const saveSession = async (s: SaveSessionInput) => {
+const saveSessionReq = async (s: SaveSessionInput) => {
   const r = await post<SuccessOutput>(saveSessionHandlers, "fake-session", s)
   successBody(r)
   return cookieHeader(r)
@@ -49,7 +55,7 @@ const withSuccessHandler = (handler: Handler) => [
 ]
 
 test("userIsLoggedIn valid test", async () => {
-  const headers = await saveSession({
+  const headers = await saveSessionReq({
     userId: 1,
     membershipId: 1,
     membershipRole: [MembershipRole.USER],
@@ -67,13 +73,13 @@ test("userIsLoggedIn invalid session test - no headers", async () => {
 })
 
 test("userIsLoggedIn invalid session test - all undefined", async () => {
-  const headers = await saveSession({})
+  const headers = await saveSessionReq({})
   const r = await errorGet(withSuccessHandler(userIsLoggedIn), "fake-test", headers)
   expect(r.statusCode).toBe(401)
 })
 
 test("userIsLoggedIn invalid session test - userId undefined", async () => {
-  const headers = await saveSession({
+  const headers = await saveSessionReq({
     membershipId: 1,
     membershipRole: [MembershipRole.USER],
     organizationId: 1,
@@ -84,7 +90,7 @@ test("userIsLoggedIn invalid session test - userId undefined", async () => {
 })
 
 test("userIsLoggedIn invalid session test - membershipId undefined", async () => {
-  const headers = await saveSession({
+  const headers = await saveSessionReq({
     userId: 1,
     membershipRole: [MembershipRole.USER],
     organizationId: 1,
@@ -95,7 +101,7 @@ test("userIsLoggedIn invalid session test - membershipId undefined", async () =>
 })
 
 test("userIsLoggedIn invalid session test - membershipRole undefined", async () => {
-  const headers = await saveSession({
+  const headers = await saveSessionReq({
     userId: 1,
     membershipId: 1,
     organizationId: 1,
@@ -106,7 +112,7 @@ test("userIsLoggedIn invalid session test - membershipRole undefined", async () 
 })
 
 test("userIsLoggedIn invalid session test - organizationId undefined", async () => {
-  const headers = await saveSession({
+  const headers = await saveSessionReq({
     userId: 1,
     membershipId: 1,
     membershipRole: [MembershipRole.USER],
@@ -117,7 +123,7 @@ test("userIsLoggedIn invalid session test - organizationId undefined", async () 
 })
 
 test("userIsLoggedIn invalid session test - globalRole undefined", async () => {
-  const headers = await saveSession({
+  const headers = await saveSessionReq({
     userId: 1,
     membershipId: 1,
     membershipRole: [MembershipRole.USER],
@@ -128,7 +134,7 @@ test("userIsLoggedIn invalid session test - globalRole undefined", async () => {
 })
 
 test("roleIsAtLeastManager user/manager test", async () => {
-  const headers = await saveSession({
+  const headers = await saveSessionReq({
     userId: 1,
     membershipId: 1,
     membershipRole: [MembershipRole.USER, MembershipRole.MANAGER],
@@ -140,7 +146,7 @@ test("roleIsAtLeastManager user/manager test", async () => {
 })
 
 test("roleIsAtLeastManager user/manager/admin test", async () => {
-  const headers = await saveSession({
+  const headers = await saveSessionReq({
     userId: 1,
     membershipId: 1,
     membershipRole: [MembershipRole.USER, MembershipRole.MANAGER, MembershipRole.ADMIN],
@@ -152,7 +158,7 @@ test("roleIsAtLeastManager user/manager/admin test", async () => {
 })
 
 test("roleIsAtLeastManager admin test", async () => {
-  const headers = await saveSession({
+  const headers = await saveSessionReq({
     userId: 1,
     membershipId: 1,
     membershipRole: [MembershipRole.ADMIN],
@@ -164,7 +170,7 @@ test("roleIsAtLeastManager admin test", async () => {
 })
 
 test("roleIsAtLeastManager superadmin test", async () => {
-  const headers = await saveSession({
+  const headers = await saveSessionReq({
     userId: 1,
     membershipId: 1,
     membershipRole: [MembershipRole.USER],
@@ -176,7 +182,7 @@ test("roleIsAtLeastManager superadmin test", async () => {
 })
 
 test("roleIsAtLeastManager invalid globalRole undefined", async () => {
-  const headers = await saveSession({
+  const headers = await saveSessionReq({
     userId: 1,
     membershipId: 1,
     membershipRole: [MembershipRole.USER],
@@ -187,7 +193,7 @@ test("roleIsAtLeastManager invalid globalRole undefined", async () => {
 })
 
 test("roleIsAtLeastManager invalid membershipRole undefined", async () => {
-  const headers = await saveSession({
+  const headers = await saveSessionReq({
     userId: 1,
     membershipId: 1,
     organizationId: 1,
@@ -198,7 +204,7 @@ test("roleIsAtLeastManager invalid membershipRole undefined", async () => {
 })
 
 test("roleIsAtLeastManager invalid not enough", async () => {
-  const headers = await saveSession({
+  const headers = await saveSessionReq({
     userId: 1,
     membershipId: 1,
     membershipRole: [MembershipRole.USER],

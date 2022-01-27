@@ -1,5 +1,12 @@
 import express from "express"
-import { AuthError, hashPassword, session, userIsLoggedIn, verifyPassword } from "./auth-utils"
+import {
+  AuthError,
+  hashPassword,
+  saveSession,
+  session,
+  userIsLoggedIn,
+  verifyPassword,
+} from "./auth-utils"
 import { processRequestBody } from "zod-express-middleware"
 import { MembershipRole, GlobalRole } from "@cleomacs/db"
 import createError from "http-errors"
@@ -56,17 +63,13 @@ export const signup = [
       await updateLastMembership(userId, membershipId)
 
       // set session
-      req.session.userId = userId
-      req.session.membershipId = membershipId
-      req.session.membershipRole = [
-        MembershipRole.ADMIN,
-        MembershipRole.MANAGER,
-        MembershipRole.USER,
-      ]
-      req.session.organizationId = organizationId
-      req.session.globalRole = GlobalRole.CUSTOMER
-      await req.session.save()
-
+      await saveSession(req, {
+        userId,
+        membershipId,
+        membershipRole: [MembershipRole.ADMIN, MembershipRole.MANAGER, MembershipRole.USER],
+        organizationId,
+        globalRole: GlobalRole.CUSTOMER,
+      })
       res.json(signupOutput({ success: true }))
     }
   },
@@ -106,13 +109,13 @@ export const login = [
       }
     }
 
-    req.session.userId = user.id
-    req.session.membershipId = membership.id
-    req.session.membershipRole = membership.role
-    req.session.organizationId = organization.id
-    req.session.globalRole = user.role
-    await req.session.save()
-
+    await saveSession(req, {
+      userId: user.id,
+      membershipId: membership.id,
+      membershipRole: membership.role,
+      organizationId: organization.id,
+      globalRole: user.role,
+    })
     res.json(loginOutput())
   },
 ]
