@@ -1,8 +1,16 @@
 import express from "express"
 import createError from "http-errors"
 import { processRequestBody, processRequestQuery } from "zod-express-middleware"
-import { roleIsAtLeastManager, session, userIsLoggedIn } from "./auth-utils"
 import {
+  hashPassword,
+  roleIsAtLeastManager,
+  saveSession,
+  session,
+  userIsLoggedIn,
+} from "./auth-utils"
+import {
+  claimSignupInput,
+  claimSignupOutput,
   newInvitationInput,
   newInvitationOutput,
   tokenInfoInput,
@@ -11,6 +19,9 @@ import {
 import { createInvitation, findInvitation } from "@cleomacs/dbal/invitation"
 import { sealData, unsealData } from "iron-session"
 import { invitationMail } from "./mailer"
+import { createUser, findUserIdByEmail, updateLastMembership } from "@cleomacs/dbal/user"
+import { GlobalRole } from "@cleomacs/db"
+import { addMembershipToUser } from "@cleomacs/dbal/membership"
 
 const INVITATION_TOKEN_EXPIRATION_IN_HOURS = 72
 const sealConfiguration = () => {
@@ -86,7 +97,58 @@ export const tokenInfo = [
   },
 ]
 
+export const claimSignup = [
+  session,
+  processRequestBody(claimSignupInput),
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (req.session.userId != null) {
+      // A user is already existing so 409 ?
+      return next(createError(409, "Conflict - already logged in"))
+    }
+    // Let's try to unseal the token
+    const token = req.body.token
+    const { invitationId }: SealData = await unsealData(token, sealConfiguration())
+    if (invitationId == undefined) {
+      // Invalid or expired token
+      res.json(claimSignupOutput({ success: false, duplicatesEmail: false, invalidToken: true }))
+      return
+    }
+    const invitation = await findInvitation(invitationId)
+    if (invitation == null) {
+      // Invalid invitation ?
+      return next(createError(500, "Internal server error"))
+    }
+    // Now it is time to signup
+    // First check for duplicate email
+    const existingUser = await findUserIdByEmail(req.body.email)
+    if (existingUser != null) {
+      res.json(claimSignupOutput({ success: false, duplicatesEmail: true, invalidToken: false }))
+      return
+    }
+    // hash the password
+    const hashedPassword = await hashPassword(req.body.password)
+    // Create objects in DB  membership - user
+    const userId = await createUser(req.body.userName, req.body.email, hashedPassword)
+
+    // Add user to the membership
+    await addMembershipToUser(invitation.membershipId, userId)
+    // and update the lastMembership
+    await updateLastMembership(userId, invitation.membershipId)
+
+    // set session
+    await saveSession(req, {
+      userId,
+      membershipId: invitation.membershipId,
+      membershipRole: invitation.membership.role,
+      organizationId: invitation.membership.organizationId,
+      globalRole: GlobalRole.CUSTOMER,
+    })
+    res.json(claimSignupOutput({ success: true }))
+  },
+]
+
 const router = express.Router()
 router.post("/new", ...newInvitation)
 router.get("/token-info", ...tokenInfo)
+router.get("/claim-signup", ...claimSignup)
 export default router
