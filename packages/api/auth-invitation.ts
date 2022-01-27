@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { email } from "./utils"
+import { email, password } from "./utils"
 
 // new invitation
 export const newInvitationInput = z.object({
@@ -32,4 +32,23 @@ export type TokenInfoOutput =
   | {
       success: true
       token: TokenInfo
+    }
+
+// claim invitation as a signup
+export const claimSignupInput = z.object({
+  token: z.string(),
+  userName: z.string(),
+  email,
+  password,
+})
+export type ClaimSignupInput = z.infer<typeof claimSignupInput>
+export const claimSignupOutput = (v: ClaimSignupOutput) => v
+export type ClaimSignupOutput =
+  | {
+      success: false
+      duplicatesEmail: boolean
+      invalidToken: boolean
+    }
+  | {
+      success: true
     }
