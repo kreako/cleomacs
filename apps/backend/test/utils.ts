@@ -110,7 +110,13 @@ export const request = async (
   params?: Params
 ): Promise<MockResponse<express.Response>> => {
   const res = await rawRequest(handlers, url, method, headers, body, params)
-  expect(res.statusCode).toBe(200)
+  if (res.statusCode !== 200) {
+    throw new Error(
+      `statusCode is not 200 : ${res.statusCode}\nmsg: ${res.statusMessage}\ndata ${JSON.stringify(
+        res._getData()
+      )}`
+    )
+  }
   return res
 }
 
