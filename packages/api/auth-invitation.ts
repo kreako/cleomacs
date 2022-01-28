@@ -52,3 +52,21 @@ export type ClaimSignupOutput =
   | {
       success: true
     }
+
+// claim invitation as a add organization
+export const claimAddInput = z.object({
+  token: z.string(),
+})
+export type ClaimAddInput = z.infer<typeof claimAddInput>
+export const claimAddOutput = (v: ClaimAddOutput) => v
+export type ClaimAddOutput =
+  | {
+      success: true
+      organizationId: number
+      membershipId: number
+    }
+  | {
+      success: false
+      invalidToken: boolean
+      alreadyMember: boolean
+    }
