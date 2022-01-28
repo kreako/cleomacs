@@ -8,7 +8,7 @@ export default {
   argTypes: {},
   decorators: [
     (Story) => (
-      <div className="relative w-screen h-screen bg-indigo-50">
+      <div className="relative w-screen h-screen bg-sky-50">
         <Story />
       </div>
     ),
@@ -30,7 +30,7 @@ Big.args = {
 export const Reverse = Template.bind({})
 Reverse.decorators = [
   (Story) => (
-    <div className="relative w-screen h-screen bg-indigo-600">
+    <div className="relative w-screen h-screen bg-sky-600">
       <Story />
     </div>
   ),

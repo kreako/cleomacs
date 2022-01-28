@@ -2,7 +2,7 @@ import RoundAdsClick from "~icons/ic/round-ads-click"
 
 export default function LostPasswordSent() {
   return (
-    <div className="mt-6 mb-4 text-indigo-900 flex flex-col items-center space-y-4 text-center">
+    <div className="mt-6 mb-4 text-sky-900 flex flex-col items-center space-y-4 text-center">
       <div className="flex flex-col items-center">
         <div className="font-bold tracking-wide">Et voilà !</div>
         <div className="mt-6 ">
@@ -11,14 +11,14 @@ export default function LostPasswordSent() {
         </div>
         <div className="mt-1">
           <span>Dedans vous trouverez un lien sur lequel vous devez&nbsp;</span>
-          <span className="decoration-indigo-500 decoration-dotted underline">
+          <span className="decoration-sky-500 decoration-dotted underline">
             cliquer
           </span>
           <span>&nbsp;</span>
           <RoundAdsClick
             width={"1em"}
             height={"1em"}
-            className="text-indigo-500 animate-pulse inline-block"
+            className="text-sky-500 animate-pulse inline-block"
           />
           <span>&nbsp; pour changer votre mot de passe !</span>
         </div>

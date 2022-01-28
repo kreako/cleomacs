@@ -11,7 +11,7 @@ export default {
   },
   decorators: [
     (Story) => (
-      <div className="relative w-screen h-screen bg-indigo-50 p-2">
+      <div className="relative w-screen h-screen bg-sky-50 p-2">
         <Story />
       </div>
     ),

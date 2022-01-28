@@ -66,7 +66,7 @@ export default function LostPasswordForm(props: LostPasswordFormProp) {
             <button
               type="submit"
               disabled={props.loading}
-              className="mt-6 w-full bg-indigo-600 text-indigo-100 py-2 rounded-md font-bold text-lg tracking-wide"
+              className="mt-6 w-full bg-sky-600 text-sky-100 py-2 rounded-md font-bold text-lg tracking-wide"
             >
               <div className="flex justify-center items-center space-x-2">
                 <div>Réinitialisation de mon mot de passe</div>

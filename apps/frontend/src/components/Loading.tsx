@@ -7,9 +7,7 @@ type LoadingProps = {
 
 export default function Loading(props: LoadingProps) {
   const size = `${props.size}em`
-  const textColorClassName = props.reverseColor
-    ? "text-indigo-50"
-    : "text-indigo-600"
+  const textColorClassName = props.reverseColor ? "text-sky-50" : "text-sky-600"
 
   return (
     <CloudSync

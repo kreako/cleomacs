@@ -79,7 +79,7 @@ export default function SignupForm(props: SignupFormProp) {
       {({ handleSubmit }) => (
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col max-w-md">
-            <div className="font-bold tracking-wide uppercase text-indigo-600">
+            <div className="font-bold tracking-wide uppercase text-sky-600">
               Inscription
             </div>
             <div className="mt-4">
@@ -164,7 +164,7 @@ export default function SignupForm(props: SignupFormProp) {
             <button
               type="submit"
               disabled={props.loading}
-              className="mt-6 w-full bg-indigo-600 text-indigo-100 py-2 px-4 rounded-md font-bold text-lg tracking-wide"
+              className="mt-6 w-full bg-sky-600 text-sky-100 py-2 px-4 rounded-md font-bold text-lg tracking-wide"
             >
               <div className="flex justify-center items-center space-x-2">
                 <div>Inscription</div>

@@ -52,7 +52,7 @@ export default function MainErrorFallback({
   if (error instanceof AuthenticationError) {
     return (
       <div className="pt-4 mx-2 flex flex-col items-center">
-        <div className="text-indigo-600 font-bold">
+        <div className="text-sky-600 font-bold">
           Connectez-vous pour accéder à cette page !
         </div>
         <LoginOn401 onSuccess={resetErrorBoundary} />
