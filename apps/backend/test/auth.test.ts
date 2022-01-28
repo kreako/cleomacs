@@ -148,3 +148,8 @@ test("login invalid payload", async () => {
   })
   expect(r.status).toBe(400)
 })
+
+test("profile login needed", async () => {
+  const r1 = await errorGet(profile, "/auth/profile")
+  expect(r1.statusCode).toBe(401)
+})
