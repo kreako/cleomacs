@@ -9,6 +9,8 @@ import {
   userIsLoggedIn,
 } from "./auth-utils"
 import {
+  claimAddInput,
+  claimAddOutput,
   claimSignupInput,
   claimSignupOutput,
   newInvitationInput,
@@ -21,7 +23,7 @@ import { sealData, unsealData } from "iron-session"
 import { invitationMail } from "./mailer"
 import { createUser, findUserIdByEmail, updateLastMembership } from "@cleomacs/dbal/user"
 import { GlobalRole } from "@cleomacs/db"
-import { addMembershipToUser } from "@cleomacs/dbal/membership"
+import { addMembershipToUser, findMembershipByUserAndOrganization } from "@cleomacs/dbal/membership"
 
 const INVITATION_TOKEN_EXPIRATION_IN_HOURS = 72
 const sealConfiguration = () => {
@@ -147,8 +149,64 @@ export const claimSignup = [
   },
 ]
 
+export const claimAdd = [
+  session,
+  userIsLoggedIn,
+  processRequestBody(claimAddInput),
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    // Let's try to unseal the token
+    const token = req.body.token
+    const { invitationId }: SealData = await unsealData(token, sealConfiguration())
+    if (invitationId == undefined) {
+      // Invalid or expired token
+      res.json(claimAddOutput({ success: false, invalidToken: true, alreadyMember: false }))
+      return
+    }
+
+    const invitation = await findInvitation(invitationId)
+    if (invitation == null) {
+      // Invalid invitation ?
+      return next(createError(500, "Internal server error"))
+    }
+
+    // Currently logged in user - cast legit because userIsLoggedIn was called before
+    const userId = req.session.userId as number
+    const organizationId = invitation.membership.organizationId
+    // Check if there is already a membership for this organization and this user
+    const existingMembership = await findMembershipByUserAndOrganization(userId, organizationId)
+    if (existingMembership != null) {
+      // Already member of this organization !
+      res.json(claimAddOutput({ success: false, invalidToken: false, alreadyMember: true }))
+      return
+    }
+
+    const membershipId = invitation.membershipId
+    // Add user to the membership
+    await addMembershipToUser(membershipId, userId)
+    // and update the lastMembership
+    await updateLastMembership(userId, membershipId)
+
+    // set session
+    await saveSession(req, {
+      userId,
+      membershipId: membershipId,
+      membershipRole: invitation.membership.role,
+      organizationId,
+      globalRole: GlobalRole.CUSTOMER,
+    })
+    res.json(
+      claimAddOutput({
+        success: true,
+        organizationId,
+        membershipId,
+      })
+    )
+  },
+]
+
 const router = express.Router()
 router.post("/new", ...newInvitation)
 router.get("/token-info", ...tokenInfo)
 router.get("/claim-signup", ...claimSignup)
+router.get("/claim-add", ...claimAdd)
 export default router
