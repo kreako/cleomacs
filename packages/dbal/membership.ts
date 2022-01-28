@@ -32,3 +32,15 @@ export const addMembershipToUser = async (membershipId: number, userId: number) 
     },
   })
 }
+
+export const findMembershipByUserAndOrganization = async (
+  userId: number,
+  organizationId: number
+) => {
+  return await prisma.membership.findFirst({
+    where: {
+      organizationId,
+      userId,
+    },
+  })
+}
