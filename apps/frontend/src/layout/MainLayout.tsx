@@ -1,16 +1,13 @@
-import { ErrorBoundary } from "react-error-boundary"
 import { Outlet } from "react-router"
-import MainErrorFallback from "../components/MainErrorFallback"
+import VerticalBarMenu from "../components/VerticalBarMenu"
 
 export default function MainLayout() {
   return (
-    <ErrorBoundary
-      FallbackComponent={MainErrorFallback}
-      onReset={() => {
-        // TODO ?
-      }}
-    >
-      <Outlet />
-    </ErrorBoundary>
+    <div className="flex flex-row">
+      <VerticalBarMenu />
+      <div className="flex-grow">
+        <Outlet />
+      </div>
+    </div>
   )
 }
