@@ -1,10 +1,10 @@
 import { Outlet } from "react-router"
-import VerticalBarMenu from "../components/VerticalBarMenu"
+import VerticalMenu from "../components/VerticalMenu"
 
 export default function MainLayout() {
   return (
     <div className="flex flex-row">
-      <VerticalBarMenu />
+      <VerticalMenu />
       <div className="flex-grow">
         <Outlet />
       </div>

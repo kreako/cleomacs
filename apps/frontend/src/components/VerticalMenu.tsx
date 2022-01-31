@@ -28,7 +28,7 @@ function MenuSquare({ children, link }: MenuSquareProps) {
   )
 }
 
-export default function VerticalBarMenu() {
+export default function VerticalMenu() {
   return (
     <div className="h-screen w-16 bg-sky-500 text-white flex flex-col space-y-2">
       <MenuSquare link="/">
