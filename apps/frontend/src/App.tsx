@@ -1,7 +1,9 @@
 import React from "react"
+import { ErrorBoundary } from "react-error-boundary"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { HashRouter, Routes, Route } from "react-router-dom"
 import LoadingPage from "./components/LoadingPage"
+import MainErrorFallback from "./components/MainErrorFallback"
 import MainLayout from "./layout/MainLayout"
 
 const queryClient = new QueryClient()
@@ -18,6 +20,7 @@ const NotFound = React.lazy(() => import("./pages/NotFound"))
 
 export default function App() {
   return (
+    <ErrorBoundary FallbackComponent={MainErrorFallback}>
     <QueryClientProvider client={queryClient}>
       <HashRouter>
         <React.Suspense fallback={<LoadingPage />}>
@@ -38,5 +41,6 @@ export default function App() {
         </React.Suspense>
       </HashRouter>
     </QueryClientProvider>
+    </ErrorBoundary>
   )
 }
