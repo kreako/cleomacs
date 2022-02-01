@@ -50,7 +50,7 @@ export function NameForm({ loading, initialName, onSubmit }: NameFormProps) {
                     c = "bg-slate-200 text-slate-400 cursor-not-allowed"
                   }
                   if (loading) {
-                    c = "bg-sky-500 text-sky-100 shadow-md"
+                    c = "bg-sky-600 text-sky-100 shadow-md animate-pulse"
                   }
                   return (
                     <button
