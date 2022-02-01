@@ -32,3 +32,9 @@ Loading.args = {
   ...Simple.args,
   loading: true,
 }
+
+export const Undefined = Template.bind({})
+Undefined.args = {
+  ...Simple.args,
+  initialName: undefined,
+}

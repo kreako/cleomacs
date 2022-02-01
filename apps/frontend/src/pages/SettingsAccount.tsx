@@ -5,7 +5,7 @@ import Logout from "../components/Logout"
 import { required } from "../utils/form"
 type NameFormProps = {
   loading: boolean
-  initialName: string
+  initialName: string | undefined
   onSubmit: (name: string) => void
 }
 
