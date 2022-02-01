@@ -28,7 +28,7 @@ function TextInput(props: InputProps) {
       value={props.value}
       onChange={props.onChange}
       type="text"
-      className={`bg-slate-100 px-4 py-2 rounded-md w-full caret-slate-900 ${c}`}
+      className={`bg-sky-100 px-4 py-2 rounded-md w-full caret-slate-900 ${c}`}
     />
   )
 }
@@ -42,7 +42,7 @@ function EmailInput(props: InputProps) {
       value={props.value}
       onChange={props.onChange}
       type="email"
-      className={`bg-slate-100 px-4 py-2 rounded-md w-full caret-slate-900 ${c}`}
+      className={`bg-sky-100 px-4 py-2 rounded-md w-full caret-slate-900 ${c}`}
     />
   )
 }
@@ -67,7 +67,7 @@ function PasswordInput(props: InputProps) {
 
   return (
     <div
-      className={`flex space-x-2 bg-slate-100 pl-4 pr-2 py-2 rounded-md w-full ${c}`}
+      className={`flex space-x-2 bg-sky-100 pl-4 pr-2 py-2 rounded-md w-full ${c}`}
     >
       <input
         id={props.id}
@@ -133,7 +133,7 @@ export default function LabelInput(props: LabelInputProps) {
   }
   return (
     <div>
-      <label htmlFor={id} className="text-slate-900">
+      <label htmlFor={id} className="text-sky-900">
         {props.label}
       </label>
       {input}
