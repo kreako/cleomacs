@@ -6,6 +6,8 @@ import RoundBike from "~icons/ic/round-directions-bike"
 import RoundSkate from "~icons/ic/round-skateboarding"
 import { Link, useMatch } from "react-router-dom"
 
+import avatarUrl from "../assets/luca-bravo-ESkw2ayO2As-unsplash-128.jpg"
+
 type MenuSquareProps = {
   link: string
   children: React.ReactNode
@@ -49,6 +51,16 @@ export default function VerticalMenu() {
       <MenuSquare link="/settings">
         <RoundSettings width={"2em"} height={"2em"} />
       </MenuSquare>
+      {/* spacer to push the last item to the end of the menu */}
+      <div className="flex-grow"></div>
+      <div className="w-16 h-16 flex flex-col items-center justify-center bg-sky-500 text-sky-200 hover:bg-sky-600 hover:text-white">
+        <div className="rounded-full">
+          <img
+            src={avatarUrl}
+            className="rounded-full w-12 h-12 object-cover"
+          />
+        </div>
+      </div>
     </div>
   )
 }
