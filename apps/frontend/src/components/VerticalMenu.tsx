@@ -5,8 +5,10 @@ import RoundFlower from "~icons/ic/round-local-florist"
 import RoundBike from "~icons/ic/round-directions-bike"
 import RoundSkate from "~icons/ic/round-skateboarding"
 import { Link, useMatch } from "react-router-dom"
-
+import { Popover } from "@headlessui/react"
 import avatarUrl from "../assets/luca-bravo-ESkw2ayO2As-unsplash-128.jpg"
+import { useLogoutAndNavigateToLogin } from "../hooks/logout"
+import { ReactNode } from "react"
 
 type MenuSquareProps = {
   link: string
@@ -27,6 +29,82 @@ function MenuSquare({ children, link }: MenuSquareProps) {
         </div>
       </Link>
     </div>
+  )
+}
+
+function Logout() {
+  const logout = useLogoutAndNavigateToLogin()
+  const onClick = async () => {
+    await logout.mutate()
+  }
+  return <UserPopoverButton onClick={onClick}>Déconnexion</UserPopoverButton>
+}
+
+type UserPopoverLinkProps = {
+  children: ReactNode
+  to: string
+}
+
+function UserPopoverLink({ children, to }: UserPopoverLinkProps) {
+  return (
+    <Link className="hover:text-sky-100 hover:bg-sky-500 px-4 py-4" to={to}>
+      {children}
+    </Link>
+  )
+}
+
+type UserPopoverButtonProps = {
+  children: ReactNode
+  onClick: () => void
+}
+
+function UserPopoverButton({ children, onClick }: UserPopoverButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      className="hover:text-sky-100 hover:bg-sky-500 px-4 py-4 text-left"
+    >
+      {children}
+    </button>
+  )
+}
+
+function UserPopover() {
+  return (
+    <Popover className="relative">
+      {({ open }) => {
+        const buttonBg = open ? "bg-sky-600" : "bg-sky-500"
+        return (
+          <>
+            <Popover.Button>
+              <div
+                className={`w-16 h-16 flex flex-col items-center justify-center ${buttonBg} text-sky-200 hover:bg-sky-600 hover:text-white`}
+              >
+                <div className="rounded-full">
+                  <img
+                    src={avatarUrl}
+                    className="rounded-full w-12 h-12 object-cover"
+                  />
+                </div>
+              </div>
+            </Popover.Button>
+
+            <Popover.Panel className="absolute z-10 bottom-0 left-16 bg-sky-600">
+              <div className="flex flex-col">
+                <UserPopoverLink to="">TODO</UserPopoverLink>
+                <UserPopoverLink to="/settings/organizations">
+                  Changez&nbsp;d&apos;organisation
+                </UserPopoverLink>
+                <hr className="" />
+                <Logout />
+              </div>
+
+              <img src="/solutions.jpg" alt="" />
+            </Popover.Panel>
+          </>
+        )
+      }}
+    </Popover>
   )
 }
 
@@ -53,14 +131,7 @@ export default function VerticalMenu() {
       </MenuSquare>
       {/* spacer to push the last item to the end of the menu */}
       <div className="flex-grow"></div>
-      <div className="w-16 h-16 flex flex-col items-center justify-center bg-sky-500 text-sky-200 hover:bg-sky-600 hover:text-white">
-        <div className="rounded-full">
-          <img
-            src={avatarUrl}
-            className="rounded-full w-12 h-12 object-cover"
-          />
-        </div>
-      </div>
+      <UserPopover />
     </div>
   )
 }
