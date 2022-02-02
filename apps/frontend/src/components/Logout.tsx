@@ -1,6 +1,5 @@
-import { useNavigate } from "react-router-dom"
 import LogoutIcon from "~icons/mdi/logout"
-import { useLogout } from "../api/auth"
+import { useLogoutAndNavigateToLogin } from "../hooks/logout"
 
 type LogoutButtonProps = {
   onClick: () => void
@@ -21,16 +20,7 @@ export function LogoutButton(props: LogoutButtonProps) {
 }
 
 export default function Logout() {
-  const navigate = useNavigate()
-  const logout = useLogout({
-    onError: (error: Error) => {
-      // TODO
-      console.log("onError", JSON.stringify(error))
-    },
-    onSuccess: () => {
-      navigate("/login")
-    },
-  })
+  const logout = useLogoutAndNavigateToLogin()
   const onLogoutClick = async () => {
     await logout.mutate()
   }
