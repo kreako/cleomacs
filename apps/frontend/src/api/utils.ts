@@ -48,6 +48,22 @@ export const post = async <T, D>(url: string, data: D): Promise<T> => {
   }
 }
 
+// TODO maybe refactoring to group all the copy paste under one generic request function
+export const put = async <T, D>(url: string, data: D): Promise<T> => {
+  try {
+    const response = await axios.put(url, data)
+    return response.data
+  } catch (error) {
+    if (rawAxios.isAxiosError(error)) {
+      const axiosError = error as AxiosError
+      if (axiosError.response?.status === 401) {
+        throw new AuthenticationError()
+      }
+    }
+    throw error
+  }
+}
+
 export const rawPost = async <T, D>(
   url: string,
   data: D
