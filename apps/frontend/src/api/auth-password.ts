@@ -79,7 +79,6 @@ export const useChangeLostPassword = ({
 }: UseChangeLostPassword) => {
   return useMutation(
     async (values: ChangeLostPasswordInput) => {
-      console.log("useChangeLostPassword", values)
       return await postChangeLostPassword(values)
     },
     {
