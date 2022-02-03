@@ -142,3 +142,10 @@ export const updateLastMembership = async (id: number, membershipId: number) => 
     data: { lastMembershipId: membershipId },
   })
 }
+
+export const updateUserNameById = async (id: number, name: string) => {
+  await prisma.user.update({
+    where: { id },
+    data: { name },
+  })
+}
