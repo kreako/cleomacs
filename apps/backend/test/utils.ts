@@ -72,6 +72,17 @@ export const post = async <B>(
   return json(r)
 }
 
+export const put = async <B>(
+  handlers: Handler[],
+  url: string,
+  body: Body,
+  headers?: Headers,
+  params?: Params
+): Promise<JsonMockResponse<B>> => {
+  const r = await request(handlers, url, "PUT", headers, body, params)
+  return json(r)
+}
+
 export const get = async <B>(
   handlers: Handler[],
   url: string,
@@ -90,6 +101,16 @@ export const errorPost = async (
   params?: Params
 ): Promise<HttpError> => {
   return await errorRequest(handlers, url, "POST", headers, body, params)
+}
+
+export const errorPut = async (
+  handlers: Handler[],
+  url: string,
+  body: Body,
+  headers?: Headers,
+  params?: Params
+): Promise<HttpError> => {
+  return await errorRequest(handlers, url, "PUT", headers, body, params)
 }
 
 export const errorGet = async (

@@ -1,9 +1,9 @@
 import { signup } from "../src/auth"
-import { profile } from "../src/auth-profile"
-import { cookieHeader, get, post, successBody } from "../test/utils"
+import { profile, updateUserName } from "../src/auth-profile"
+import { cookieHeader, errorGet, errorPut, get, post, put, successBody } from "../test/utils"
 import { cleanupOrganizationFromDb, faker } from "@cleomacs/test"
 import { SignupOutput } from "@cleomacs/api/auth"
-import { ProfileOutput } from "@cleomacs/api/auth-profile"
+import { ProfileOutput, UpdateUserNameOutput } from "@cleomacs/api/auth-profile"
 
 describe("Auth profile test", () => {
   let fake: ReturnType<typeof faker>
@@ -42,4 +42,39 @@ describe("Auth profile test", () => {
     }
     expect(user.lastMembership.organization.name).toBe(fake.organizationName)
   })
+
+  test("update-user-name", async () => {
+    const r1 = await get<ProfileOutput>(profile, "/auth-profile/profile", headers)
+    const user = r1.body.user
+    if (user == null) {
+      throw new Error("user is null")
+    }
+    expect(user.name).toBe(fake.userName)
+
+    const newName = "mouh"
+    const r2 = await put<UpdateUserNameOutput>(
+      updateUserName,
+      "/auth-profile/update-user-name",
+      { name: newName },
+      headers
+    )
+    successBody(r2)
+
+    const r3 = await get<ProfileOutput>(profile, "/auth-profile/profile", headers)
+    const user2 = r3.body.user
+    if (user2 == null) {
+      throw new Error("user2 is null")
+    }
+    expect(user2.name).toBe(newName)
+  })
+})
+
+test("profile login needed", async () => {
+  const r1 = await errorGet(profile, "/auth-profile/profile")
+  expect(r1.statusCode).toBe(401)
+})
+
+test("update-username login needed", async () => {
+  const r1 = await errorPut(profile, "/auth-profile/update-user-name", { name: "meuh" })
+  expect(r1.statusCode).toBe(401)
 })
