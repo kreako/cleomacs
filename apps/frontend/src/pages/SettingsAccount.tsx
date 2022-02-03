@@ -3,9 +3,11 @@ import LabelInput from "../components/LabelInput"
 import Loading from "../components/Loading"
 import Logout from "../components/Logout"
 import { required } from "../utils/form"
-import { useProfile } from "../api/auth-profile"
+import { useProfile, useUpdateUserName } from "../api/auth-profile"
 import RawError from "../components/RawError"
 import ErrorCard from "../components/ErrorCard"
+import { useQueryClient } from "react-query"
+import { keys } from "../api/query-key"
 
 type NameFormProps = {
   loading: boolean
@@ -78,10 +80,27 @@ export function NameForm({ loading, initialName, onSubmit }: NameFormProps) {
   )
 }
 
-export default function SettingsAccount() {
+const useUpdateUserNameAndInvalidate = () => {
+  const queryClient = useQueryClient()
+  const updateUserName = useUpdateUserName({
+    onError: (error: Error) => {
+      // TODO
+      console.log("error : ", error)
+    },
+    onSuccess: () => {
+      // TODO maybe this should be in frontend/api/useUpdateUserName instead
+      queryClient.invalidateQueries(keys.profile)
+    },
+  })
   const onNameSubmit = async (name: string) => {
-    console.log("onNameSubmit", name)
+    updateUserName.mutate({ name })
   }
+  return { updateUserNameLoading: updateUserName.isLoading, onNameSubmit }
+}
+
+export default function SettingsAccount() {
+  const { updateUserNameLoading, onNameSubmit } =
+    useUpdateUserNameAndInvalidate()
 
   const profile = useProfile()
   if (profile.data) {
@@ -94,7 +113,7 @@ export default function SettingsAccount() {
           </div>
           <div className="mt-4">
             <NameForm
-              loading={false}
+              loading={updateUserNameLoading}
               onSubmit={onNameSubmit}
               initialName={profile.data.user.name || undefined}
             />
