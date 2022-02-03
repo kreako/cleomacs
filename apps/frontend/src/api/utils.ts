@@ -83,3 +83,8 @@ export const retryQuery =
     }
     return count < 3
   }
+
+export type UseMutationType = {
+  onError: (error: Error) => void
+  onSuccess: () => void
+}
