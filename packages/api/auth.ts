@@ -1,5 +1,4 @@
 import { z } from "zod"
-import { UserWithoutPassword } from "@cleomacs/dbal/user"
 import { email, password, success } from "./utils"
 
 // signup
@@ -36,9 +35,3 @@ export type LoginOutput = ReturnType<typeof loginOutput>
 // logout
 export const logoutOutput = () => success
 export type LogoutOutput = ReturnType<typeof logoutOutput>
-
-// profile
-export const profileOutput = (user: UserWithoutPassword) => ({
-  user,
-})
-export type ProfileOutput = ReturnType<typeof profileOutput>
