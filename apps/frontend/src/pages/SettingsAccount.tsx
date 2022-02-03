@@ -3,7 +3,7 @@ import LabelInput from "../components/LabelInput"
 import Loading from "../components/Loading"
 import Logout from "../components/Logout"
 import { required } from "../utils/form"
-import { useProfile } from "../api/auth"
+import { useProfile } from "../api/auth-profile"
 import RawError from "../components/RawError"
 import ErrorCard from "../components/ErrorCard"
 

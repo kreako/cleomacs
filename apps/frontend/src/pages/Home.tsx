@@ -1,4 +1,4 @@
-import { useProfile } from "../api/auth"
+import { useProfile } from "../api/auth-profile"
 import Loading from "../components/Loading"
 import Logout from "../components/Logout"
 import RawError from "../components/RawError"
