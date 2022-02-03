@@ -1,7 +1,9 @@
-import { login, logout, profile, signup } from "../src/auth"
+import { login, logout, signup } from "../src/auth"
+import { profile } from "../src/auth-profile"
 import { cookieHeader, errorGet, errorPost, get, post, successBody } from "./utils"
 import { cleanupOrganizationFromDb, faker } from "@cleomacs/test"
-import { LoginOutput, LogoutOutput, ProfileOutput, SignupOutput } from "@cleomacs/api/auth"
+import { LoginOutput, LogoutOutput, SignupOutput } from "@cleomacs/api/auth"
+import { ProfileOutput } from "@cleomacs/api/auth-profile"
 
 describe("Auth test", () => {
   let fake: ReturnType<typeof faker>
@@ -27,7 +29,7 @@ describe("Auth test", () => {
 
   test("signup", async () => {
     // Now let's check that cookie is now useful
-    const r = await get<ProfileOutput>(profile, "/auth/profile", headers)
+    const r = await get<ProfileOutput>(profile, "/auth-profile/profile", headers)
     const user = r.body.user
     if (user == null) {
       throw new Error("user is null")
@@ -42,7 +44,7 @@ describe("Auth test", () => {
 
   test("signup/login/logout test", async () => {
     // Now let's check that cookie is now useful
-    const r1 = await get<ProfileOutput>(profile, "/auth/profile", headers)
+    const r1 = await get<ProfileOutput>(profile, "/auth-profile/profile", headers)
     expect(r1.statusCode).toBe(200)
 
     // logout
@@ -51,7 +53,7 @@ describe("Auth test", () => {
     headers = cookieHeader(r2)
 
     // profile is in error
-    const err = await errorGet(profile, "/auth/profile", headers)
+    const err = await errorGet(profile, "/auth-profile/profile", headers)
     expect(err.statusCode).toBe(401)
 
     // login
@@ -61,7 +63,7 @@ describe("Auth test", () => {
     })
     successBody(r3)
     headers = cookieHeader(r3)
-    const r4 = await get<ProfileOutput>(profile, "/auth/profile", headers)
+    const r4 = await get<ProfileOutput>(profile, "/auth-profile/profile", headers)
     expect(r4.statusCode).toBe(200)
   })
 
@@ -150,6 +152,6 @@ test("login invalid payload", async () => {
 })
 
 test("profile login needed", async () => {
-  const r1 = await errorGet(profile, "/auth/profile")
+  const r1 = await errorGet(profile, "/auth-profile/profile")
   expect(r1.statusCode).toBe(401)
 })

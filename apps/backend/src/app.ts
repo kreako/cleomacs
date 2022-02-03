@@ -4,6 +4,7 @@ import "express-async-errors"
 import auth from "./auth"
 import authPassword from "./auth-password"
 import authInvitation from "./auth-invitation"
+import authProfile from "./auth-profile"
 
 export const app = express()
 
@@ -22,3 +23,4 @@ app.get("/error", async () => {
 app.use("/auth", auth)
 app.use("/auth-password", authPassword)
 app.use("/auth-invitation", authInvitation)
+app.use("/auth-profile", authProfile)

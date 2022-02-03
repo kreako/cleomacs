@@ -6,8 +6,10 @@ jest.mock("./mailer", () => ({
 
 import { cookieHeader, errorPost, get, post, successBody } from "../test/utils"
 import { cleanupOrganizationFromDb, faker } from "@cleomacs/test"
-import { profile, signup } from "./auth"
-import { ProfileOutput, SignupOutput } from "@cleomacs/api/auth"
+import { signup } from "./auth"
+import { profile } from "./auth-profile"
+import { ProfileOutput } from "@cleomacs/api/auth-profile"
+import { SignupOutput } from "@cleomacs/api/auth"
 import {
   ClaimAddOutput,
   ClaimSignupOutput,
@@ -110,7 +112,7 @@ describe("Invitation", () => {
 
     // headers from claim signup should allow me to browse as the new user
     const headers2 = cookieHeader(r2)
-    const r4 = await get<ProfileOutput>(profile, "/auth/profile", headers2)
+    const r4 = await get<ProfileOutput>(profile, "/auth-profile/profile", headers2)
     if (r4.body.user == null) {
       throw new Error("user is null")
     }
@@ -315,7 +317,7 @@ describe("Invitation with 2 users", () => {
     expect(invitationMail.mock.calls[0][1]).toBe(token)
 
     // Get user2 id from its profile
-    const r5 = await get<ProfileOutput>(profile, "/auth/profile", headers2)
+    const r5 = await get<ProfileOutput>(profile, "/auth-profile/profile", headers2)
     if (r5.body.user == null) {
       throw new Error("user is null")
     }
@@ -370,7 +372,7 @@ describe("Invitation with 2 users", () => {
 
     // headers from claim add should allow me to browse as the new user
     const headers3 = cookieHeader(r3)
-    const r4 = await get<ProfileOutput>(profile, "/auth/profile", headers3)
+    const r4 = await get<ProfileOutput>(profile, "/auth-profile/profile", headers3)
     if (r4.body.user == null) {
       throw new Error("user is null")
     }

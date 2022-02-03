@@ -14,7 +14,6 @@ import {
   loginInput,
   loginOutput,
   logoutOutput,
-  profileOutput,
   signupInput,
   signupOutput,
 } from "@cleomacs/api/auth"
@@ -129,20 +128,8 @@ export const logout = [
   },
 ]
 
-export const profile = [
-  session,
-  userIsLoggedIn,
-  async (req: express.Request, res: express.Response) => {
-    const userId = req.session.userId as number // legit cast because userIsLoggedIn is called before
-    const user = await findUser(userId)
-    const userWithoutPassword = excludePassword(user)
-    res.json(profileOutput(userWithoutPassword))
-  },
-]
-
 const router = express.Router()
 router.post("/signup", ...signup)
 router.post("/login", ...login)
 router.post("/logout", ...logout)
-router.get("/profile", ...profile)
 export default router
