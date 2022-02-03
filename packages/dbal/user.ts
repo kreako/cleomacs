@@ -19,7 +19,16 @@ export const findUser = async (userId: number) => {
     },
   })
 }
-export type User = Prisma.PromiseReturnType<typeof findUser>
+type User = Prisma.PromiseReturnType<typeof findUser>
+export const excludePassword = (user: User) => {
+  if (user == null) {
+    return user
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { hashedPassword, ...userWithoutPassword } = user
+  return userWithoutPassword
+}
+export type UserWithoutPassword = ReturnType<typeof excludePassword>
 
 export const findReducedUserByEmail = async (email: string) => {
   return await prisma.user.findUnique({

@@ -1,6 +1,7 @@
 import { processRequestBody, processRequestQuery } from "zod-express-middleware"
 import express from "express"
 import {
+  excludePassword,
   findReducedUserById,
   findUser,
   findUserNameByEmail,
@@ -106,7 +107,8 @@ export const tokenInfo = [
       res.json(tokenInfoOutput())
     } else {
       const user = await findUser(userId)
-      res.json(tokenInfoOutput(user))
+      const userWithoutPassword = excludePassword(user)
+      res.json(tokenInfoOutput(userWithoutPassword))
     }
   },
 ]

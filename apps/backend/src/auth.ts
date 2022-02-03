@@ -20,6 +20,7 @@ import {
 } from "@cleomacs/api/auth"
 import {
   createUser,
+  excludePassword,
   findReducedUserByEmail,
   findUser,
   findUserIdByEmail,
@@ -134,7 +135,8 @@ export const profile = [
   async (req: express.Request, res: express.Response) => {
     const userId = req.session.userId as number // legit cast because userIsLoggedIn is called before
     const user = await findUser(userId)
-    res.json(profileOutput(user))
+    const userWithoutPassword = excludePassword(user)
+    res.json(profileOutput(userWithoutPassword))
   },
 ]
 
