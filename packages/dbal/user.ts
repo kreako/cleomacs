@@ -19,25 +19,16 @@ export const findUser = async (userId: number) => {
     },
   })
 }
-type User = Prisma.PromiseReturnType<typeof findUser>
-export const excludePassword = (user: User) => {
-  if (user == null) {
-    return user
-  }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { hashedPassword, ...userWithoutPassword } = user
-  return userWithoutPassword
-}
-export type UserWithoutPassword = ReturnType<typeof excludePassword>
+export type User = Prisma.PromiseReturnType<typeof findUser>
 
-export const findReducedUserByEmail = async (email: string) => {
+export const findReducedUserWithPasswordByEmail = async (email: string) => {
   return await prisma.user.findUnique({
     where: {
       email,
     },
     select: {
       id: true,
-      hashedPassword: true,
+      userPassword: true,
       role: true,
       lastMembership: {
         select: {
@@ -54,14 +45,14 @@ export const findReducedUserByEmail = async (email: string) => {
   })
 }
 
-export const findReducedUserById = async (id: number) => {
+export const findReducedUserWithPasswordById = async (id: number) => {
   return await prisma.user.findUnique({
     where: {
       id,
     },
     select: {
       id: true,
-      hashedPassword: true,
+      userPassword: true,
       role: true,
       lastMembership: {
         select: {
@@ -101,34 +92,16 @@ export const findUserIdByEmail = async (email: string) => {
   })
 }
 
-export const updatePasswordHash = (email: string) => async (newHashedPassword: string) => {
-  await prisma.user.update({
-    where: {
-      email,
-    },
-    data: {
-      hashedPassword: newHashedPassword,
-    },
-  })
-}
-
-export const updatePasswordHashById = async (id: number, newHashedPassword: string) => {
-  await prisma.user.update({
-    where: {
-      id,
-    },
-    data: {
-      hashedPassword: newHashedPassword,
-    },
-  })
-}
-
 export const createUser = async (name: string, email: string, hashedPassword: string) => {
   const { id: userId } = await prisma.user.create({
     data: {
       name: name,
       email: email,
-      hashedPassword: hashedPassword,
+      userPassword: {
+        create: {
+          hashedPassword: hashedPassword,
+        },
+      },
       role: GlobalRole.CUSTOMER,
     },
     select: { id: true },
