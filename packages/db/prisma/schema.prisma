@@ -71,6 +71,10 @@ model User {
   userPassword     UserPassword?
 }
 
+// User and UserPassword are 2 separate models :
+// - prisma do not support (yet) @private or @exclude annotation to auto-exclude hashedPassword
+// - so dbal/backend code have to explicitly remove hashedPassword from user which is a big mess and error prone
+// - splitting User model in 2 allows for easier to write code in dbal/backend and improve security (no accidental hashedPassword leak)
 model UserPassword {
   id             Int    @id @default(autoincrement())
   user           User   @relation(fields: [userId], references: [id])
