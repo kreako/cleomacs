@@ -5,6 +5,8 @@ import {
   RelatedMembershipModel,
   CompleteInvitation,
   RelatedInvitationModel,
+  CompleteUserPassword,
+  RelatedUserPasswordModel,
 } from "./index"
 
 export const UserModel = z.object({
@@ -14,7 +16,6 @@ export const UserModel = z.object({
   name: z.string().nullable(),
   email: z.string(),
   emailVerified: z.boolean(),
-  hashedPassword: z.string(),
   role: z.nativeEnum(GlobalRole),
   lastMembershipId: z.number().int().nullable(),
 })
@@ -23,6 +24,7 @@ export interface CompleteUser extends User {
   memberships: CompleteMembership[]
   lastMembership: CompleteMembership | null
   invitations: CompleteInvitation[]
+  userPassword: CompleteUserPassword | null
 }
 
 /**
@@ -35,5 +37,6 @@ export const RelatedUserModel: z.ZodSchema<CompleteUser> = z.lazy(() =>
     memberships: RelatedMembershipModel.array(),
     lastMembership: RelatedMembershipModel.nullable(),
     invitations: RelatedInvitationModel.array(),
+    userPassword: RelatedUserPasswordModel.nullable(),
   })
 )

@@ -57,18 +57,25 @@ model Invitation {
 }
 
 model User {
-  id               Int          @id @default(autoincrement())
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
+  id               Int           @id @default(autoincrement())
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
   name             String?
-  email            String       @unique
-  emailVerified    Boolean      @default(false)
-  hashedPassword   String
+  email            String        @unique
+  emailVerified    Boolean       @default(false)
   role             GlobalRole
-  memberships      Membership[] @relation(name: "Memberships")
+  memberships      Membership[]  @relation(name: "Memberships")
   lastMembershipId Int?
-  lastMembership   Membership?  @relation(name: "LastMembership", fields: [lastMembershipId], references: [id])
+  lastMembership   Membership?   @relation(name: "LastMembership", fields: [lastMembershipId], references: [id])
   invitations      Invitation[]
+  userPassword     UserPassword?
+}
+
+model UserPassword {
+  id             Int    @id @default(autoincrement())
+  user           User   @relation(fields: [userId], references: [id])
+  userId         Int    @unique
+  hashedPassword String
 }
 
 enum GlobalRole {
