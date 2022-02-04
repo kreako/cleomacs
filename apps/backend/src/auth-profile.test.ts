@@ -1,9 +1,10 @@
 import { signup } from "../src/auth"
-import { profile, updateUserName } from "../src/auth-profile"
+import { profile, team, updateUserName } from "../src/auth-profile"
 import { cookieHeader, errorGet, errorPut, get, post, put, successBody } from "../test/utils"
 import { cleanupOrganizationFromDb, faker } from "@cleomacs/test"
 import { SignupOutput } from "@cleomacs/api/auth"
-import { ProfileOutput, UpdateUserNameOutput } from "@cleomacs/api/auth-profile"
+import { ProfileOutput, TeamOutput, UpdateUserNameOutput } from "@cleomacs/api/auth-profile"
+import { findUserIdByEmail } from "@cleomacs/dbal/user"
 
 describe("Auth profile test", () => {
   let fake: ReturnType<typeof faker>
@@ -67,6 +68,23 @@ describe("Auth profile test", () => {
     }
     expect(user2.name).toBe(newName)
   })
+
+  test("team", async () => {
+    const r1 = await get<TeamOutput>(team, "/auth-profile/team", headers)
+    const me = await findUserIdByEmail(fake.email)
+    if (me == null) {
+      throw new Error("me is null")
+    }
+    expect(r1.body.meId).toBe(me.id)
+    const t = r1.body.team
+    if (t == null) {
+      throw new Error("t-team is null")
+    }
+    expect(t.name).toBe(fake.organizationName)
+    expect(t.memberships.length).toBe(1)
+    expect(t.memberships[0].role.length).toBe(3)
+    expect(t.memberships[0].user?.email).toBe(fake.email)
+  })
 })
 
 test("profile login needed", async () => {
@@ -76,5 +94,10 @@ test("profile login needed", async () => {
 
 test("update-username login needed", async () => {
   const r1 = await errorPut(profile, "/auth-profile/update-user-name", { name: "meuh" })
+  expect(r1.statusCode).toBe(401)
+})
+
+test("team login needed", async () => {
+  const r1 = await errorGet(team, "/auth-profile/team")
   expect(r1.statusCode).toBe(401)
 })
