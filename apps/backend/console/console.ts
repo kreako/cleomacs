@@ -7,6 +7,7 @@ export const deleteDbContent = async () => {
   await prisma.invitation.deleteMany()
   await prisma.membership.deleteMany()
   await prisma.organization.deleteMany()
+  await prisma.userPassword.deleteMany()
   await prisma.user.deleteMany()
 }
 
