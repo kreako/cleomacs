@@ -1,9 +1,9 @@
-import { UserWithoutPassword } from "@cleomacs/dbal/user"
+import { User } from "@cleomacs/dbal/user"
 import { z } from "zod"
 import { success } from "./utils"
 
 // profile
-export const profileOutput = (user: UserWithoutPassword) => ({
+export const profileOutput = (user: User) => ({
   user,
 })
 export type ProfileOutput = ReturnType<typeof profileOutput>
