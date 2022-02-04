@@ -2,6 +2,7 @@
   "name": "@cleomacs/db",
   "version": "1.0.0",
   "scripts": {
+    "migrate": "npx prisma migrate dev && npx prettier -lw .",
     "clean": "rm -rf ./dist",
     "compile": "tsc -p tsconfig.build.json",
     "build": "yarn run clean && yarn run compile",
