@@ -6,7 +6,7 @@ import type {
   LostPasswordOutput,
   TokenInfoOutput,
 } from "@cleomacs/api/auth-password"
-import { rawGet, rawPost, retryQuery } from "./utils"
+import { rawGet, rawPost, retryQuery, UseMutationType } from "./utils"
 import { keys } from "./query-key"
 
 export class UnknownEmailError extends Error {
@@ -31,12 +31,7 @@ export const postLostPassword = async (
   return data.data
 }
 
-type UseLostPassword = {
-  onError: (error: Error) => void
-  onSuccess: () => void
-}
-
-export const useLostPassword = ({ onError, onSuccess }: UseLostPassword) => {
+export const useLostPassword = ({ onError, onSuccess }: UseMutationType) => {
   return useMutation(
     async (values: LostPasswordInput) => {
       return await postLostPassword(values)
@@ -68,15 +63,10 @@ export const postChangeLostPassword = async (
   return res.data
 }
 
-type UseChangeLostPassword = {
-  onError: (error: Error) => void
-  onSuccess: () => void
-}
-
 export const useChangeLostPassword = ({
   onError,
   onSuccess,
-}: UseChangeLostPassword) => {
+}: UseMutationType) => {
   return useMutation(
     async (values: ChangeLostPasswordInput) => {
       return await postChangeLostPassword(values)

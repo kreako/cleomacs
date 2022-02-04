@@ -5,7 +5,7 @@ import {
   SignupOutput,
 } from "@cleomacs/api/auth"
 import { useMutation } from "react-query"
-import { post, rawPost } from "./utils"
+import { post, rawPost, UseMutationType } from "./utils"
 
 export class DuplicatesError extends Error {
   name = "DuplicatesError"
@@ -28,12 +28,7 @@ export const postSignup = async (values: SignupInput) => {
   }
 }
 
-type UseSignup = {
-  onError: (error: Error) => void
-  onSuccess: () => void
-}
-
-export const useSignup = ({ onError, onSuccess }: UseSignup) => {
+export const useSignup = ({ onError, onSuccess }: UseMutationType) => {
   return useMutation(
     async (values: SignupInput) => {
       return await postSignup(values)
@@ -49,12 +44,7 @@ export const postLogin = async (values: LoginInput): Promise<LoginOutput> => {
   return await post("/auth/login", values)
 }
 
-type UseLogin = {
-  onError: (error: Error) => void
-  onSuccess: () => void
-}
-
-export const useLogin = ({ onError, onSuccess }: UseLogin) => {
+export const useLogin = ({ onError, onSuccess }: UseMutationType) => {
   return useMutation(
     async (values: LoginInput) => {
       return await postLogin(values)
@@ -70,12 +60,7 @@ export const postLogout = async () => {
   return await rawPost("/auth/logout", {})
 }
 
-type UseLogout = {
-  onError: (error: Error) => void
-  onSuccess: () => void
-}
-
-export const useLogout = ({ onError, onSuccess }: UseLogout) => {
+export const useLogout = ({ onError, onSuccess }: UseMutationType) => {
   return useMutation(
     async () => {
       return await postLogout()
