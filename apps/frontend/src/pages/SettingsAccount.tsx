@@ -6,8 +6,6 @@ import { required } from "../utils/form"
 import { useProfile, useUpdateUserName } from "../api/auth-profile"
 import RawError from "../components/RawError"
 import ErrorCard from "../components/ErrorCard"
-import { useQueryClient } from "react-query"
-import { keys } from "../api/query-key"
 
 type NameFormProps = {
   loading: boolean
@@ -81,15 +79,10 @@ export function NameForm({ loading, initialName, onSubmit }: NameFormProps) {
 }
 
 const useUpdateUserNameAndInvalidate = () => {
-  const queryClient = useQueryClient()
   const updateUserName = useUpdateUserName({
     onError: (error: Error) => {
       // TODO
       console.log("error : ", error)
-    },
-    onSuccess: () => {
-      // TODO maybe this should be in frontend/api/useUpdateUserName instead
-      queryClient.invalidateQueries(keys.profile)
     },
   })
   const onNameSubmit = async (name: string) => {
