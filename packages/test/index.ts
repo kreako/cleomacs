@@ -27,6 +27,7 @@ export const cleanupOrganizationFromDb = async (organizationName: string) => {
   }
   for (const membership of organizationIds.memberships) {
     if (membership.user != null) {
+      await prisma.userPassword.delete({ where: { userId: membership.user.id } })
       await prisma.user.delete({ where: { id: membership.user.id } })
     }
   }
