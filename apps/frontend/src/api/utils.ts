@@ -85,6 +85,6 @@ export const retryQuery =
   }
 
 export type UseMutationType = {
-  onError: (error: Error) => void
-  onSuccess: () => void
+  onError?: (error: Error) => void
+  onSuccess?: () => void
 }
