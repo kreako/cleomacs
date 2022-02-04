@@ -1,12 +1,7 @@
 import { processRequestBody, processRequestQuery } from "zod-express-middleware"
 import express from "express"
-import {
-  excludePassword,
-  findReducedUserById,
-  findUser,
-  findUserNameByEmail,
-  updatePasswordHashById,
-} from "@cleomacs/dbal/user"
+import { findReducedUserWithPasswordById, findUser, findUserNameByEmail } from "@cleomacs/dbal/user"
+import { updatePasswordHashByUserId } from "@cleomacs/dbal/user-password"
 import {
   changeLostPasswordInput,
   changeLostPasswordOutput,
@@ -62,7 +57,7 @@ export const changeLostPassword = [
       res.json(changeLostPasswordOutput(false))
     } else {
       // Find the user
-      const user = await findReducedUserById(userId)
+      const user = await findReducedUserWithPasswordById(userId)
       if (user === null) {
         throw new Error(
           `Invalid DB state - user pointed by token userId is null\ntoken.userId : ${userId}`
@@ -81,7 +76,7 @@ export const changeLostPassword = [
 
       // Update password
       const hashedPassword = await hashPassword(req.body.password)
-      await updatePasswordHashById(userId, hashedPassword)
+      await updatePasswordHashByUserId(userId, hashedPassword)
 
       // And log the user
       await saveSession(req, {
@@ -107,8 +102,7 @@ export const tokenInfo = [
       res.json(tokenInfoOutput())
     } else {
       const user = await findUser(userId)
-      const userWithoutPassword = excludePassword(user)
-      res.json(tokenInfoOutput(userWithoutPassword))
+      res.json(tokenInfoOutput(user))
     }
   },
 ]

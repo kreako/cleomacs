@@ -1,12 +1,5 @@
 import express from "express"
-import {
-  AuthError,
-  hashPassword,
-  saveSession,
-  session,
-  userIsLoggedIn,
-  verifyPassword,
-} from "./auth-utils"
+import { AuthError, hashPassword, saveSession, session, verifyPassword } from "./auth-utils"
 import { processRequestBody } from "zod-express-middleware"
 import { MembershipRole, GlobalRole } from "@cleomacs/db"
 import createError from "http-errors"
@@ -19,16 +12,14 @@ import {
 } from "@cleomacs/api/auth"
 import {
   createUser,
-  excludePassword,
-  findReducedUserByEmail,
-  findUser,
+  findReducedUserWithPasswordByEmail,
   findUserIdByEmail,
   updateLastMembership,
-  updatePasswordHash,
 } from "@cleomacs/dbal/user"
 import { createOrganization, findOrganizationIdByName } from "@cleomacs/dbal/organization"
 import { createAdminMembership } from "@cleomacs/dbal/membership"
 import * as crypto from "crypto"
+import { updatePasswordHashByEmail } from "@cleomacs/dbal/user-password"
 
 export const hash256 = (input: string) => {
   return crypto.createHash("sha256").update(input).digest("hex")
@@ -79,7 +70,7 @@ export const login = [
   processRequestBody(loginInput),
   session,
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user = await findReducedUserByEmail(req.body.email)
+    const user = await findReducedUserWithPasswordByEmail(req.body.email)
     if (user === null) {
       return next(createError(401, "login necessary"))
     }
@@ -93,12 +84,16 @@ export const login = [
       )
     }
     const organization = membership.organization
+    const hashedPassword = user.userPassword?.hashedPassword
+    if (hashedPassword == null) {
+      throw new Error(`Invalid DB state - hashedPassword is null\nuserId: ${user.id}`)
+    }
 
     try {
       await verifyPassword(
         req.body.password,
-        user.hashedPassword,
-        updatePasswordHash(req.body.email)
+        hashedPassword,
+        updatePasswordHashByEmail(req.body.email)
       )
     } catch (error) {
       if (error instanceof AuthError) {
