@@ -1,4 +1,5 @@
 import { User } from "@cleomacs/dbal/user"
+import { OrganizationTeam } from "@cleomacs/dbal/organization"
 import { z } from "zod"
 import { success } from "./utils"
 
@@ -15,3 +16,10 @@ export const updateUserNameInput = z.object({
 export type UpdateUserNameInput = z.infer<typeof updateUserNameInput>
 export const updateUserNameOutput = () => success
 export type UpdateUserNameOutput = ReturnType<typeof updateUserNameOutput>
+
+// team list
+export const teamOutput = (meId: number, team: OrganizationTeam) => ({
+  meId,
+  team,
+})
+export type TeamOutput = ReturnType<typeof teamOutput>
