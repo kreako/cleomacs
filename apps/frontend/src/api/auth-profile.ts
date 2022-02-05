@@ -1,4 +1,8 @@
-import { ProfileOutput, UpdateUserNameInput } from "@cleomacs/api/auth-profile"
+import type {
+  ProfileOutput,
+  TeamOutput,
+  UpdateUserNameInput,
+} from "@cleomacs/api/auth-profile"
 import { useMutation, useQuery, useQueryClient } from "react-query"
 import { useAuthStore } from "../stores/auth"
 import { keys } from "./query-key"
@@ -46,4 +50,13 @@ export const useUpdateUserName = ({ onError, onSuccess }: UseMutationType) => {
       },
     }
   )
+}
+
+const fetchTeam = async (): Promise<TeamOutput> => get("/auth-profile/team")
+
+export const useTeam = () => {
+  return useQuery(keys.profile, fetchTeam, {
+    useErrorBoundary: true,
+    retry: retryQuery(["AuthenticationError"]),
+  })
 }
