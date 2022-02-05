@@ -18,6 +18,7 @@
     "@headlessui/react": "^1.4.3",
     "@tailwindcss/line-clamp": "^0.3.0",
     "axios": "^0.24.0",
+    "date-fns": "^2.28.0",
     "final-form": "^4.20.6",
     "final-form-focus": "^1.1.2",
     "immer": "^9.0.7",
