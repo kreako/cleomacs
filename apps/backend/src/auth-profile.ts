@@ -38,12 +38,9 @@ export const team = [
   userIsLoggedIn,
   async (req: express.Request, res: express.Response) => {
     // legit casts because userIsLoggedIn is called before and it checks for undefined in req.session
-    const userId = req.session.userId as number
     const organizationId = req.session.organizationId as number
-
     const organization = await findOrganizationTeam(organizationId)
-
-    res.json(teamOutput(userId, organization))
+    res.json(teamOutput(organization))
   },
 ]
 

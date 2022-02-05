@@ -18,8 +18,7 @@ export const updateUserNameOutput = () => success
 export type UpdateUserNameOutput = ReturnType<typeof updateUserNameOutput>
 
 // team list
-export const teamOutput = (meId: number, team: OrganizationTeam) => ({
-  meId,
+export const teamOutput = (team: OrganizationTeam) => ({
   team,
 })
 export type TeamOutput = ReturnType<typeof teamOutput>

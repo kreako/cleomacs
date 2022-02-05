@@ -71,11 +71,6 @@ describe("Auth profile test", () => {
 
   test("team", async () => {
     const r1 = await get<TeamOutput>(team, "/auth-profile/team", headers)
-    const me = await findUserIdByEmail(fake.email)
-    if (me == null) {
-      throw new Error("me is null")
-    }
-    expect(r1.body.meId).toBe(me.id)
     const t = r1.body.team
     if (t == null) {
       throw new Error("t-team is null")
