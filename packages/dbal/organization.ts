@@ -24,6 +24,11 @@ export const findOrganizationTeam = async (id: number) => {
           user: true,
           invitation: true,
         },
+        orderBy: {
+          user: {
+            name: "asc",
+          },
+        },
       },
     },
   })
