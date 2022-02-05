@@ -5,7 +5,7 @@ import Logout from "../components/Logout"
 import { required } from "../utils/form"
 import { useProfile, useUpdateUserName } from "../api/auth-profile"
 import RawError from "../components/RawError"
-import ErrorCard from "../components/ErrorCard"
+import LoadingPage from "../components/LoadingPage"
 
 type NameFormProps = {
   loading: boolean
@@ -96,38 +96,29 @@ export default function SettingsAccount() {
     useUpdateUserNameAndInvalidate()
 
   const profile = useProfile()
-  if (profile.data) {
-    if (profile.data.user) {
-      return (
-        <div className="pl-4 mt-4">
-          <div>
-            <div className="text-sky-900">Votre email:</div>
-            <div>{profile.data.user.email}</div>
-          </div>
-          <div className="mt-4">
-            <NameForm
-              loading={updateUserNameLoading}
-              onSubmit={onNameSubmit}
-              initialName={profile.data.user.name || undefined}
-            />
-          </div>
-          <div className="mt-4">
-            <Logout />
-          </div>
+  if (profile.data?.user) {
+    return (
+      <div className="pl-4 mt-4">
+        <div>
+          <div className="text-sky-900">Votre email:</div>
+          <div>{profile.data.user.email}</div>
         </div>
-      )
-    } else {
-      // TODO error reporting
-      return <ErrorCard>Unknown state: {JSON.stringify(profile)}</ErrorCard>
-    }
-  }
-  if (profile.isLoading) {
-    return <Loading size={2} />
+        <div className="mt-4">
+          <NameForm
+            loading={updateUserNameLoading}
+            onSubmit={onNameSubmit}
+            initialName={profile.data.user.name || undefined}
+          />
+        </div>
+        <div className="mt-4">
+          <Logout />
+        </div>
+      </div>
+    )
   }
   if (profile.isError) {
     // TODO error reporting
     return <RawError error={profile.error as Error} />
   }
-  // TODO error reporting
-  return <ErrorCard>Unknown state: {JSON.stringify(profile)}</ErrorCard>
+  return <LoadingPage />
 }
