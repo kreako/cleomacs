@@ -21,7 +21,7 @@ export default function VerticalSubMenuCard({
     <div className={`px-4 py-2 ${c}`}>
       <Link className="flex space-x-4 items-center group" to={link}>
         <div className="text-sky-600 group-hover:text-sky-800">{icon}</div>
-        <div className="group-hover:underline group-hover:decoration-dotted">
+        <div className="group-hover:underline group-hover:decoration-dotted whitespace-nowrap">
           {label}
         </div>
       </Link>
