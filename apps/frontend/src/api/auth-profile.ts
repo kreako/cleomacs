@@ -8,13 +8,13 @@ const fetchProfile = async (): Promise<ProfileOutput> =>
   get("/auth-profile/profile")
 
 export const useProfile = () => {
-  const store = useAuthStore()
+  const updateStore = useAuthStore((state) => state.update)
   return useQuery(keys.profile, fetchProfile, {
     useErrorBoundary: true,
     retry: retryQuery(["AuthenticationError"]),
     onSuccess: ({ user }) => {
       // update the store automatically after each profile query
-      store.update({
+      updateStore({
         userId: user?.id,
         membershipId: user?.lastMembershipId,
         membershipRole: user?.lastMembership?.role,
