@@ -7,7 +7,7 @@ import type {
   TokenInfoOutput,
 } from "@cleomacs/api/auth-password"
 import { rawGet, rawPost, retryQuery, UseMutationType } from "./utils"
-import { keys } from "./query-key"
+import { keysAuthPassword } from "./query-key"
 
 export class UnknownEmailError extends Error {
   name = "UnknownEmailError"
@@ -73,7 +73,7 @@ export const useChangeLostPassword = ({ onError, onSuccess }: UseMutationType) =
 export const getTokenInfo = async ({
   queryKey: [{ token }],
 }: QueryFunctionContext<
-  ReturnType<typeof keys["authPasswordTokenInfo"]>
+  ReturnType<typeof keysAuthPassword["tokenInfo"]>
 >): Promise<TokenInfoOutput> => {
   const res = await rawGet<TokenInfoOutput>(`/auth-password/token-info?token=${token}`)
   if (res.data.user == null) {
@@ -83,7 +83,7 @@ export const getTokenInfo = async ({
 }
 
 export const useTokenInfo = (token: string | null) => {
-  return useQuery(keys.authPasswordTokenInfo(token), getTokenInfo, {
+  return useQuery(keysAuthPassword.tokenInfo(token), getTokenInfo, {
     retry: retryQuery(["AuthenticationError", "InvalidTokenError"]),
   })
 }
