@@ -110,7 +110,7 @@ function UserPopover() {
 
 export default function VerticalMenu() {
   return (
-    <div className="h-screen w-16 bg-sky-500 text-white flex flex-col space-y-2">
+    <div className="h-screen w-16 bg-sky-500 text-white flex flex-col space-y-2 sticky top-0">
       <MenuSquare link="/">
         <RoundHome width={"2em"} height={"2em"} />
       </MenuSquare>
