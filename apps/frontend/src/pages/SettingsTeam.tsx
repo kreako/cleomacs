@@ -1,4 +1,5 @@
 import type { TeamOutput } from "@cleomacs/api/auth-profile"
+import type { NewInvitationInput } from "@cleomacs/api/auth-invitation"
 import { useTeam } from "../api/auth-profile"
 import LoadingPage from "../components/LoadingPage"
 import RawError from "../components/RawError"
@@ -11,7 +12,6 @@ import { Disclosure } from "@headlessui/react"
 import { Field, Form } from "react-final-form"
 import { required, validateEmail } from "../utils/form"
 import LabelInput from "../components/LabelInput"
-import { NewInvitationInput } from "packages/api/auth-invitation"
 import { useNewInvitation } from "../api/auth-invitation"
 
 // Ability to unpack type[] to type
