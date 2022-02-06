@@ -1,9 +1,17 @@
 import rawAxios, { AxiosError, AxiosResponse } from "axios"
+import superjson from "superjson"
 
 const axios = rawAxios.create({
   baseURL: "/api",
   timeout: 3000,
   transitional: { clarifyTimeoutError: true },
+  transformRequest: (data: unknown) => {
+    return superjson.stringify(data)
+  },
+  transformResponse: (data: string) => {
+    // eslint-disable-next-line import/no-named-as-default-member
+    return superjson.parse(data)
+  },
 })
 
 export class AuthenticationError extends Error {
