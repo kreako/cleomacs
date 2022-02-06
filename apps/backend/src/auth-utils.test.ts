@@ -4,6 +4,7 @@ import { roleIsAtLeastManager, saveSession, session, userIsLoggedIn } from "./au
 import { z } from "zod"
 import { processRequestBody } from "zod-express-middleware"
 import { cookieHeader, post, get, errorGet, successBody } from "../test/utils"
+import { json } from "./super-json"
 
 const saveSessionInput = z.object({
   userId: z.number().optional(),
@@ -36,7 +37,7 @@ const saveSessionHandlers = [
       organizationId: req.body.organizationId,
       globalRole: req.body.globalRole,
     })
-    res.json({ success: true })
+    json(res, { success: true })
   },
 ]
 
@@ -50,7 +51,7 @@ const withSuccessHandler = (handler: Handler) => [
   session,
   handler,
   async (req: express.Request, res: express.Response) => {
-    res.json({ success: true })
+    json(res, { success: true })
   },
 ]
 

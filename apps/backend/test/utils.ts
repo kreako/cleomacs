@@ -10,6 +10,7 @@ import {
   createResponse,
   RequestMethod,
 } from "node-mocks-http"
+import superjson from "superjson"
 
 type SyncHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => void
 type AsyncHandler = (
@@ -55,7 +56,9 @@ type BodyMockResponse<B> = {
 type JsonMockResponse<B> = BodyMockResponse<B> & MockResponse<express.Response>
 
 const json = <B>(r: MockResponse<express.Response>): JsonMockResponse<B> => {
-  const body = r._getJSONData() as B
+  const data = r._getData()
+  // eslint-disable-next-line import/no-named-as-default-member
+  const body = superjson.parse<B>(data)
   const r2 = r as JsonMockResponse<B>
   r2.body = body
   return r2

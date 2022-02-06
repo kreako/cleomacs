@@ -4,7 +4,6 @@ import { cookieHeader, errorGet, errorPut, get, post, put, successBody } from ".
 import { cleanupOrganizationFromDb, faker } from "@cleomacs/test"
 import { SignupOutput } from "@cleomacs/api/auth"
 import { ProfileOutput, TeamOutput, UpdateUserNameOutput } from "@cleomacs/api/auth-profile"
-import { findUserIdByEmail } from "@cleomacs/dbal/user"
 
 describe("Auth profile test", () => {
   let fake: ReturnType<typeof faker>
