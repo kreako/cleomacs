@@ -9,6 +9,7 @@ import {
 } from "@cleomacs/api/auth-profile"
 import { processRequestBody } from "zod-express-middleware"
 import { findOrganizationTeam } from "@cleomacs/dbal/organization"
+import { json } from "./super-json"
 
 export const profile = [
   session,
@@ -16,7 +17,7 @@ export const profile = [
   async (req: express.Request, res: express.Response) => {
     const userId = req.session.userId as number // legit cast because userIsLoggedIn is called before
     const user = await findUser(userId)
-    res.json(profileOutput(user))
+    json(res, profileOutput(user))
   },
 ]
 
@@ -29,7 +30,7 @@ export const updateUserName = [
     const userId = req.session.userId as number
     const name = req.body.name
     await updateUserNameById(userId, name)
-    res.json(updateUserNameOutput())
+    json(res, updateUserNameOutput())
   },
 ]
 
@@ -40,7 +41,7 @@ export const team = [
     // legit casts because userIsLoggedIn is called before and it checks for undefined in req.session
     const organizationId = req.session.organizationId as number
     const organization = await findOrganizationTeam(organizationId)
-    res.json(teamOutput(organization))
+    json(res, teamOutput(organization))
   },
 ]
 

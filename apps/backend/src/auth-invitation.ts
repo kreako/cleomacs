@@ -24,6 +24,7 @@ import { invitationMail } from "./mailer"
 import { createUser, findUserIdByEmail, updateLastMembership } from "@cleomacs/dbal/user"
 import { GlobalRole } from "@cleomacs/db"
 import { addMembershipToUser, findMembershipByUserAndOrganization } from "@cleomacs/dbal/membership"
+import { json } from "./super-json"
 
 const INVITATION_TOKEN_EXPIRATION_IN_HOURS = 72
 const sealConfiguration = () => {
@@ -62,7 +63,7 @@ export const newInvitation = [
     // Send email
     await invitationMail(req.body.email, token)
 
-    res.json(newInvitationOutput(token))
+    json(res, newInvitationOutput(token))
   },
 ]
 
@@ -74,14 +75,15 @@ export const tokenInfo = [
     const { invitationId }: SealData = await unsealData(token, sealConfiguration())
     if (invitationId == undefined) {
       // Invalid or expired token
-      res.json(tokenInfoOutput({ success: false }))
+      json(res, tokenInfoOutput({ success: false }))
     } else {
       const invitation = await findInvitation(invitationId)
       if (invitation == null) {
         // Invalid invitation ?
         return next(createError(500, "Internal server error"))
       }
-      res.json(
+      json(
+        res,
         tokenInfoOutput({
           success: true,
           token: {
@@ -112,7 +114,7 @@ export const claimSignup = [
     const { invitationId }: SealData = await unsealData(token, sealConfiguration())
     if (invitationId == undefined) {
       // Invalid or expired token
-      res.json(claimSignupOutput({ success: false, duplicatesEmail: false, invalidToken: true }))
+      json(res, claimSignupOutput({ success: false, duplicatesEmail: false, invalidToken: true }))
       return
     }
     const invitation = await findInvitation(invitationId)
@@ -124,7 +126,7 @@ export const claimSignup = [
     // First check for duplicate email
     const existingUser = await findUserIdByEmail(req.body.email)
     if (existingUser != null) {
-      res.json(claimSignupOutput({ success: false, duplicatesEmail: true, invalidToken: false }))
+      json(res, claimSignupOutput({ success: false, duplicatesEmail: true, invalidToken: false }))
       return
     }
     // hash the password
@@ -145,7 +147,7 @@ export const claimSignup = [
       organizationId: invitation.membership.organizationId,
       globalRole: GlobalRole.CUSTOMER,
     })
-    res.json(claimSignupOutput({ success: true }))
+    json(res, claimSignupOutput({ success: true }))
   },
 ]
 
@@ -159,7 +161,7 @@ export const claimAdd = [
     const { invitationId }: SealData = await unsealData(token, sealConfiguration())
     if (invitationId == undefined) {
       // Invalid or expired token
-      res.json(claimAddOutput({ success: false, invalidToken: true, alreadyMember: false }))
+      json(res, claimAddOutput({ success: false, invalidToken: true, alreadyMember: false }))
       return
     }
 
@@ -176,7 +178,7 @@ export const claimAdd = [
     const existingMembership = await findMembershipByUserAndOrganization(userId, organizationId)
     if (existingMembership != null) {
       // Already member of this organization !
-      res.json(claimAddOutput({ success: false, invalidToken: false, alreadyMember: true }))
+      json(res, claimAddOutput({ success: false, invalidToken: false, alreadyMember: true }))
       return
     }
 
@@ -194,7 +196,8 @@ export const claimAdd = [
       organizationId,
       globalRole: GlobalRole.CUSTOMER,
     })
-    res.json(
+    json(
+      res,
       claimAddOutput({
         success: true,
         organizationId,

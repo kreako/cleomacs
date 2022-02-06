@@ -20,6 +20,7 @@ import { createOrganization, findOrganizationIdByName } from "@cleomacs/dbal/org
 import { createAdminMembership } from "@cleomacs/dbal/membership"
 import * as crypto from "crypto"
 import { updatePasswordHashByEmail } from "@cleomacs/dbal/user-password"
+import { json } from "./super-json"
 
 export const hash256 = (input: string) => {
   return crypto.createHash("sha256").update(input).digest("hex")
@@ -33,7 +34,8 @@ export const signup = [
     const organization = await findOrganizationIdByName(req.body.organizationName)
     const user = await findUserIdByEmail(req.body.email)
     if (organization != null || user != null) {
-      res.json(
+      json(
+        res,
         signupOutput({
           success: false,
           duplicates: {
@@ -61,7 +63,7 @@ export const signup = [
         organizationId,
         globalRole: GlobalRole.CUSTOMER,
       })
-      res.json(signupOutput({ success: true }))
+      json(res, signupOutput({ success: true }))
     }
   },
 ]
@@ -111,7 +113,7 @@ export const login = [
       organizationId: organization.id,
       globalRole: user.role,
     })
-    res.json(loginOutput())
+    json(res, loginOutput())
   },
 ]
 
@@ -119,7 +121,7 @@ export const logout = [
   session,
   (req: express.Request, res: express.Response) => {
     req.session.destroy()
-    res.json(logoutOutput())
+    json(res, logoutOutput())
   },
 ]
 

@@ -13,6 +13,7 @@ import {
 import { sealData, unsealData } from "iron-session"
 import { lostPasswordMail } from "./mailer"
 import { hashPassword, saveSession, session } from "./auth-utils"
+import { json } from "./super-json"
 
 const LOST_PASSWORD_TOKEN_EXPIRATION_IN_HOURS = 4
 const sealConfiguration = () => {
@@ -40,10 +41,10 @@ export const lostPassword = [
       await lostPasswordMail(req.body.email, token)
 
       // success !
-      res.json(lostPasswordOutput(true))
+      json(res, lostPasswordOutput(true))
     } else {
       // user not found
-      res.json(lostPasswordOutput(false))
+      json(res, lostPasswordOutput(false))
     }
   },
 ]
@@ -54,7 +55,7 @@ export const changeLostPassword = [
   async (req: express.Request, res: express.Response) => {
     const { userId }: SealData = await unsealData(req.body.token, sealConfiguration())
     if (userId == undefined) {
-      res.json(changeLostPasswordOutput(false))
+      json(res, changeLostPasswordOutput(false))
     } else {
       // Find the user
       const user = await findReducedUserWithPasswordById(userId)
@@ -87,7 +88,7 @@ export const changeLostPassword = [
         globalRole: user.role,
       })
 
-      res.json(changeLostPasswordOutput(true))
+      json(res, changeLostPasswordOutput(true))
     }
   },
 ]
@@ -99,10 +100,10 @@ export const tokenInfo = [
     const { userId }: SealData = await unsealData(token, sealConfiguration())
     if (userId == undefined) {
       // Invalid or expired token
-      res.json(tokenInfoOutput())
+      json(res, tokenInfoOutput())
     } else {
       const user = await findUser(userId)
-      res.json(tokenInfoOutput(user))
+      json(res, tokenInfoOutput(user))
     }
   },
 ]
