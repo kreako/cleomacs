@@ -21,9 +21,13 @@ type MembershipSinceProps = {
   now: Date
 }
 function MembershipSince({ membership, now }: MembershipSinceProps) {
-  const since = formatDistance(parseISO(membership.createdAt), now, {
-    locale: fr,
-  })
+  const since = formatDistance(
+    parseISO(membership.createdAt as unknown as string),
+    now,
+    {
+      locale: fr,
+    }
+  )
   return <div className="font-mono text-xs">{since}</div>
 }
 
