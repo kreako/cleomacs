@@ -25,17 +25,11 @@ function LoginOn401(props: LoginProps) {
     await login.mutate(values)
   }
   return (
-    <LoginForm
-      onSubmit={onSubmit}
-      mainError={login.error as Error}
-      loading={login.isLoading}
-    />
+    <LoginForm onSubmit={onSubmit} mainError={login.error as Error} loading={login.isLoading} />
   )
 }
 
-function ErrorResetOnURLChange({
-  resetErrorBoundary,
-}: Pick<FallbackProps, "resetErrorBoundary">) {
+function ErrorResetOnURLChange({ resetErrorBoundary }: Pick<FallbackProps, "resetErrorBoundary">) {
   const location = useLocation()
   useUpdateEffect(() => {
     // reset error on url change
@@ -45,16 +39,11 @@ function ErrorResetOnURLChange({
   return <></>
 }
 
-export default function MainErrorFallback({
-  error,
-  resetErrorBoundary,
-}: FallbackProps) {
+export default function MainErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   if (error instanceof AuthenticationError) {
     return (
-      <div className="pt-4 mx-2 flex flex-col items-center">
-        <div className="text-sky-600 font-bold">
-          Connectez-vous pour accéder à cette page !
-        </div>
+      <div className="mx-2 flex flex-col items-center pt-4">
+        <div className="font-bold text-sky-600">Connectez-vous pour accéder à cette page !</div>
         <LoginOn401 onSuccess={resetErrorBoundary} />
         <ErrorResetOnURLChange resetErrorBoundary={resetErrorBoundary} />
       </div>

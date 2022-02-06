@@ -13,7 +13,7 @@ export default {
   decorators: [
     (Story) => (
       <HashRouter>
-        <div className="relative w-screen h-screen bg-sky-50 p-2 flex flex-col items-center">
+        <div className="relative flex h-screen w-screen flex-col items-center bg-sky-50 p-2">
           <Story />
         </div>
       </HashRouter>

@@ -25,7 +25,7 @@ export default function Settings() {
           icon={<BuildingBank width={"2em"} height={"2em"} />}
         />
       </VerticalSubMenu>
-      <div className="bg-sky-50 flex-grow">
+      <div className="flex-grow bg-sky-50">
         <Outlet />
       </div>
     </div>

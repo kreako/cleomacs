@@ -8,16 +8,14 @@ export default {
   argTypes: {},
   decorators: [
     (Story) => (
-      <div className="relative w-screen h-screen bg-sky-50">
+      <div className="relative h-screen w-screen bg-sky-50">
         <Story />
       </div>
     ),
   ],
 } as ComponentMeta<typeof ErrorCard>
 
-const Template: ComponentStory<typeof ErrorCard> = (args) => (
-  <ErrorCard {...args} />
-)
+const Template: ComponentStory<typeof ErrorCard> = (args) => <ErrorCard {...args} />
 
 export const Simple = Template.bind({})
 Simple.args = {

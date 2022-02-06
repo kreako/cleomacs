@@ -23,8 +23,7 @@ export default function Signup() {
     },
   })
   const onSubmit = async (v: object) => {
-    const { organizationName, identityName, email, password } =
-      v as SignupValues
+    const { organizationName, identityName, email, password } = v as SignupValues
     await signup.mutate({
       organizationName,
       userName: identityName,
@@ -33,7 +32,7 @@ export default function Signup() {
     })
   }
   return (
-    <div className="pt-4 mx-2 flex flex-col items-center">
+    <div className="mx-2 flex flex-col items-center pt-4">
       <SignupForm
         onSubmit={onSubmit}
         mainError={signup.error as Error}

@@ -13,7 +13,7 @@ export default {
   decorators: [
     (Story) => (
       <HashRouter>
-        <div className="relative w-screen h-screen bg-sky-50 p-2">
+        <div className="relative h-screen w-screen bg-sky-50 p-2">
           <Story />
         </div>
       </HashRouter>
@@ -21,9 +21,7 @@ export default {
   ],
 } as ComponentMeta<typeof LoginForm>
 
-const Template: ComponentStory<typeof LoginForm> = (args) => (
-  <LoginForm {...args} />
-)
+const Template: ComponentStory<typeof LoginForm> = (args) => <LoginForm {...args} />
 
 export const Simple = Template.bind({})
 Simple.args = {

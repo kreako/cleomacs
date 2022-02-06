@@ -72,10 +72,7 @@ export const put = async <T, D>(url: string, data: D): Promise<T> => {
   }
 }
 
-export const rawPost = async <T, D>(
-  url: string,
-  data: D
-): Promise<AxiosResponse<T>> => {
+export const rawPost = async <T, D>(url: string, data: D): Promise<AxiosResponse<T>> => {
   return await axios.post(url, data)
 }
 

@@ -24,15 +24,8 @@ export function NameForm({ loading, initialName, onSubmit }: NameFormProps) {
       <Form onSubmit={onNameSubmit}>
         {({ handleSubmit }) => (
           <form onSubmit={handleSubmit}>
-            <Field<string>
-              name="name"
-              validate={required("Votre nom")}
-              initialValue={initialName}
-            >
-              {({
-                input: { name, value, onChange },
-                meta: { error, touched },
-              }) => (
+            <Field<string> name="name" validate={required("Votre nom")} initialValue={initialName}>
+              {({ input: { name, value, onChange }, meta: { error, touched } }) => (
                 <LabelInput
                   label="Votre nom"
                   kind="text"
@@ -44,7 +37,7 @@ export function NameForm({ loading, initialName, onSubmit }: NameFormProps) {
                 />
               )}
             </Field>
-            <div className="mt-1 w-full flex justify-end">
+            <div className="mt-1 flex w-full justify-end">
               <FormSpy subscription={{ values: true }}>
                 {({ values }) => {
                   // compute button style based on form state
@@ -60,9 +53,9 @@ export function NameForm({ loading, initialName, onSubmit }: NameFormProps) {
                     <button
                       type="submit"
                       disabled={loading || noChange}
-                      className={`${c} py-1 px-2 rounded-md`}
+                      className={`${c} rounded-md py-1 px-2`}
                     >
-                      <div className="flex justify-center items-center space-x-2">
+                      <div className="flex items-center justify-center space-x-2">
                         <div>Sauvegarder</div>
                         {loading && <Loading size={1} reverseColor />}
                       </div>
@@ -92,13 +85,12 @@ const useUpdateUserNameAndInvalidate = () => {
 }
 
 export default function SettingsAccount() {
-  const { updateUserNameLoading, onNameSubmit } =
-    useUpdateUserNameAndInvalidate()
+  const { updateUserNameLoading, onNameSubmit } = useUpdateUserNameAndInvalidate()
 
   const profile = useProfile()
   if (profile.data?.user) {
     return (
-      <div className="pl-4 mt-4">
+      <div className="mt-4 pl-4">
         <div>
           <div className="text-sky-900">Votre email:</div>
           <div>{profile.data.user.email}</div>

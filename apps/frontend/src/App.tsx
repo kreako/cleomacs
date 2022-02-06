@@ -12,17 +12,13 @@ const Signup = React.lazy(() => import("./pages/Signup"))
 const Login = React.lazy(() => import("./pages/Login"))
 const LostPassword = React.lazy(() => import("./pages/LostPassword"))
 const LostPasswordSent = React.lazy(() => import("./pages/LostPasswordSent"))
-const ChangeLostPassword = React.lazy(
-  () => import("./pages/ChangeLostPassword")
-)
+const ChangeLostPassword = React.lazy(() => import("./pages/ChangeLostPassword"))
 const Home = React.lazy(() => import("./pages/Home"))
 const Settings = React.lazy(() => import("./pages/Settings"))
 const SettingsHome = React.lazy(() => import("./pages/SettingsHome"))
 const SettingsAccount = React.lazy(() => import("./pages/SettingsAccount"))
 const SettingsTeam = React.lazy(() => import("./pages/SettingsTeam"))
-const SettingsOrganizations = React.lazy(
-  () => import("./pages/SettingsOrganizations")
-)
+const SettingsOrganizations = React.lazy(() => import("./pages/SettingsOrganizations"))
 const NotFound = React.lazy(() => import("./pages/NotFound"))
 
 export default function App() {
@@ -36,20 +32,14 @@ export default function App() {
               <Route path="login" element={<Login />} />
               <Route path="lost-password" element={<LostPassword />} />
               <Route path="lost-password-sent" element={<LostPasswordSent />} />
-              <Route
-                path="change-lost-password"
-                element={<ChangeLostPassword />}
-              />
+              <Route path="change-lost-password" element={<ChangeLostPassword />} />
               <Route path="/" element={<MainLayout />}>
                 <Route index element={<Home />} />
                 <Route path="settings" element={<Settings />}>
                   <Route index element={<SettingsHome />} />
                   <Route path="account" element={<SettingsAccount />} />
                   <Route path="team" element={<SettingsTeam />} />
-                  <Route
-                    path="organizations"
-                    element={<SettingsOrganizations />}
-                  />
+                  <Route path="organizations" element={<SettingsOrganizations />} />
                 </Route>
               </Route>
               <Route path="*" element={<NotFound />} />

@@ -9,11 +9,5 @@ export default function Loading(props: LoadingProps) {
   const size = `${props.size}em`
   const textColorClassName = props.reverseColor ? "text-sky-50" : "text-sky-600"
 
-  return (
-    <CloudSync
-      className={`${textColorClassName} animate-pulse`}
-      width={size}
-      height={size}
-    />
-  )
+  return <CloudSync className={`${textColorClassName} animate-pulse`} width={size} height={size} />
 }

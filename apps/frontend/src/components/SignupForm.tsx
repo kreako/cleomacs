@@ -63,8 +63,8 @@ export default function SignupForm(props: SignupFormProp) {
           <ErrorCard>
             <div>Je connais déjà cette organisation !</div>
             <div>
-              Si vous voulez y participer, il vous faudra demander un lien
-              d&apos;invitation à quelqu&apos;un qui en fait partie.
+              Si vous voulez y participer, il vous faudra demander un lien d&apos;invitation à
+              quelqu&apos;un qui en fait partie.
             </div>
           </ErrorCard>
         )
@@ -78,19 +78,14 @@ export default function SignupForm(props: SignupFormProp) {
     <Form onSubmit={onSubmit} decorators={[focusOnError]}>
       {({ handleSubmit }) => (
         <form onSubmit={handleSubmit}>
-          <div className="flex flex-col max-w-md">
-            <div className="font-bold tracking-wide uppercase text-sky-600">
-              Inscription
-            </div>
+          <div className="flex max-w-md flex-col">
+            <div className="font-bold uppercase tracking-wide text-sky-600">Inscription</div>
             <div className="mt-4">
               <Field<string>
                 name="organizationName"
                 validate={required("Le nom de votre organisation")}
               >
-                {({
-                  input: { name, value, onChange },
-                  meta: { error, touched },
-                }) => (
+                {({ input: { name, value, onChange }, meta: { error, touched } }) => (
                   <LabelInput
                     label="Le nom de votre organisation"
                     kind="text"
@@ -104,14 +99,8 @@ export default function SignupForm(props: SignupFormProp) {
               </Field>
             </div>
             <div className="mt-4">
-              <Field<string>
-                name="identityName"
-                validate={required("Votre nom")}
-              >
-                {({
-                  input: { name, value, onChange },
-                  meta: { error, touched },
-                }) => (
+              <Field<string> name="identityName" validate={required("Votre nom")}>
+                {({ input: { name, value, onChange }, meta: { error, touched } }) => (
                   <LabelInput
                     label="Votre nom"
                     kind="text"
@@ -126,10 +115,7 @@ export default function SignupForm(props: SignupFormProp) {
             </div>
             <div className="mt-4">
               <Field<string> name="email" validate={validateEmail}>
-                {({
-                  input: { name, value, onChange },
-                  meta: { error, touched },
-                }) => (
+                {({ input: { name, value, onChange }, meta: { error, touched } }) => (
                   <LabelInput
                     label="Votre adresse email"
                     kind="email"
@@ -144,10 +130,7 @@ export default function SignupForm(props: SignupFormProp) {
             </div>
             <div className="mt-4">
               <Field<string> name="password" validate={validatePassword}>
-                {({
-                  input: { name, value, onChange },
-                  meta: { error, touched },
-                }) => (
+                {({ input: { name, value, onChange }, meta: { error, touched } }) => (
                   <LabelInput
                     label="Votre mot de passe"
                     kind="password"
@@ -164,9 +147,9 @@ export default function SignupForm(props: SignupFormProp) {
             <button
               type="submit"
               disabled={props.loading}
-              className="mt-6 w-full bg-sky-600 text-sky-100 py-2 px-4 rounded-md font-bold text-lg tracking-wide"
+              className="mt-6 w-full rounded-md bg-sky-600 py-2 px-4 text-lg font-bold tracking-wide text-sky-100"
             >
-              <div className="flex justify-center items-center space-x-2">
+              <div className="flex items-center justify-center space-x-2">
                 <div>Inscription</div>
                 {props.loading && <Loading size={1} reverseColor />}
               </div>

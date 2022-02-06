@@ -1,9 +1,4 @@
-import {
-  LoginInput,
-  LoginOutput,
-  SignupInput,
-  SignupOutput,
-} from "@cleomacs/api/auth"
+import { LoginInput, LoginOutput, SignupInput, SignupOutput } from "@cleomacs/api/auth"
 import { useMutation } from "react-query"
 import { post, rawPost, UseMutationType } from "./utils"
 
@@ -21,10 +16,7 @@ export class DuplicatesError extends Error {
 export const postSignup = async (values: SignupInput) => {
   const res = await rawPost<SignupOutput, SignupInput>("/auth/signup", values)
   if (!res.data.success) {
-    throw new DuplicatesError(
-      res.data.duplicates.organizationName,
-      res.data.duplicates.email
-    )
+    throw new DuplicatesError(res.data.duplicates.organizationName, res.data.duplicates.email)
   }
 }
 

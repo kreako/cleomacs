@@ -19,7 +19,7 @@ function Profile() {
 
 export default function Home() {
   return (
-    <div className="pl-4 flex flex-col space-y-4">
+    <div className="flex flex-col space-y-4 pl-4">
       <div>Accueil</div>
       <Profile />
       <Logout />

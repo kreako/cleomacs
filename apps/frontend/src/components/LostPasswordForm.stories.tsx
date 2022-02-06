@@ -11,16 +11,14 @@ export default {
   },
   decorators: [
     (Story) => (
-      <div className="relative w-screen h-screen bg-sky-50 p-2">
+      <div className="relative h-screen w-screen bg-sky-50 p-2">
         <Story />
       </div>
     ),
   ],
 } as ComponentMeta<typeof LostPasswordForm>
 
-const Template: ComponentStory<typeof LostPasswordForm> = (args) => (
-  <LostPasswordForm {...args} />
-)
+const Template: ComponentStory<typeof LostPasswordForm> = (args) => <LostPasswordForm {...args} />
 
 export const Simple = Template.bind({})
 Simple.args = {

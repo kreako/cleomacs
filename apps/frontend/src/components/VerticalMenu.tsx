@@ -22,11 +22,9 @@ function MenuSquare({ children, link }: MenuSquareProps) {
     c = "bg-sky-600 text-sky-200 hover:bg-sky-600 hover:text-white"
   }
   return (
-    <div className={`w-16 flex flex-col items-center ${c}`}>
+    <div className={`flex w-16 flex-col items-center ${c}`}>
       <Link to={link}>
-        <div className="h-12 w-12 flex justify-center items-center">
-          {children}
-        </div>
+        <div className="flex h-12 w-12 items-center justify-center">{children}</div>
       </Link>
     </div>
   )
@@ -47,7 +45,7 @@ type UserPopoverLinkProps = {
 
 function UserPopoverLink({ children, to }: UserPopoverLinkProps) {
   return (
-    <Link className="hover:text-sky-100 hover:bg-sky-500 px-4 py-4" to={to}>
+    <Link className="px-4 py-4 hover:bg-sky-500 hover:text-sky-100" to={to}>
       {children}
     </Link>
   )
@@ -60,10 +58,7 @@ type UserPopoverButtonProps = {
 
 function UserPopoverButton({ children, onClick }: UserPopoverButtonProps) {
   return (
-    <button
-      onClick={onClick}
-      className="hover:text-sky-100 hover:bg-sky-500 px-4 py-4 text-left"
-    >
+    <button onClick={onClick} className="px-4 py-4 text-left hover:bg-sky-500 hover:text-sky-100">
       {children}
     </button>
   )
@@ -78,18 +73,15 @@ function UserPopover() {
           <>
             <Popover.Button>
               <div
-                className={`w-16 h-16 flex flex-col items-center justify-center ${buttonBg} text-sky-200 hover:bg-sky-600 hover:text-white`}
+                className={`flex h-16 w-16 flex-col items-center justify-center ${buttonBg} text-sky-200 hover:bg-sky-600 hover:text-white`}
               >
                 <div className="rounded-full">
-                  <img
-                    src={avatarUrl}
-                    className="rounded-full w-12 h-12 object-cover"
-                  />
+                  <img src={avatarUrl} className="h-12 w-12 rounded-full object-cover" />
                 </div>
               </div>
             </Popover.Button>
 
-            <Popover.Panel className="absolute z-10 bottom-0 left-16 bg-sky-600">
+            <Popover.Panel className="absolute bottom-0 left-16 z-10 bg-sky-600">
               <div className="flex flex-col">
                 <UserPopoverLink to="">TODO</UserPopoverLink>
                 <UserPopoverLink to="/settings/organizations">
@@ -110,7 +102,7 @@ function UserPopover() {
 
 export default function VerticalMenu() {
   return (
-    <div className="h-screen w-16 bg-sky-500 text-white flex flex-col space-y-2 sticky top-0">
+    <div className="sticky top-0 flex h-screen w-16 flex-col space-y-2 bg-sky-500 text-white">
       <MenuSquare link="/">
         <RoundHome width={"2em"} height={"2em"} />
       </MenuSquare>

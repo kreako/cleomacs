@@ -9,9 +9,7 @@ export default {
   decorators: [(Story) => <Story />],
 } as ComponentMeta<typeof LogoutButton>
 
-const Template: ComponentStory<typeof LogoutButton> = (args) => (
-  <LogoutButton {...args} />
-)
+const Template: ComponentStory<typeof LogoutButton> = (args) => <LogoutButton {...args} />
 
 export const Simple = Template.bind({})
 Simple.args = {}

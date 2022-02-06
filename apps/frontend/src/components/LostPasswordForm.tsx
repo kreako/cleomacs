@@ -26,8 +26,7 @@ export default function LostPasswordForm(props: LostPasswordFormProp) {
       error = (
         <ErrorCard>
           <div>
-            Je ne reconnais pas cet email{" "}
-            <span className="font-mono">{props.mainError.email}</span>
+            Je ne reconnais pas cet email <span className="font-mono">{props.mainError.email}</span>
           </div>
         </ErrorCard>
       )
@@ -43,13 +42,10 @@ export default function LostPasswordForm(props: LostPasswordFormProp) {
     <Form onSubmit={onSubmit} decorators={[focusOnError]}>
       {({ handleSubmit }) => (
         <form onSubmit={handleSubmit}>
-          <div className="flex flex-col max-w-md">
+          <div className="flex max-w-md flex-col">
             <div className="mt-4">
               <Field<string> name="email" validate={validateEmail}>
-                {({
-                  input: { name, value, onChange },
-                  meta: { error, touched },
-                }) => (
+                {({ input: { name, value, onChange }, meta: { error, touched } }) => (
                   <LabelInput
                     label="Votre adresse email"
                     kind="email"
@@ -66,9 +62,9 @@ export default function LostPasswordForm(props: LostPasswordFormProp) {
             <button
               type="submit"
               disabled={props.loading}
-              className="mt-6 w-full bg-sky-600 text-sky-100 py-2 rounded-md font-bold text-lg tracking-wide"
+              className="mt-6 w-full rounded-md bg-sky-600 py-2 text-lg font-bold tracking-wide text-sky-100"
             >
-              <div className="flex justify-center items-center space-x-2">
+              <div className="flex items-center justify-center space-x-2">
                 <div>Réinitialisation de mon mot de passe</div>
                 {props.loading && <Loading size={1} reverseColor />}
               </div>

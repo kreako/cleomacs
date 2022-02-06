@@ -18,7 +18,7 @@ export default function LostPassword() {
     await lostPassword.mutate(values)
   }
   return (
-    <div className="pt-4 mx-2 flex flex-col items-center">
+    <div className="mx-2 flex flex-col items-center pt-4">
       <LostPasswordForm
         onSubmit={onSubmit}
         mainError={lostPassword.error as Error}

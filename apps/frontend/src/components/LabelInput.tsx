@@ -28,7 +28,7 @@ function TextInput(props: InputProps) {
       value={props.value}
       onChange={props.onChange}
       type="text"
-      className={`bg-sky-100 px-4 py-2 rounded-md w-full caret-slate-900 ${c}`}
+      className={`w-full rounded-md bg-sky-100 px-4 py-2 caret-slate-900 ${c}`}
     />
   )
 }
@@ -42,7 +42,7 @@ function EmailInput(props: InputProps) {
       value={props.value}
       onChange={props.onChange}
       type="email"
-      className={`bg-sky-100 px-4 py-2 rounded-md w-full caret-slate-900 ${c}`}
+      className={`w-full rounded-md bg-sky-100 px-4 py-2 caret-slate-900 ${c}`}
     />
   )
 }
@@ -59,23 +59,20 @@ function useInputType() {
 
 function PasswordInput(props: InputProps) {
   const { hidden, toggle, kind } = useInputType()
-  let c =
-    "outline-none focus-within:outline focus-within:outline-2 focus-within:outline-sky-300"
+  let c = "outline-none focus-within:outline focus-within:outline-2 focus-within:outline-sky-300"
   if (props.error) {
     c = "outline outline-2 outline-red-600"
   }
 
   return (
-    <div
-      className={`flex space-x-2 bg-sky-100 pl-4 pr-2 py-2 rounded-md w-full ${c}`}
-    >
+    <div className={`flex w-full space-x-2 rounded-md bg-sky-100 py-2 pl-4 pr-2 ${c}`}>
       <input
         id={props.id}
         name={props.name}
         value={props.value}
         onChange={props.onChange}
         type={kind}
-        className="flex-grow caret-slate-900 bg-transparent outline-none"
+        className="flex-grow bg-transparent caret-slate-900 outline-none"
       />
       <button onClick={toggle} className="flex-grow-0">
         {hidden ? <Eye /> : <EyeOff />}
@@ -137,7 +134,7 @@ export default function LabelInput(props: LabelInputProps) {
         {props.label}
       </label>
       {input}
-      {isError && <div className="text-red-600 text-right">{props.error}</div>}
+      {isError && <div className="text-right text-red-600">{props.error}</div>}
     </div>
   )
 }

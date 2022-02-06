@@ -49,13 +49,10 @@ export default function LoginForm(props: LoginFormProp) {
     <Form onSubmit={onSubmit} decorators={[focusOnError]}>
       {({ handleSubmit }) => (
         <form onSubmit={handleSubmit}>
-          <div className="flex flex-col max-w-md">
+          <div className="flex max-w-md flex-col">
             <div className="mt-4">
               <Field<string> name="email" validate={validateEmail}>
-                {({
-                  input: { name, value, onChange },
-                  meta: { error, touched },
-                }) => (
+                {({ input: { name, value, onChange }, meta: { error, touched } }) => (
                   <LabelInput
                     label="Votre adresse email"
                     kind="email"
@@ -70,10 +67,7 @@ export default function LoginForm(props: LoginFormProp) {
             </div>
             <div className="mt-4">
               <Field<string> name="password" validate={validatePassword}>
-                {({
-                  input: { name, value, onChange },
-                  meta: { error, touched },
-                }) => (
+                {({ input: { name, value, onChange }, meta: { error, touched } }) => (
                   <>
                     <LabelInput
                       label="Votre mot de passe"
@@ -87,7 +81,7 @@ export default function LoginForm(props: LoginFormProp) {
                     <div className="flex justify-end">
                       <Link
                         to="/lost-password"
-                        className="text-sm text-gray-700 underline decoration-dotted decoration-gray-400 hover:decoration-gray-700"
+                        className="text-sm text-gray-700 underline decoration-gray-400 decoration-dotted hover:decoration-gray-700"
                       >
                         mot de passe perdu ?
                       </Link>
@@ -100,9 +94,9 @@ export default function LoginForm(props: LoginFormProp) {
             <button
               type="submit"
               disabled={props.loading}
-              className="mt-6 w-full bg-sky-600 text-sky-100 py-2 px-4 rounded-md font-bold text-lg tracking-wide"
+              className="mt-6 w-full rounded-md bg-sky-600 py-2 px-4 text-lg font-bold tracking-wide text-sky-100"
             >
-              <div className="flex justify-center items-center space-x-2">
+              <div className="flex items-center justify-center space-x-2">
                 <div>Connexion</div>
                 {props.loading && <Loading size={1} reverseColor />}
               </div>

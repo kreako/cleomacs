@@ -10,7 +10,7 @@ export function LogoutButton(props: LogoutButtonProps) {
     <div>
       <button
         onClick={props.onClick}
-        className="flex items-center space-x-2 border border-sky-600 px-4 py-2 rounded-md hover:bg-sky-100"
+        className="flex items-center space-x-2 rounded-md border border-sky-600 px-4 py-2 hover:bg-sky-100"
       >
         <div className="text-sky-900">Déconnexion</div>
         <LogoutIcon className="text-sky-600" width={"1em"} height={"1em"} />

@@ -24,9 +24,7 @@ type ChangeLostPasswordFormProp = {
   loading: boolean
 }
 
-export default function ChangeLostPasswordForm(
-  props: ChangeLostPasswordFormProp
-) {
+export default function ChangeLostPasswordForm(props: ChangeLostPasswordFormProp) {
   let error: React.ReactElement | null = null
   if (props.mainError != null) {
     if (props.mainError instanceof InvalidTokenError) {
@@ -37,10 +35,7 @@ export default function ChangeLostPasswordForm(
           <div>Ce lien n&apos;est plus valide.</div>
           <div>
             Il vous faut en demander un nouveau&nbsp;
-            <Link
-              to="/lost-password"
-              className="underline decoration-red-600 decoration-dotted"
-            >
+            <Link to="/lost-password" className="underline decoration-red-600 decoration-dotted">
               ici
             </Link>
             &nbsp;!
@@ -62,13 +57,10 @@ export default function ChangeLostPasswordForm(
       <Form onSubmit={onSubmit} decorators={[focusOnError]}>
         {({ handleSubmit }) => (
           <form onSubmit={handleSubmit}>
-            <div className="flex flex-col max-w-md">
+            <div className="flex max-w-md flex-col">
               <div className="mt-4">
                 <Field<string> name="password" validate={validatePassword}>
-                  {({
-                    input: { name, value, onChange },
-                    meta: { error, touched },
-                  }) => (
+                  {({ input: { name, value, onChange }, meta: { error, touched } }) => (
                     <LabelInput
                       label="Votre nouveau mot de passe"
                       kind="password"
@@ -85,9 +77,9 @@ export default function ChangeLostPasswordForm(
               <button
                 type="submit"
                 disabled={props.loading}
-                className="mt-6 w-full bg-sky-600 text-sky-100 py-2 px-4 rounded-md font-bold text-lg tracking-wide"
+                className="mt-6 w-full rounded-md bg-sky-600 py-2 px-4 text-lg font-bold tracking-wide text-sky-100"
               >
-                <div className="flex justify-center items-center space-x-2">
+                <div className="flex items-center justify-center space-x-2">
                   <div>Réinitialisation de mon mot de passe</div>
                   {props.loading && <Loading size={1} reverseColor={true} />}
                 </div>

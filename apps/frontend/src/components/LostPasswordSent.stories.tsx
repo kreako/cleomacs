@@ -8,16 +8,14 @@ export default {
   argTypes: {},
   decorators: [
     (Story) => (
-      <div className="relative w-screen h-screen bg-sky-50 p-2">
+      <div className="relative h-screen w-screen bg-sky-50 p-2">
         <Story />
       </div>
     ),
   ],
 } as ComponentMeta<typeof LostPasswordSent>
 
-const Template: ComponentStory<typeof LostPasswordSent> = () => (
-  <LostPasswordSent />
-)
+const Template: ComponentStory<typeof LostPasswordSent> = () => <LostPasswordSent />
 
 export const Simple = Template.bind({})
 Simple.args = {}

@@ -9,9 +9,7 @@ export default {
   decorators: [(Story) => <Story />],
 } as ComponentMeta<typeof RawError>
 
-const Template: ComponentStory<typeof RawError> = (args) => (
-  <RawError {...args} />
-)
+const Template: ComponentStory<typeof RawError> = (args) => <RawError {...args} />
 
 export const Simple = Template.bind({})
 Simple.args = {

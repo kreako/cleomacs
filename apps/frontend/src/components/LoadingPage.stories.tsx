@@ -8,7 +8,7 @@ export default {
   argTypes: {},
   decorators: [
     (Story) => (
-      <div className="relative w-screen h-screen bg-sky-50">
+      <div className="relative h-screen w-screen bg-sky-50">
         <Story />
       </div>
     ),

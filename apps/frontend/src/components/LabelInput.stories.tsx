@@ -17,9 +17,7 @@ export default {
   ],
 } as ComponentMeta<typeof LabelInput>
 
-const Template: ComponentStory<typeof LabelInput> = (args) => (
-  <LabelInput {...args} />
-)
+const Template: ComponentStory<typeof LabelInput> = (args) => <LabelInput {...args} />
 
 export const Text = Template.bind({})
 Text.args = {

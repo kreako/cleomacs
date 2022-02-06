@@ -23,12 +23,8 @@ export default function Login() {
     await login.mutate(values)
   }
   return (
-    <div className="pt-4 mx-2 flex flex-col items-center">
-      <LoginForm
-        onSubmit={onSubmit}
-        mainError={login.error as Error}
-        loading={login.isLoading}
-      />
+    <div className="mx-2 flex flex-col items-center pt-4">
+      <LoginForm onSubmit={onSubmit} mainError={login.error as Error} loading={login.isLoading} />
     </div>
   )
 }

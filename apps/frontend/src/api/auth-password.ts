@@ -18,13 +18,8 @@ export class UnknownEmailError extends Error {
   }
 }
 
-export const postLostPassword = async (
-  values: LostPasswordInput
-): Promise<LostPasswordOutput> => {
-  const data = await rawPost<LostPasswordOutput, LostPasswordInput>(
-    "/auth-password/lost",
-    values
-  )
+export const postLostPassword = async (values: LostPasswordInput): Promise<LostPasswordOutput> => {
+  const data = await rawPost<LostPasswordOutput, LostPasswordInput>("/auth-password/lost", values)
   if (!data.data.success) {
     throw new UnknownEmailError(values.email)
   }
@@ -63,10 +58,7 @@ export const postChangeLostPassword = async (
   return res.data
 }
 
-export const useChangeLostPassword = ({
-  onError,
-  onSuccess,
-}: UseMutationType) => {
+export const useChangeLostPassword = ({ onError, onSuccess }: UseMutationType) => {
   return useMutation(
     async (values: ChangeLostPasswordInput) => {
       return await postChangeLostPassword(values)
@@ -83,9 +75,7 @@ export const getTokenInfo = async ({
 }: QueryFunctionContext<
   ReturnType<typeof keys["authPasswordTokenInfo"]>
 >): Promise<TokenInfoOutput> => {
-  const res = await rawGet<TokenInfoOutput>(
-    `/auth-password/token-info?token=${token}`
-  )
+  const res = await rawGet<TokenInfoOutput>(`/auth-password/token-info?token=${token}`)
   if (res.data.user == null) {
     throw new InvalidTokenError()
   }
