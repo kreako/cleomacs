@@ -4,7 +4,7 @@ import LoadingPage from "../components/LoadingPage"
 import RawError from "../components/RawError"
 import RoundPerson from "~icons/ic/round-person"
 import { ReactNode } from "react"
-import { formatDistance, parseISO } from "date-fns"
+import { formatDistance } from "date-fns"
 import { fr } from "date-fns/locale"
 
 // Ability to unpack type[] to type
@@ -21,13 +21,9 @@ type MembershipSinceProps = {
   now: Date
 }
 function MembershipSince({ membership, now }: MembershipSinceProps) {
-  const since = formatDistance(
-    parseISO(membership.createdAt as unknown as string),
-    now,
-    {
-      locale: fr,
-    }
-  )
+  const since = formatDistance(membership.createdAt, now, {
+    locale: fr,
+  })
   return <div className="font-mono text-xs">{since}</div>
 }
 
@@ -206,7 +202,6 @@ export default function SettingsTeam() {
             ))}
           </div>
         </div>
-        <div className="mt-24">{JSON.stringify(team.data)}</div>
       </div>
     )
   }
