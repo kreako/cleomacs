@@ -1,8 +1,8 @@
 export const keysAuthProfile = {
-  profile: [{ scope: "profile", item: "profile" }] as const,
-  teams: [{ scope: "profile", item: "team" }] as const,
+  profile: [{ scope: "auth-profile", item: "profile" }] as const,
+  teams: [{ scope: "auth-profile", item: "team" }] as const,
   team: (organizationId: number | undefined) =>
-    [{ scope: "profile", item: "team", organizationId }] as const,
+    [{ scope: "auth-profile", item: "team", organizationId }] as const,
 }
 
 export const keysAuthPassword = {
