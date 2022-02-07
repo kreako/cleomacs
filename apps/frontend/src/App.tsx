@@ -18,6 +18,7 @@ const Settings = React.lazy(() => import("./pages/Settings"))
 const SettingsHome = React.lazy(() => import("./pages/SettingsHome"))
 const SettingsAccount = React.lazy(() => import("./pages/SettingsAccount"))
 const SettingsTeam = React.lazy(() => import("./pages/SettingsTeam"))
+const SettingsTeamMembership = React.lazy(() => import("./pages/SettingsTeamMembership"))
 const SettingsOrganizations = React.lazy(() => import("./pages/SettingsOrganizations"))
 const NotFound = React.lazy(() => import("./pages/NotFound"))
 
@@ -39,6 +40,7 @@ export default function App() {
                   <Route index element={<SettingsHome />} />
                   <Route path="account" element={<SettingsAccount />} />
                   <Route path="team" element={<SettingsTeam />} />
+                  <Route path="team-membership/:id" element={<SettingsTeamMembership />} />
                   <Route path="organizations" element={<SettingsOrganizations />} />
                 </Route>
               </Route>

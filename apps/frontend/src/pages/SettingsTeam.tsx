@@ -7,12 +7,14 @@ import { ReactNode } from "react"
 import { formatDistance } from "date-fns"
 import { fr } from "date-fns/locale"
 import RoundPerson from "~icons/ic/round-person"
-import RoundPersonAdd from "~icons/ic/round-person-add"
 import { Disclosure } from "@headlessui/react"
 import { Field, Form } from "react-final-form"
 import { required, validateEmail } from "../utils/form"
 import LabelInput from "../components/LabelInput"
 import { useNewInvitation } from "../api/auth-invitation"
+import RoundPersonAdd from "~icons/ic/round-person-add"
+import RoundEdit from "~icons/ic/round-edit"
+import { Link } from "react-router-dom"
 
 // Ability to unpack type[] to type
 type Unpacked<T> = T extends (infer U)[] ? U : T
@@ -86,6 +88,34 @@ function MembershipUserName({ name, email }: MembershipUserNameProps) {
   )
 }
 
+function MembershipActions() {
+  return (
+    <div>
+      <RoundEdit width="1em" height="1em" />
+    </div>
+  )
+}
+
+type MembershipRowProps = {
+  icon: ReactNode
+  name: ReactNode
+  role: ReactNode
+  since: ReactNode
+  actions: ReactNode
+}
+
+function MembershipRow({ icon, name, role, since, actions }: MembershipRowProps) {
+  return (
+    <div className="flex items-center space-x-4">
+      <div className="w-[2em] flex-shrink-0 flex-grow-0">{icon}</div>
+      <div className="w-5/12 flex-shrink-0">{name}</div>
+      <div className="w-1/12 flex-shrink-0 flex-grow-0">{role}</div>
+      <div className="w-2/12">{since}</div>
+      <div className="invisible group-hover:visible">{actions}</div>
+    </div>
+  )
+}
+
 type MembershipUserProps = {
   membership: MembershipType
   user: UserType
@@ -94,20 +124,13 @@ type MembershipUserProps = {
 
 function MembershipUser({ membership, user, now }: MembershipUserProps) {
   return (
-    <div className="flex items-center space-x-4">
-      <div className="w-[2em] flex-shrink-0 flex-grow-0">
-        <RoundPerson width={"1.5em"} height={"1.5em"} className="text-sky-600" />
-      </div>
-      <div className="w-5/12 flex-shrink-0">
-        <MembershipUserName name={user.name} email={user.email} />
-      </div>
-      <div className="w-1/12 flex-shrink-0 flex-grow-0">
-        <MembershipRoleDisplay membership={membership} />
-      </div>
-      <div>
-        <MembershipSince membership={membership} now={now} />
-      </div>
-    </div>
+    <MembershipRow
+      icon={<RoundPerson width={"1.5em"} height={"1.5em"} className="text-sky-600" />}
+      name={<MembershipUserName name={user.name} email={user.email} />}
+      role={<MembershipRoleDisplay membership={membership} />}
+      since={<MembershipSince membership={membership} now={now} />}
+      actions={<MembershipActions />}
+    />
   )
 }
 
@@ -119,20 +142,13 @@ type MembershipInvitationProps = {
 
 function MembershipInvitation({ membership, invitation, now }: MembershipInvitationProps) {
   return (
-    <div className="flex items-center space-x-4">
-      <div className="w-[2em] flex-shrink-0 flex-grow-0">
-        <RoundPerson width={"1.5em"} height={"1.5em"} className="text-sky-600 opacity-25" />
-      </div>
-      <div className="w-5/12 flex-shrink-0">
-        <MembershipUserName name={invitation.name} email={invitation.email} />
-      </div>
-      <div className="w-1/12 flex-shrink-0 flex-grow-0">
-        <MembershipRoleDisplay membership={membership} />
-      </div>
-      <div>
-        <MembershipSince membership={membership} now={now} />
-      </div>
-    </div>
+    <MembershipRow
+      icon={<RoundPerson width={"1.5em"} height={"1.5em"} className="text-sky-600 opacity-25" />}
+      name={<MembershipUserName name={invitation.name} email={invitation.email} />}
+      role={<MembershipRoleDisplay membership={membership} />}
+      since={<MembershipSince membership={membership} now={now} />}
+      actions={<MembershipActions />}
+    />
   )
 }
 type MembershipProps = {
@@ -141,15 +157,31 @@ type MembershipProps = {
 }
 
 function Membership({ membership, now }: MembershipProps) {
+  let inner = <div>What ? {JSON.stringify(membership)}</div>
   if (membership.user) {
-    return <MembershipUser membership={membership} user={membership.user} now={now} />
+    inner = <MembershipUser membership={membership} user={membership.user} now={now} />
   }
   if (membership.invitation) {
-    return (
+    inner = (
       <MembershipInvitation membership={membership} invitation={membership.invitation} now={now} />
     )
   }
-  return <div>What ? {JSON.stringify(membership)}</div>
+  return (
+    <div className="group hover:bg-sky-100">
+      <Link to={`/settings/team-membership/${membership.id}`}>{inner}</Link>
+    </div>
+  )
+}
+
+function MembershipsHeader() {
+  return (
+    <div className="mt-4 mb-2 flex space-x-4 text-sky-700">
+      <div className="w-[2em] flex-shrink-0 flex-grow-0"></div>
+      <div className="w-5/12 flex-shrink-0 text-sm font-bold uppercase tracking-wide">Nom</div>
+      <div className="w-1/12 flex-shrink-0 flex-grow-0"></div>
+      <div className="text-sm font-bold uppercase tracking-wide">Depuis</div>
+    </div>
+  )
 }
 
 function SendInvitation() {
@@ -238,14 +270,7 @@ export default function SettingsTeam() {
         </div>
         <div className="mt-12">
           <div className="text-sm font-bold text-sky-900">L&apos;équipe</div>
-          <div className="mt-4 mb-2 flex space-x-4 bg-sky-100 text-sky-700 opacity-70">
-            <div className="w-[2em] flex-shrink-0 flex-grow-0"></div>
-            <div className="w-5/12 flex-shrink-0 text-sm font-bold uppercase tracking-wide">
-              Nom
-            </div>
-            <div className="w-1/12 flex-shrink-0 flex-grow-0"></div>
-            <div className="text-sm font-bold uppercase tracking-wide">Depuis</div>
-          </div>
+          <MembershipsHeader />
           <div>
             {team.data.team.memberships.map((m) => (
               <Membership membership={m} key={m.id} now={now} />
