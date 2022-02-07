@@ -167,52 +167,59 @@ function SendInvitation() {
         <RoundPersonAdd className="text-sky-600 opacity-75" width={"1em"} height={"1em"} />
       </Disclosure.Button>
       <Disclosure.Panel className="max-w-md">
-        <Form onSubmit={onSubmit}>
-          {({ handleSubmit }) => (
-            <form onSubmit={handleSubmit}>
-              <div className="mt-4">
-                <Field<string> name="name" validate={required("Le nom du futur membre")}>
-                  {({ input: { name, value, onChange }, meta: { error, touched } }) => (
-                    <LabelInput
-                      label="Le nom du futur membre"
-                      kind="text"
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      error={error}
-                      touched={touched}
-                    />
-                  )}
-                </Field>
-              </div>
-              <div className="mt-4">
-                <Field<string> name="email" validate={validateEmail}>
-                  {({ input: { name, value, onChange }, meta: { error, touched } }) => (
-                    <LabelInput
-                      label="L'email du futur membre"
-                      kind="text"
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      error={error}
-                      touched={touched}
-                    />
-                  )}
-                </Field>
-              </div>
-              <div className="mt-1 flex w-full justify-end">
-                <button
-                  type="submit"
-                  className="rounded-md bg-sky-600 py-1 px-2 text-sky-100 shadow-md"
-                >
-                  <div className="flex items-center justify-center space-x-2">
-                    <div>Envoyer</div>
-                  </div>
-                </button>
-              </div>
-            </form>
-          )}
-        </Form>
+        {({ close }) => (
+          <Form onSubmit={onSubmit}>
+            {({ handleSubmit }) => (
+              <form
+                onSubmit={() => {
+                  handleSubmit()
+                  close()
+                }}
+              >
+                <div className="mt-4">
+                  <Field<string> name="name" validate={required("Le nom du futur membre")}>
+                    {({ input: { name, value, onChange }, meta: { error, touched } }) => (
+                      <LabelInput
+                        label="Le nom du futur membre"
+                        kind="text"
+                        name={name}
+                        value={value}
+                        onChange={onChange}
+                        error={error}
+                        touched={touched}
+                      />
+                    )}
+                  </Field>
+                </div>
+                <div className="mt-4">
+                  <Field<string> name="email" validate={validateEmail}>
+                    {({ input: { name, value, onChange }, meta: { error, touched } }) => (
+                      <LabelInput
+                        label="L'email du futur membre"
+                        kind="text"
+                        name={name}
+                        value={value}
+                        onChange={onChange}
+                        error={error}
+                        touched={touched}
+                      />
+                    )}
+                  </Field>
+                </div>
+                <div className="mt-1 flex w-full justify-end">
+                  <button
+                    type="submit"
+                    className="rounded-md bg-sky-600 py-1 px-2 text-sky-100 shadow-md"
+                  >
+                    <div className="flex items-center justify-center space-x-2">
+                      <div>Envoyer</div>
+                    </div>
+                  </button>
+                </div>
+              </form>
+            )}
+          </Form>
+        )}
       </Disclosure.Panel>
     </Disclosure>
   )
