@@ -14,6 +14,8 @@ import LabelInput from "../components/LabelInput"
 import { useNewInvitation } from "../api/auth-invitation"
 import RoundPersonAdd from "~icons/ic/round-person-add"
 import { Link } from "react-router-dom"
+import MobileMenu from "../components/MobileMenu"
+import { SettingsMobileMenu } from "../layout/SettingsLayout"
 
 // Ability to unpack type[] to type
 type Unpacked<T> = T extends (infer U)[] ? U : T
@@ -250,7 +252,17 @@ export default function SettingsTeam() {
 
   if (team.data?.team) {
     return (
-      <div className="pl-4">
+      <div className="mt-2 pl-4">
+        <MobileMenu
+          menu={<SettingsMobileMenu />}
+          crumbs={[
+            { name: "Réglages", to: "/settings" },
+            {
+              name: "Mon équipe",
+              to: "/settings/team",
+            },
+          ]}
+        />
         <div>
           <div className="text-sm font-bold text-sky-900">L&apos;organisation</div>
           <div className="mt-2">{team.data.team.name}</div>

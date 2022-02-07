@@ -6,6 +6,8 @@ import { required } from "../utils/form"
 import { useProfile, useUpdateUserName } from "../api/auth-profile"
 import RawError from "../components/RawError"
 import LoadingPage from "../components/LoadingPage"
+import { SettingsMobileMenu } from "../layout/SettingsLayout"
+import MobileMenu from "../components/MobileMenu"
 
 type NameFormProps = {
   loading: boolean
@@ -90,7 +92,17 @@ export default function SettingsAccount() {
   const profile = useProfile()
   if (profile.data?.user) {
     return (
-      <div className="mt-4 pl-4">
+      <div className="mt-2 pl-4">
+        <MobileMenu
+          menu={<SettingsMobileMenu />}
+          crumbs={[
+            { name: "Réglages", to: "/settings" },
+            {
+              name: "Mon compte",
+              to: "/settings/account",
+            },
+          ]}
+        />
         <div>
           <div className="text-sky-900">Votre email:</div>
           <div>{profile.data.user.email}</div>

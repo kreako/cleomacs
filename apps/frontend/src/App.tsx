@@ -14,7 +14,7 @@ const LostPassword = React.lazy(() => import("./pages/LostPassword"))
 const LostPasswordSent = React.lazy(() => import("./pages/LostPasswordSent"))
 const ChangeLostPassword = React.lazy(() => import("./pages/ChangeLostPassword"))
 const Home = React.lazy(() => import("./pages/Home"))
-const Settings = React.lazy(() => import("./pages/Settings"))
+const SettingsLayout = React.lazy(() => import("./layout/SettingsLayout"))
 const SettingsHome = React.lazy(() => import("./pages/SettingsHome"))
 const SettingsAccount = React.lazy(() => import("./pages/SettingsAccount"))
 const SettingsTeam = React.lazy(() => import("./pages/SettingsTeam"))
@@ -36,13 +36,13 @@ export default function App() {
               <Route path="change-lost-password" element={<ChangeLostPassword />} />
               <Route path="/" element={<MainLayout />}>
                 <Route index element={<Home />} />
-                <Route path="settings" element={<Settings />}>
-                  <Route index element={<SettingsHome />} />
-                  <Route path="account" element={<SettingsAccount />} />
-                  <Route path="team" element={<SettingsTeam />} />
-                  <Route path="team-membership/:id" element={<SettingsTeamMembership />} />
-                  <Route path="organizations" element={<SettingsOrganizations />} />
-                </Route>
+              </Route>
+              <Route path="settings" element={<SettingsLayout />}>
+                <Route index element={<SettingsHome />} />
+                <Route path="account" element={<SettingsAccount />} />
+                <Route path="team" element={<SettingsTeam />} />
+                <Route path="team-membership/:id" element={<SettingsTeamMembership />} />
+                <Route path="organizations" element={<SettingsOrganizations />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
