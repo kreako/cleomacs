@@ -13,7 +13,6 @@ import { required, validateEmail } from "../utils/form"
 import LabelInput from "../components/LabelInput"
 import { useNewInvitation } from "../api/auth-invitation"
 import RoundPersonAdd from "~icons/ic/round-person-add"
-import RoundEdit from "~icons/ic/round-edit"
 import { Link } from "react-router-dom"
 
 // Ability to unpack type[] to type
@@ -76,7 +75,7 @@ function MembershipUserName({ name, email }: MembershipUserNameProps) {
   if (name) {
     return (
       <div className="flex items-baseline space-x-2">
-        <div>{name}</div>
+        <div className="group-hover:underline group-hover:decoration-dotted">{name}</div>
         <div className="text-sm text-sky-700">{email}</div>
       </div>
     )
@@ -88,30 +87,20 @@ function MembershipUserName({ name, email }: MembershipUserNameProps) {
   )
 }
 
-function MembershipActions() {
-  return (
-    <div>
-      <RoundEdit width="1em" height="1em" />
-    </div>
-  )
-}
-
 type MembershipRowProps = {
   icon: ReactNode
   name: ReactNode
   role: ReactNode
   since: ReactNode
-  actions: ReactNode
 }
 
-function MembershipRow({ icon, name, role, since, actions }: MembershipRowProps) {
+function MembershipRow({ icon, name, role, since }: MembershipRowProps) {
   return (
     <div className="flex items-center space-x-4">
       <div className="w-[2em] flex-shrink-0 flex-grow-0">{icon}</div>
       <div className="w-5/12 flex-shrink-0">{name}</div>
       <div className="w-1/12 flex-shrink-0 flex-grow-0">{role}</div>
       <div className="w-2/12">{since}</div>
-      <div className="invisible group-hover:visible">{actions}</div>
     </div>
   )
 }
@@ -129,7 +118,6 @@ function MembershipUser({ membership, user, now }: MembershipUserProps) {
       name={<MembershipUserName name={user.name} email={user.email} />}
       role={<MembershipRoleDisplay membership={membership} />}
       since={<MembershipSince membership={membership} now={now} />}
-      actions={<MembershipActions />}
     />
   )
 }
@@ -147,7 +135,6 @@ function MembershipInvitation({ membership, invitation, now }: MembershipInvitat
       name={<MembershipUserName name={invitation.name} email={invitation.email} />}
       role={<MembershipRoleDisplay membership={membership} />}
       since={<MembershipSince membership={membership} now={now} />}
-      actions={<MembershipActions />}
     />
   )
 }
