@@ -160,8 +160,10 @@ function SendInvitation() {
   }
   return (
     <Disclosure>
-      <Disclosure.Button className=" flex items-center space-x-2 rounded-md border border-sky-600 py-1 px-2 shadow-md hover:bg-sky-100">
-        <div className="text-sky-900">Invitez un autre membre</div>
+      <Disclosure.Button className="flex items-center space-x-2">
+        <div className="text-sky-900 hover:underline hover:decoration-dotted">
+          Invitez un autre membre
+        </div>
         <RoundPersonAdd className="text-sky-600 opacity-75" width={"1em"} height={"1em"} />
       </Disclosure.Button>
       <Disclosure.Panel className="max-w-md">
