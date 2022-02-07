@@ -12,7 +12,8 @@
     "esModuleInterop": true,
     "types": [],
     "jsx": "react-jsx",
-    "noEmit": false
+    "noEmit": false,
+    "downlevelIteration": true
   },
   "exclude": ["node_modules", "dist"]
 }
