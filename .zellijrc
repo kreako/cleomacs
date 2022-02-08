@@ -38,7 +38,7 @@ tabs:
             run:
               command:
                 cmd: "./.launch.expect"
-                args: ["cd apps/backend && yarn run worker:lost-password"]
+                args: ["cd apps/backend && yarn run worker:transactional-email"]
           - direction: Vertical
             split_size:
               Percent: 33
