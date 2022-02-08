@@ -3,7 +3,7 @@ import MobileMenu from "../components/MobileMenu"
 import { SettingsMobileMenu } from "../layout/SettingsLayout"
 
 export default function SettingsTeamMembership() {
-  const { id } = useParams()
+  const { membershipId } = useParams()
   return (
     <div className="mt-2 pl-4">
       <MobileMenu
@@ -15,10 +15,10 @@ export default function SettingsTeamMembership() {
             to: "/settings/team",
           },
           // TODO name of the membership
-          { name: "Un membre", to: `/settings/team-membership/${id}` },
+          { name: "Un membre", to: `/settings/team/${membershipId}` },
         ]}
       />
-      SettingsTeamMembership : {id}
+      SettingsTeamMembership : {membershipId}
     </div>
   )
 }

@@ -41,7 +41,7 @@ export default function App() {
                 <Route index element={<SettingsHome />} />
                 <Route path="account" element={<SettingsAccount />} />
                 <Route path="team" element={<SettingsTeam />} />
-                <Route path="team-membership/:id" element={<SettingsTeamMembership />} />
+                <Route path="team/:membershipId" element={<SettingsTeamMembership />} />
                 <Route path="organizations" element={<SettingsOrganizations />} />
               </Route>
               <Route path="*" element={<NotFound />} />

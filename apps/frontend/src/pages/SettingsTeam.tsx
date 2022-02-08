@@ -157,7 +157,7 @@ function Membership({ membership, now }: MembershipProps) {
   }
   return (
     <div className="group hover:bg-sky-100">
-      <Link to={`/settings/team-membership/${membership.id}`}>{inner}</Link>
+      <Link to={`/settings/team/${membership.id}`}>{inner}</Link>
     </div>
   )
 }
