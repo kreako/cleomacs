@@ -9,8 +9,15 @@ const axios = rawAxios.create({
     return superjson.stringify(data)
   },
   transformResponse: (data: string) => {
-    // eslint-disable-next-line import/no-named-as-default-member
-    return superjson.parse(data)
+    try {
+      // eslint-disable-next-line import/no-named-as-default-member
+      return superjson.parse(data)
+    } catch {
+      // Not able to parse.. let's be optimistic ?
+      // It's probably a server error, 401, 500 or something like this
+      // It seems I have no other choices but to ignore it
+      return data
+    }
   },
 })
 
