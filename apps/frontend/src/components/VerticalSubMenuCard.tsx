@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import { Link, useMatch } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 type VerticalSubMenuCardProps = {
   link: string
@@ -8,9 +8,10 @@ type VerticalSubMenuCardProps = {
 }
 
 export default function VerticalSubMenuCard({ link, label, icon }: VerticalSubMenuCardProps) {
-  const match = useMatch(link)
+  const location = useLocation()
   let c = "bg-transparent"
-  if (match) {
+  if (location.pathname.startsWith(link)) {
+    // Match on this link or its children
     c = "bg-sky-50"
   }
   return (
