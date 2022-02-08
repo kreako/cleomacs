@@ -1,6 +1,6 @@
 import React from "react"
 import { ErrorBoundary } from "react-error-boundary"
-import { QueryClient, QueryClientProvider } from "react-query"
+import { QueryClient, QueryClientProvider, QueryErrorResetBoundary } from "react-query"
 import { HashRouter, Routes, Route } from "react-router-dom"
 import LoadingPage from "./components/LoadingPage"
 import MainErrorFallback from "./components/MainErrorFallback"
@@ -24,31 +24,35 @@ const NotFound = React.lazy(() => import("./pages/NotFound"))
 
 export default function App() {
   return (
-    <ErrorBoundary FallbackComponent={MainErrorFallback}>
-      <QueryClientProvider client={queryClient}>
-        <HashRouter>
-          <React.Suspense fallback={<LoadingPage />}>
-            <Routes>
-              <Route path="signup" element={<Signup />} />
-              <Route path="login" element={<Login />} />
-              <Route path="lost-password" element={<LostPassword />} />
-              <Route path="lost-password-sent" element={<LostPasswordSent />} />
-              <Route path="change-lost-password" element={<ChangeLostPassword />} />
-              <Route path="/" element={<MainLayout />}>
-                <Route index element={<Home />} />
-              </Route>
-              <Route path="settings" element={<SettingsLayout />}>
-                <Route index element={<SettingsHome />} />
-                <Route path="account" element={<SettingsAccount />} />
-                <Route path="team" element={<SettingsTeam />} />
-                <Route path="team/:membershipId" element={<SettingsTeamMembership />} />
-                <Route path="organizations" element={<SettingsOrganizations />} />
-              </Route>
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </React.Suspense>
-        </HashRouter>
-      </QueryClientProvider>
-    </ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <HashRouter>
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <ErrorBoundary FallbackComponent={MainErrorFallback} onReset={reset}>
+              <React.Suspense fallback={<LoadingPage />}>
+                <Routes>
+                  <Route path="signup" element={<Signup />} />
+                  <Route path="login" element={<Login />} />
+                  <Route path="lost-password" element={<LostPassword />} />
+                  <Route path="lost-password-sent" element={<LostPasswordSent />} />
+                  <Route path="change-lost-password" element={<ChangeLostPassword />} />
+                  <Route path="/" element={<MainLayout />}>
+                    <Route index element={<Home />} />
+                  </Route>
+                  <Route path="settings" element={<SettingsLayout />}>
+                    <Route index element={<SettingsHome />} />
+                    <Route path="account" element={<SettingsAccount />} />
+                    <Route path="team" element={<SettingsTeam />} />
+                    <Route path="team/:membershipId" element={<SettingsTeamMembership />} />
+                    <Route path="organizations" element={<SettingsOrganizations />} />
+                  </Route>
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </React.Suspense>
+            </ErrorBoundary>
+          )}
+        </QueryErrorResetBoundary>
+      </HashRouter>
+    </QueryClientProvider>
   )
 }
