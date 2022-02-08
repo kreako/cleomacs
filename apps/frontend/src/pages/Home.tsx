@@ -3,7 +3,7 @@ import Loading from "../components/Loading"
 import Logout from "../components/Logout"
 import MobileMenu from "../components/MobileMenu"
 import RawError from "../components/RawError"
-import VerticalMenu from "../components/VerticalMenu"
+import { VerticalMobileMenu } from "../components/VerticalMenu"
 
 function Profile() {
   const profile = useProfile()
@@ -22,7 +22,7 @@ function Profile() {
 export default function Home() {
   return (
     <div className="mt-2 flex flex-col space-y-4 pl-4">
-      <MobileMenu menu={<VerticalMenu />} crumbs={[{ name: "Accueil", to: "/" }]} />
+      <MobileMenu menu={<VerticalMobileMenu />} crumbs={[{ name: "Accueil", to: "/" }]} />
       <Profile />
       <Logout />
     </div>

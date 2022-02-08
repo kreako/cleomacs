@@ -57,7 +57,7 @@ export default function MobileMenu({ menu, crumbs }: MobileMenuProps) {
           <Crumb key={crumb.to} crumb={crumb} first={idx === 0} />
         ))}
       </div>
-      <Dialog open={open} onClose={close} className="fixed inset-0 z-50 overflow-y-auto lg:hidden">
+      <Dialog open={open} onClose={close} className="fixed inset-0 z-10 overflow-y-auto lg:hidden">
         <Dialog.Overlay className="fixed inset-0 bg-sky-900/60 backdrop-blur-sm " />
         <div className="relative w-min max-w-[calc(100%-3rem)] whitespace-nowrap bg-white">
           {menu}

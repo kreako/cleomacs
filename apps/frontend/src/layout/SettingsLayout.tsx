@@ -1,5 +1,5 @@
 import { Outlet } from "react-router"
-import VerticalMenu from "../components/VerticalMenu"
+import VerticalMenu, { VerticalMobileMenu } from "../components/VerticalMenu"
 import VerticalSubMenuCard from "../components/VerticalSubMenuCard"
 import VerticalSubMenu from "../components/VerticalSubMenu"
 import RoundManageAccounts from "~icons/ic/round-manage-accounts"
@@ -33,20 +33,16 @@ function SettingsSubMenu() {
 export function SettingsMobileMenu() {
   return (
     <div className="flex flex-row">
-      <VerticalMenu />
-      <SettingsSubMenu />
+      <VerticalMobileMenu submenu={<SettingsSubMenu />} />
     </div>
   )
 }
 
-export default function MainLayout() {
+export default function SettingsLayout() {
   return (
     <div className="flex flex-row">
       <div className="hidden lg:block">
-        <VerticalMenu />
-      </div>
-      <div className="hidden lg:block">
-        <SettingsSubMenu />
+        <VerticalMenu submenu={<SettingsSubMenu />} />
       </div>
       <div className="min-h-screen flex-grow bg-sky-50">
         <Outlet />

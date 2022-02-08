@@ -30,23 +30,33 @@ function MenuSquare({ children, link }: MenuSquareProps) {
   )
 }
 
-function Logout() {
+type LogoutProps = {
+  mobile: boolean
+}
+
+function Logout({ mobile }: LogoutProps) {
   const logout = useLogoutAndNavigateToLogin()
   const onClick = async () => {
     await logout.mutate()
   }
-  return <UserPopoverButton onClick={onClick}>Déconnexion</UserPopoverButton>
+  return (
+    <UserPopoverButton mobile={mobile} onClick={onClick}>
+      Déconnexion
+    </UserPopoverButton>
+  )
 }
 
 type UserPopoverLinkProps = {
   children: ReactNode
   to: string
+  mobile: boolean
 }
 
-function UserPopoverLink({ children, to }: UserPopoverLinkProps) {
+function UserPopoverLink({ children, to, mobile }: UserPopoverLinkProps) {
+  const hover = mobile ? "hover:bg-sky-600 hover:text-white" : "hover:bg-sky-500 hover:text-sky-100"
   return (
-    <Link className="px-4 py-4 hover:bg-sky-500 hover:text-sky-100" to={to}>
-      {children}
+    <Link className={`flex h-16 items-center px-4 ${hover}`} to={to}>
+      <div>{children}</div>
     </Link>
   )
 }
@@ -54,19 +64,43 @@ function UserPopoverLink({ children, to }: UserPopoverLinkProps) {
 type UserPopoverButtonProps = {
   children: ReactNode
   onClick: () => void
+  mobile: boolean
 }
 
-function UserPopoverButton({ children, onClick }: UserPopoverButtonProps) {
+function UserPopoverButton({ children, onClick, mobile }: UserPopoverButtonProps) {
+  const hover = mobile ? "hover:bg-sky-600 hover:text-white" : "hover:bg-sky-500 hover:text-sky-100"
   return (
-    <button onClick={onClick} className="px-4 py-4 text-left hover:bg-sky-500 hover:text-sky-100">
+    <button onClick={onClick} className={`h-16 px-4 py-4 text-left ${hover}`}>
       {children}
     </button>
   )
 }
 
+type UserPopoverContentProps = {
+  mobile: boolean
+}
+
+function UserPopoverContent({ mobile }: UserPopoverContentProps) {
+  const bgColor = mobile ? "bg-sky-500" : "bg-sky-600"
+  return (
+    <div className={`${bgColor} text-white`}>
+      <div className="flex flex-col">
+        <UserPopoverLink mobile={mobile} to="">
+          TODO
+        </UserPopoverLink>
+        <UserPopoverLink mobile={mobile} to="/settings/organizations">
+          Changez&nbsp;d&apos;organisation
+        </UserPopoverLink>
+        <hr className="" />
+        <Logout mobile={mobile} />
+      </div>
+    </div>
+  )
+}
+
 function UserPopover() {
   return (
-    <Popover className="relative">
+    <Popover className="">
       {({ open }) => {
         const buttonBg = open ? "bg-sky-600" : "bg-sky-500"
         return (
@@ -81,17 +115,8 @@ function UserPopover() {
               </div>
             </Popover.Button>
 
-            <Popover.Panel className="absolute bottom-0 left-16 z-10 bg-sky-600">
-              <div className="flex flex-col">
-                <UserPopoverLink to="">TODO</UserPopoverLink>
-                <UserPopoverLink to="/settings/organizations">
-                  Changez&nbsp;d&apos;organisation
-                </UserPopoverLink>
-                <hr className="" />
-                <Logout />
-              </div>
-
-              <img src="/solutions.jpg" alt="" />
+            <Popover.Panel className="fixed bottom-0 left-16 z-50">
+              <UserPopoverContent mobile={false} />
             </Popover.Panel>
           </>
         )
@@ -100,30 +125,59 @@ function UserPopover() {
   )
 }
 
-export default function VerticalMenu() {
+type VerticalMenuProps = {
+  mobile?: boolean
+  submenu?: ReactNode
+}
+
+export default function VerticalMenu({ submenu, mobile = false }: VerticalMenuProps) {
   return (
-    <div className="sticky top-0 flex h-screen w-16 flex-col space-y-2 bg-sky-500 text-white">
-      <MenuSquare link="/">
-        <RoundHome width={"2em"} height={"2em"} />
-      </MenuSquare>
-      <MenuSquare link="/rabbit">
-        <Rabbit width={"2em"} height={"2em"} />
-      </MenuSquare>
-      <MenuSquare link="/flower">
-        <RoundFlower width={"2em"} height={"2em"} />
-      </MenuSquare>
-      <MenuSquare link="/bike">
-        <RoundBike width={"2em"} height={"2em"} />
-      </MenuSquare>
-      <MenuSquare link="/skate">
-        <RoundSkate width={"2em"} height={"2em"} />
-      </MenuSquare>
-      <MenuSquare link="/settings">
-        <RoundSettings width={"2em"} height={"2em"} />
-      </MenuSquare>
-      {/* spacer to push the last item to the end of the menu */}
-      <div className="flex-grow"></div>
-      <UserPopover />
+    <div className="sticky top-0 flex flex-row">
+      <div className=" flex h-screen w-16 flex-col space-y-2 bg-sky-500 text-white">
+        <MenuSquare link="/">
+          <RoundHome width={"2em"} height={"2em"} />
+        </MenuSquare>
+        <MenuSquare link="/rabbit">
+          <Rabbit width={"2em"} height={"2em"} />
+        </MenuSquare>
+        <MenuSquare link="/flower">
+          <RoundFlower width={"2em"} height={"2em"} />
+        </MenuSquare>
+        <MenuSquare link="/bike">
+          <RoundBike width={"2em"} height={"2em"} />
+        </MenuSquare>
+        <MenuSquare link="/skate">
+          <RoundSkate width={"2em"} height={"2em"} />
+        </MenuSquare>
+        <MenuSquare link="/settings">
+          <RoundSettings width={"2em"} height={"2em"} />
+        </MenuSquare>
+        {/* spacer to push the last item to the end of the menu */}
+        <div className="flex-grow"></div>
+        <UserPopover />
+      </div>
+      {submenu &&
+        // there is a submenu
+        (mobile ? (
+          // On mobile the submenu and the user popover content share the same vertical column
+          <div className="flex h-screen flex-col overflow-y-auto">
+            <div className="flex-grow">{submenu}</div>
+            <div>
+              <UserPopoverContent mobile={true} />
+            </div>
+          </div>
+        ) : (
+          // On desktop the submenu will have its own column
+          <div className="h-screen ">{submenu}</div>
+        ))}
     </div>
   )
+}
+
+type VerticalMobileMenuProps = {
+  submenu?: ReactNode
+}
+
+export function VerticalMobileMenu({ submenu }: VerticalMobileMenuProps) {
+  return <VerticalMenu submenu={submenu} mobile={true} />
 }
