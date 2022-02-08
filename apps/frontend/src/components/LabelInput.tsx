@@ -74,7 +74,7 @@ function PasswordInput(props: InputProps) {
         type={kind}
         className="flex-grow bg-transparent caret-slate-900 outline-none"
       />
-      <button onClick={toggle} className="flex-grow-0">
+      <button onClick={toggle} type="button" className="flex-grow-0">
         {hidden ? <Eye /> : <EyeOff />}
       </button>
     </div>
