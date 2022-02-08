@@ -8,25 +8,23 @@ import BuildingBank from "~icons/fluent/building-bank-24-filled"
 
 function SettingsSubMenu() {
   return (
-    <div className="flex">
-      <VerticalSubMenu label="Réglages">
-        <VerticalSubMenuCard
-          link="/settings/account"
-          label="Mon compte"
-          icon={<RoundManageAccounts width={"2em"} height={"2em"} />}
-        />
-        <VerticalSubMenuCard
-          link="/settings/team"
-          label="Mon équipe"
-          icon={<RoundSupervisorAccount width={"2em"} height={"2em"} />}
-        />
-        <VerticalSubMenuCard
-          link="/settings/organizations"
-          label="Mes organisations"
-          icon={<BuildingBank width={"2em"} height={"2em"} />}
-        />
-      </VerticalSubMenu>
-    </div>
+    <VerticalSubMenu label="Réglages">
+      <VerticalSubMenuCard
+        link="/settings/account"
+        label="Mon compte"
+        icon={<RoundManageAccounts width={"2em"} height={"2em"} />}
+      />
+      <VerticalSubMenuCard
+        link="/settings/team"
+        label="Mon équipe"
+        icon={<RoundSupervisorAccount width={"2em"} height={"2em"} />}
+      />
+      <VerticalSubMenuCard
+        link="/settings/organizations"
+        label="Mes organisations"
+        icon={<BuildingBank width={"2em"} height={"2em"} />}
+      />
+    </VerticalSubMenu>
   )
 }
 

@@ -156,20 +156,18 @@ export default function VerticalMenu({ submenu, mobile = false }: VerticalMenuPr
         <div className="flex-grow"></div>
         <UserPopover />
       </div>
-      {submenu &&
-        // there is a submenu
-        (mobile ? (
-          // On mobile the submenu and the user popover content share the same vertical column
-          <div className="flex h-screen flex-col overflow-y-auto">
-            <div className="flex-grow">{submenu}</div>
-            <div>
-              <UserPopoverContent mobile={true} />
-            </div>
+      {mobile ? (
+        // On mobile the submenu and the user popover content share the same vertical column
+        <div className="flex h-screen flex-col overflow-y-auto">
+          <div className="flex-grow ">{submenu}</div>
+          <div>
+            <UserPopoverContent mobile={true} />
           </div>
-        ) : (
-          // On desktop the submenu will have its own column
-          <div className="h-screen ">{submenu}</div>
-        ))}
+        </div>
+      ) : (
+        // On desktop the submenu will have its own column
+        <div className="h-screen ">{submenu}</div>
+      )}
     </div>
   )
 }
